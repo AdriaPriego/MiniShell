@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/17 16:57:22 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/17 17:02:44 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main(void)
 	ft_printf("%s$>", entry_split[i - 1]);
 	while (1)
 	{
-		
+
 	}
 	return(0);
 }
