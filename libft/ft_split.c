@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:25:37 by apriego-          #+#    #+#             */
-/*   Updated: 2023/06/29 17:12:04 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/21 11:17:34 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	ft_countlenspit(char const *s2, char c, int i)
 	return (len);
 }
 
-static char	**ft_free_matrix(char const **matrix, int j)
+char	**ft_free_matrix(char const **matrix, int j)
 {
 	while (j > 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 18:17:51 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/16 11:15:38 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/21 11:17:50 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,6 @@ size_t	ft_strlen_line(const char *s);
 char	*ft_strjoin_line(char *s1, char *s2);
 char	*get_next_line(int fd);
 size_t	ft_len_line(const char *s);
+char	**ft_free_matrix(char const **matrix, int j);
 
 #endif

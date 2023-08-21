@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/17 19:06:42 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/21 18:15:34 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,24 @@ int	ft_array_len(char **array)
 	return (i);
 }
 
-char	*cosa(const char *s1)
+void	generate_entry(void)
+{
+	char	*entry;
+	char	**entry_split;
+	int		i;
+
+	entry = getcwd(NULL, 0);
+	entry_split = ft_split(entry, '/');
+	free(entry);
+	i = ft_array_len(entry_split);
+	entry = entry_split[i - 1];
+	ft_printf("%s", GREENBASH);
+	ft_printf("%s$> ", entry);
+	ft_printf("%s", NO_COL);
+	ft_free_matrix((const char**)entry_split, i);
+}
+
+char	*parse_command(const char *s1)
 {
 	int		i;
 	char	*var;
@@ -48,43 +65,42 @@ char	**generate(char *str)
 	args = malloc(4 * sizeof(char *));
 	args[0] = ft_strdup("/bin/bash");
 	args[1] = ft_strdup("-c");
-	args[2] = cosa(str);
+	args[2] = parse_command(str);
 	args[3] = NULL;
 	return (args);
 }
 
-int	main(int ac, char **av, char **env)
+void	sig_handler(int signum)
 {
-	char	*entry;
-	char	**entry_split;
+	if (signum == SIGINT)
+	{
+		ft_printf("\n");
+		generate_entry();
+	}
+}
+
+int	main(void)
+{
 	char	*str;
 	char	**str1;
-	int		i;
+	pid_t	pid;
 
-	ac = 0;
-	av = env;
-	env = av;
-	ft_printf("%s", env[0]);
-	ft_printf("%s", env[1]);
-	ft_printf("%s", env[2]);
-	ft_printf("%s", env[3]);
-	ft_printf("%s", env[4]);
-	entry = getcwd(NULL, 0);
-	entry_split = ft_split(entry, '/');
-	i = ft_array_len(entry_split);
-	ft_printf("%s", GREENBASH);
-	ft_printf("%s$>", entry_split[i - 1]);
-	ft_printf("%s", NO_COL);
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
+	generate_entry();
 	str = get_next_line(STDIN_FILENO);
-	while (ft_strncmp(str, "exit\n", ft_strlen(str)) != 0)
+	while (str && ft_strncmp(str, "exit\n", ft_strlen(str)) != 0)
 	{
 		str1 = generate(str);
-		execve("/bin/bash", str1, NULL);
-		ft_printf("%s", GREENBASH);
-		ft_printf("%s$>", entry_split[i - 1]);
-		ft_printf("%s", NO_COL);
+		free(str);
+		pid = fork();
+		if (pid == 0)
+			execve("/bin/bash", str1, NULL);
+		wait(0);
+		ft_free_matrix((const char**)str1, 3);
+		generate_entry();
 		str = get_next_line(STDIN_FILENO);
-		printf("%s", str);
 	}
+	free(str);
 	return (0);
 }

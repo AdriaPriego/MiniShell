@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/17 11:17:45 by apriego-         ###   ########.fr        #
+#    Updated: 2023/08/21 18:16:06 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,10 +21,10 @@ YELLOW	=	\033[38;5;190m
 
 #=================COMMANDS=================#
 
-CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
-INCLUDE	=	-I./inc
-RM		=	rm -fr
+CC			=	gcc
+CFLAGS		=	-Wall -Wextra -Werror
+INCLUDE		=	-I./inc
+RM			=	rm -fr
 
 #==================FILES===================#
 
@@ -44,11 +44,12 @@ $(NAME)	: temp $(OBJ)
 	@printf "${GREEN}Compiled minishell${NC}"
 
 $(DIR_OBJ)%.o: %.c $(HEADER)
-	@$(CC) $(CFLAGS) $(INCLUDE) -c -o $@ $<
+	@$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(INCLUDE) -c -o $@ $<
 	@printf "${YELLOW}Compiling obj $@...${NC}                  	\r"
 
 makelib	:
 	@$(MAKE) -C libft --no-print-directory
+
 temp	:
 	@mkdir -p $(DIR_OBJ)
 
