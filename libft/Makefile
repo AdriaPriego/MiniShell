@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/02 13:15:19 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/17 11:16:15 by apriego-         ###   ########.fr        #
+#    Updated: 2023/08/22 17:25:22 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,7 @@ temp:
 
 $(NAME): $(OBJ) $(OBJPRINT) $(OBJGETLINE) $(OBJPRINTFD)
 	@$(LIB) $(NAME) $(OBJ) $(OBJPRINT) $(OBJGETLINE) $(OBJPRINTFD)
-	@printf "${GREEN}Compiled libft${NC}"
+	@printf "${GREEN}Compiled libft\n${NC}"
 
 $(DIR_OBJ)%.o: %.c $(INCLUDE)
 	@mkdir -p $(dir $@)
