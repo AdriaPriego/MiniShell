@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/22 17:27:48 by apriego-         ###   ########.fr        #
+#    Updated: 2023/08/23 17:07:06 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ YELLOW	=	\033[38;5;190m
 
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
-INCLUDE	=	-I./inc
+INCLUDE	=	-I./inc -I./readline
 RM		=	rm -fr
 
 #==================FILES===================#
@@ -52,22 +52,25 @@ HEADERS		:=	$(INC_ROOT)
 HEADERS		+=	$(addsuffix $(INC_ROOT),$(LIBFT_ROOT))
 HEADERS		+=	$(RDLINE_ROOT)
 
-all : temp librarys $(NAME)
+all : librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
 	@$(MAKE) rdline --no-print-directory
 
-$(NAME) : temp $(OBJ)
+$(NAME) : $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
 	@echo "${GREEN}Minishell Compiled${NC}"
+
 rdline :
-	@pwd
-	@cd ./readline/ && ./configure
-	@make -C ./readline/
+	@echo "${YELLOW}Compiling Readline...${NC}"
+	@cd ./readline/ &> /dev/null && ./configure &> /dev/null
+	@make -C ./readline/ &> /dev/null
+	@echo "${GREEN}Readline Compiled${NC}"
+
 
 $(DIR_OBJ)%.o: %.c
-	@$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(INCLUDE) -c -o $@ $<
+	@$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(INCLUDE) -c $< -o $@
 	@echo "${YELLOW}Compiling obj $@...${NC}"
 
 temp	:
