@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/23 17:07:06 by apriego-         ###   ########.fr        #
+#    Updated: 2023/08/24 10:58:07 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ RM		=	rm -fr
 
 NAME		=	minishell
 COMP		=	./libft/libft.a
-SRC			=	minishell.c entry.c
+SRC			=	main.c entry.c signals.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/
@@ -52,7 +52,7 @@ HEADERS		:=	$(INC_ROOT)
 HEADERS		+=	$(addsuffix $(INC_ROOT),$(LIBFT_ROOT))
 HEADERS		+=	$(RDLINE_ROOT)
 
-all : librarys $(NAME)
+all : temp librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
@@ -78,7 +78,7 @@ temp	:
 
 clean	:
 	@$(MAKE) -C libft clean --no-print-directory
-	@$(RM) $(OBJS) $(DIR_OBJ)
+	@$(RM) $(DIR_OBJ)
 	@printf "${RED}Objs deleted\n${NC}"
 
 fclean	: clean
@@ -90,9 +90,9 @@ fclean	: clean
 norm	:
 	@printf "${PURPLE}SEARCHING FOR A PRINTF IN THE PROJECT: "
 	@printf "%i \n${NC}" $(shell grep "	printf" *.c | wc -l)
-	@printf "${YELLOW}Norminette...  ${NC}"
+	@printf "${YELLOW}Norminette...\n${NC}"
 	@printf "${RED}"
-	@norminette > test && printf "$(GREEN)OK\n" || grep Error test
+	@norminette *.c inc/*.h > test && printf "$(GREEN)\t[OK]\n" || grep Error test
 	@printf "${NC}"
 	@rm test
 

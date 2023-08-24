@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/02 13:15:19 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/23 14:57:14 by apriego-         ###   ########.fr        #
+#    Updated: 2023/08/24 10:46:27 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ $(NAME): $(OBJ) $(OBJPRINT) $(OBJGETLINE) $(OBJPRINTFD)
 $(DIR_OBJ)%.o: %.c $(INCLUDE)
 	@mkdir -p $(dir $@)
 	@$(CC) $(CCFLAGS) $(INCFLAG) -c -o $@ $<
-	@printf "${YELLOW}Compiling obj $@...${NC}                  	\r"
+	@printf "${YELLOW}Compiling obj $@...${NC}\n"
 
 clean:
 	@$(RM) $(DIR_OBJ)
