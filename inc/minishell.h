@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/24 11:00:05 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/24 14:54:35 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,17 @@
 
 /*------------------------------FUNCTIONS-------------------------------*/
 
-char	*generate_entry(void);
+char	*generate_entry(char **envp);
 char	**generate(char *str);
 int		ft_array_len(char **array);
 int		test_exist(char *str);
 void	init_signals(void);
+void	ft_pwd(void);
+void	ft_env(char **envp);
+void	ft_cd(char **comand, char **envp);
+char	*find_home(char **envp);
+void	ft_echo(char **comand);
+char	**ft_splitn(char *str, char c, int qtt);
+int		count_spaces(char *str);
 
 #endif

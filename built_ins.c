@@ -1,0 +1,73 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   built_ins.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
+/*   Updated: 2023/08/24 14:52:46 by apriego-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <minishell.h>
+
+void	ft_cd(char **comand, char **envp)
+{
+	char	**str;
+
+	str = ft_split(comand[2], ' ');
+	if (ft_strncmp(str[0], "cd", ft_strlen(str[0])) == 0)
+	{
+		if (ft_strncmp(str[1], "..", ft_strlen(str[1])) == 0)
+			chdir("..");
+		else if (ft_strncmp(str[1], ".", ft_strlen(str[1])) == 0)
+			chdir(".");
+		else if (ft_strncmp(str[1], "/", ft_strlen(str[1])) == 0)
+			chdir("/");
+		else if (ft_strncmp(str[1], "~", ft_strlen(str[1])) == 0)
+			chdir(find_home(envp));
+		else if (chdir(str[1]) != 0)
+			ft_printf("cd: no such file or directory: %s\n", str[1]);
+	}
+}
+
+void	ft_pwd(void)
+{
+	char	*str;
+
+	str = getcwd(NULL, 0);
+	ft_printf("%s\n", str);
+	free(str);
+}
+
+void	ft_env(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		ft_printf("%s\n", envp[i]);
+		i++;
+	}
+}
+
+void	ft_echo(char **comand)
+{
+	char	**split;
+	int		l;
+
+	split = ft_splitn(comand[2], ' ', 2);
+	if (ft_strncmp(split[0], "echo", ft_strlen(split[0])) == 0)
+	{
+		if (split[1][0] == '-' && split[1][1] == 'n')
+		{
+			l = count_spaces(split[1] + 2);
+			ft_printf("%s", split[1] + 2 + l);
+		}
+		else
+			ft_printf("%s\n", split[1]);
+	}
+	ft_free_matrix((const char **)split, 2);
+}

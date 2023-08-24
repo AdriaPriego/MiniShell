@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/24 10:58:07 by apriego-         ###   ########.fr        #
+#    Updated: 2023/08/24 14:59:56 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ RM		=	rm -fr
 
 NAME		=	minishell
 COMP		=	./libft/libft.a
-SRC			=	main.c entry.c signals.c
+SRC			=	main.c entry.c signals.c built_ins.c utils.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/
@@ -56,7 +56,7 @@ all : temp librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
-	@$(MAKE) rdline --no-print-directory
+#@$(MAKE) rdline --no-print-directory
 
 $(NAME) : $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
@@ -83,9 +83,9 @@ clean	:
 
 fclean	: clean
 	@$(MAKE) -C libft cleaname --no-print-directory
-	@$(MAKE) -C readline clean --no-print-directory
 	@$(RM) $(NAME)
 	@printf "${RED}Minishell deleted\n${NC}"
+	@$(MAKE) -C readline clean --no-print-directory
 
 norm	:
 	@printf "${PURPLE}SEARCHING FOR A PRINTF IN THE PROJECT: "

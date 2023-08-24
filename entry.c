@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/24 10:53:10 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/24 14:53:08 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,39 @@ int	ft_array_len(char **array)
 	return (i);
 }
 
-char	*generate_entry(void)
+char	*ft_joincolors(char *array)
 {
-	char	**entry;
-	char	**entry_split;
+	char	**aux;
 	char	*str;
-	int		i;
 
-	entry = malloc(3 * sizeof(char *));
-	entry[0] = getcwd(NULL, 0);
-	entry_split = ft_split(entry[0], '/');
-	free(entry[0]);
-	i = ft_array_len(entry_split);
-	entry[0] = ft_strjoin(GREENBASH, entry_split[i - 1]);
-	entry[1] = ft_strjoin(entry[0], "$>");
-	entry[2] = ft_strjoin(entry[1], NO_COL);
-	str = readline(entry[2]);
-	ft_free_matrix((const char **)entry_split, i);
-	ft_free_matrix((const char **)entry, 3);
+	aux = malloc(2 * sizeof(char *));
+	aux[0] = ft_strjoin(GREENBASH, array);
+	aux[1] = ft_strjoin(aux[0], "$>");
+	str = ft_strjoin(aux[1], NO_COL);
+	ft_free_matrix((const char **)aux, 2);
+	return (str);
+}
+
+char	*generate_entry(char **envp)
+{
+	char	*entry;
+	char	*aux;
+	char	*split;
+	char	*str;
+
+	aux = getcwd(NULL, 0);
+	if (ft_strncmp(aux, find_home(envp), ft_strlen(aux)) == 0)
+		entry = ft_joincolors("~");
+	else if (ft_strncmp(aux, "/", ft_strlen(aux)) == 0)
+		entry = ft_joincolors(aux);
+	else
+	{
+		split = ft_strrchr(aux, '/');
+		entry = ft_joincolors(split + 1);
+	}
+	str = readline(entry);
+	free(aux);
+	free(entry);
 	return (str);
 }
 
