@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/24 14:54:35 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/24 16:53:22 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # define REDBASH "\033[1;38;2;255;0;0m"
 # define CTRL_C SIGINT
 # define CTRL_SLASH SIGQUIT
+# define EXIT_SON 0
+# define EXIT_DAD 1
 
 /*------------------------------FUNCTIONS-------------------------------*/
 
@@ -42,5 +44,7 @@ char	*find_home(char **envp);
 void	ft_echo(char **comand);
 char	**ft_splitn(char *str, char c, int qtt);
 int		count_spaces(char *str);
+//void	ft_export(char **comand, char **envp);
+void	ft_unset(char **comand, char **envp);
 
 #endif

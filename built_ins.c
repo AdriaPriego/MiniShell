@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/24 14:52:46 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/24 16:52:21 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,31 @@ void	ft_echo(char **comand)
 			ft_printf("%s\n", split[1]);
 	}
 	ft_free_matrix((const char **)split, 2);
+}
+
+void ft_unset(char **comand, char **envp)
+{
+	int	i;
+	int j;
+	char **var;
+	char *aux;
+
+	i = 0;
+	var = ft_splitn(comand[2], ' ', 2);
+	aux = ft_strjoin(var[1], "=");
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], aux, ft_strlen(aux)) == 0)
+		{
+			j = i;
+			while (envp[j])
+			{
+				envp[j] = envp[j + 1];
+				j++;
+			}
+		}
+		else
+			i++;
+	}
+	ft_free_matrix((const char **)var, 2);
 }
