@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/24 11:00:05 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/25 17:50:30 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <sys/stat.h>
-# include <readline.h>
-# include <history.h>
 
 /*--------------------------------MACROS--------------------------------*/
 
@@ -28,12 +26,38 @@
 # define CTRL_C SIGINT
 # define CTRL_SLASH SIGQUIT
 
+# define WORD 0
+# define RESERVED 1
+
+
+/*------------------------------STRUCTURES-------------------------------*/
+
+typedef enum s_token
+{
+    PIPE = 1,
+    GREAT,
+    GREAT_GREAT,
+    LESS,
+    LESS_LESS,
+} t_token;
+
+
+typedef struct s_lexer
+{
+	char			*word;
+	t_token			token;
+	struct s_lexer	*next;
+}	t_lex;
+
 /*------------------------------FUNCTIONS-------------------------------*/
 
-char	*generate_entry(void);
-char	**generate(char *str);
-int		ft_array_len(char **array);
-int		test_exist(char *str);
-void	init_signals(void);
+t_lex	*lexer_lstnew(void);
+void	lexer_lstadd_back(t_lex **lst, t_lex *new);
+void	lexer_lstclear(t_lex **lst);
+int		lexer_lstsize(t_lex *lst);
+t_lex	*lexer_lstlast(t_lex *lst);
+
+
+
 
 #endif

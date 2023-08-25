@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
+#    By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/24 10:58:07 by apriego-         ###   ########.fr        #
+#    Updated: 2023/08/25 15:52:15 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,14 +23,14 @@ YELLOW	=	\033[38;5;190m
 
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
-INCLUDE	=	-I./inc -I./readline
+INCLUDE	=	-I./inc #-I./readline
 RM		=	rm -fr
 
 #==================FILES===================#
 
 NAME		=	minishell
 COMP		=	./libft/libft.a
-SRC			=	main.c entry.c signals.c
+SRC			=	main.c utils.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/
@@ -40,26 +40,21 @@ OBJ		=	$(addprefix $(DIR_OBJ),$(SRC:.c=.o))
 
 #==================RULES===================#
 
-LIB_A		:=	$(RDLINE_ROOT)libreadline.a $(RDLINE_ROOT)libhistory.a \
-				$(LIBFT_ROOT)libft.a
+LIB_A		:=	$(LIBFT_ROOT)libft.a
 
-LIB_ADD_DIR	:=	-L$(RDLINE_ROOT) -L$(LIBFT_ROOT)
-
-LIB_SEARCH	:=	-lreadline -lhistory -ltermcap -lft
+LIB_ADD_DIR	:=	-L$(LIBFT_ROOT)
 
 #<-------------------------------->HEADERS<---------------------------------->#
 HEADERS		:=	$(INC_ROOT)
 HEADERS		+=	$(addsuffix $(INC_ROOT),$(LIBFT_ROOT))
-HEADERS		+=	$(RDLINE_ROOT)
 
 all : temp librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
-	@$(MAKE) rdline --no-print-directory
 
 $(NAME) : $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
+	@$(CC) $(CFLAGS) $(OBJ) $(LIB_ADD_DIR) $(LIB_A) -o $@
 	@echo "${GREEN}Minishell Compiled${NC}"
 
 rdline :
