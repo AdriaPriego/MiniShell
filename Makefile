@@ -6,7 +6,7 @@
 #    By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/25 15:52:15 by fbosch           ###   ########.fr        #
+#    Updated: 2023/08/25 20:43:31 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ RM		=	rm -fr
 
 NAME		=	minishell
 COMP		=	./libft/libft.a
-SRC			=	main.c utils.c
+SRC			=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/

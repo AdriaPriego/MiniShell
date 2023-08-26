@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/25 17:50:30 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/08/26 18:19:50 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,12 @@
 # define CTRL_C SIGINT
 # define CTRL_SLASH SIGQUIT
 
-# define WORD 0
-# define RESERVED 1
-
+#define C_VERTICAL_BAR 124
+#define C_LESS 60
+#define C_GREAT 62
+#define C_DOLLAR 36
+#define C_SINGLE_QUOTE 39
+#define C_DOUBLE_QUOTE 34
 
 /*------------------------------STRUCTURES-------------------------------*/
 
@@ -39,6 +42,9 @@ typedef enum s_token
     GREAT_GREAT,
     LESS,
     LESS_LESS,
+	DOLLAR,
+	SINGLE_QUOTE,
+	DOUBLE_QUOTE
 } t_token;
 
 
@@ -49,14 +55,21 @@ typedef struct s_lexer
 	struct s_lexer	*next;
 }	t_lex;
 
-/*------------------------------FUNCTIONS-------------------------------*/
+/*------------------------------TOKENIZER-------------------------------*/
+int	tokenizer(char *str);
+int	create_token(char *str, int i, t_lex *lexer);
+void print_tokens(t_lex *lexer);
 
+/*------------------------------TOKENIZER UTILS-------------------------------*/
+int	ft_isspace(int	c);
+int	ft_isreserved(int	c);
+
+/*------------------------------TOKENIZER LISTS-------------------------------*/
 t_lex	*lexer_lstnew(void);
 void	lexer_lstadd_back(t_lex **lst, t_lex *new);
 void	lexer_lstclear(t_lex **lst);
 int		lexer_lstsize(t_lex *lst);
 t_lex	*lexer_lstlast(t_lex *lst);
-
 
 
 
