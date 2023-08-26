@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/26 20:17:30 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/08/27 00:03:11 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	create_word(char *str, int i, t_lex *new)
 	int		j;
 
 	j = 1;
-	while (str[i + j] && !ft_isspace(str[i + j]) && !ft_isreserved(str[i + j]))
+	while (str[i + j] && !ft_isspace(str[i + j]) && !ft_isreserved(str[i + j])
+		&& str[i + j] != C_DOLLAR)
 		j++;
 	word = ft_substr(str, i, j);
 	if (!word)
@@ -52,7 +53,16 @@ int	create_word(char *str, int i, t_lex *new)
 	return (j);
 }
 
-int	tokenizer(char *str)
+/*	This function receives the input given on the terminal as a string
+	and it creates a linked list of tokens, the tokens will be used
+	to process the commands in a simpler way by the parser.
+
+	Example:
+
+	Input -> "ls -l | wc -c > outfile"
+	Output -> linked_list {ls, -l, PIPE, wc, -c, GREAT, outfile}
+*/
+t_lex	*tokenizer(char *str)
 {
 	t_lex	*lexer;
 	t_lex	*new;
@@ -66,10 +76,10 @@ int	tokenizer(char *str)
 		{
 			new = lexer_lstnew();
 			if (!new)
-				return (1);
+				return (NULL);
 			lexer_lstadd_back(&lexer, new);
-			if (ft_isreserved(str[i]))
-				i += create_token(str, i, new); //check both returns to parse errors
+			if (ft_isreserved(str[i]) && str[i] != C_DOLLAR)
+				i += create_token(str, i, new); //check returns parse errors
 			else
 				i += create_word(str, i, new);
 		}
@@ -77,41 +87,21 @@ int	tokenizer(char *str)
 			i++;
 	}
 	print_tokens(lexer);
-	return (0);
+	return (lexer);
 }
 
-void print_tokens(t_lex *lexer)
-{
-	while (lexer)
-	{
-		if (!lexer->word)
-		{
-			if (lexer->token == PIPE)
-				printf(" PIPE");
-			else if (lexer->token == LESS)
-				printf(" LESS");
-			else if (lexer->token == LESS_LESS)
-				printf(" LESS_LESS");
-			else if (lexer->token == GREAT)
-				printf(" GREAT");
-			else if (lexer->token == GREAT_GREAT)
-				printf(" GREAT_GREAT");
-			else if (lexer->token == SINGLE_QUOTE)
-				printf(" SINGLE_QUOTE");
-			else if (lexer->token == DOUBLE_QUOTE)
-				printf(" DOUBLE_QUOTE");
-		}
-		else
-			printf(" %s ", lexer->word);
-		lexer = lexer->next;
-	}
-}
 int	main(int ac, char **av)
 {
+	t_lex	*lexer;
+	//t_cmd	*commands;
+
 	if (ac != 2)
 		return (1);
 	printf("entry: %s\n", av[1]);
 	printf("token: ");
-	tokenizer(av[1]);
+	lexer = tokenizer(av[1]); //check return of lexer
+	//commands = parser(lexer);
+	//expander
+	lexer_lstclear(&lexer);
 	printf("\n");
 }

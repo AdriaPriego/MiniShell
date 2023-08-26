@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:34:14 by fbosch            #+#    #+#             */
-/*   Updated: 2023/08/25 21:49:47 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/08/26 23:39:18 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,21 @@ t_lex	*lexer_lstnew(void)
 	if (!node)
 		return (NULL);
 	node->word = NULL;
+	node->prev = NULL;
 	node->next = NULL;
 	return (node);
 }
 
 void	lexer_lstadd_back(t_lex **lst, t_lex *new)
 {
+	t_lex	*last;
+	
 	if ((*lst))
-		lexer_lstlast(*lst)->next = new;
+	{
+		last = lexer_lstlast(*lst);
+		last->next = new;
+		new->prev = last;
+	}
 	else
 		(*lst) = new;
 }
