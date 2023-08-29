@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/27 00:03:11 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/08/30 01:39:53 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,6 @@ int	create_token(char *str, int i, t_lex *new)
 		new->token = GREAT;
 	else if (str[i] == C_GREAT && str[i] == C_GREAT)
 		new->token = GREAT_GREAT;
-	else if (str[i] == C_SINGLE_QUOTE)
-		new->token = SINGLE_QUOTE;
-	else if (str[i] == C_DOUBLE_QUOTE)
-		new->token = DOUBLE_QUOTE;
 	if (new->token == LESS_LESS || new->token == GREAT_GREAT)
 		count = 2;
 	else
@@ -37,18 +33,25 @@ int	create_token(char *str, int i, t_lex *new)
 	return (count);
 }
 
-int	create_word(char *str, int i, t_lex *new)
+int	create_word(char *str, int i, t_lex *new, int *quoted)
 {
 	char	*word;
 	int		j;
 
-	j = 1;
-	while (str[i + j] && !ft_isspace(str[i + j]) && !ft_isreserved(str[i + j])
-		&& str[i + j] != C_DOLLAR)
+	j = 0;
+	while (str[i + j])
+	{
+		if (*quoted == 1 && ft_isquote(str[i + j]) == 1)
+			*quoted = 0;
+		else if (*quoted == 0 && ft_isquote(str[i + j]) == 1)
+			*quoted = 1;
+		if (*quoted == 0 && (ft_isspace(str[i + j]) || ft_isreserved(str[i + j])))
+			break ;
 		j++;
+	}
 	word = ft_substr(str, i, j);
 	if (!word)
-		return (1);
+		return (-1);
 	new->word = word;
 	return (j);
 }
@@ -56,19 +59,20 @@ int	create_word(char *str, int i, t_lex *new)
 /*	This function receives the input given on the terminal as a string
 	and it creates a linked list of tokens, the tokens will be used
 	to process the commands in a simpler way by the parser.
-
 	Example:
 
 	Input -> "ls -l | wc -c > outfile"
 	Output -> linked_list {ls, -l, PIPE, wc, -c, GREAT, outfile}
 */
-t_lex	*tokenizer(char *str)
+int	tokenizer(char *str, t_lex **lexer)
 {
-	t_lex	*lexer;
 	t_lex	*new;
 	int		i;
+	int		temp;
+	int		quoted;
 
-	lexer = NULL;
+	*lexer = NULL;
+	quoted = 0;
 	i = 0;
 	while (str[i])
 	{
@@ -76,30 +80,35 @@ t_lex	*tokenizer(char *str)
 		{
 			new = lexer_lstnew();
 			if (!new)
-				return (NULL);
-			lexer_lstadd_back(&lexer, new);
-			if (ft_isreserved(str[i]) && str[i] != C_DOLLAR)
-				i += create_token(str, i, new); //check returns parse errors
+				return (1);
+			lexer_lstadd_back(lexer, new);
+			if (ft_isreserved(str[i]))
+				i += create_token(str, i, new);
 			else
-				i += create_word(str, i, new);
+			{
+				temp = create_word(str, i, new, &quoted);
+				if (temp == -1)
+					return (1);
+				i += temp;
+			}
 		}
 		else
 			i++;
 	}
-	print_tokens(lexer);
-	return (lexer);
+	return (0);
 }
 
 int	main(int ac, char **av)
 {
 	t_lex	*lexer;
 	//t_cmd	*commands;
-
 	if (ac != 2)
 		return (1);
 	printf("entry: %s\n", av[1]);
 	printf("token: ");
-	lexer = tokenizer(av[1]); //check return of lexer
+	if (tokenizer(av[1], &lexer) == 1)
+		return (1);
+	print_tokens(lexer);
 	//commands = parser(lexer);
 	//expander
 	lexer_lstclear(&lexer);

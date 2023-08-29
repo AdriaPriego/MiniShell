@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:33:56 by fbosch            #+#    #+#             */
-/*   Updated: 2023/08/26 23:40:19 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/08/30 01:39:54 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,16 @@ int	ft_isspace(int c)
 	return (0);
 }
 
+int	ft_isquote(int c)
+{
+	if (c == C_ONE_QUOTE || c == C_TWO_QUOTE)
+		return (1);
+	return (0);
+}
+
 int	ft_isreserved(int c)
 {
-	if (c == C_VERTICAL_BAR || c == C_LESS || c == C_GREAT || c == C_DOLLAR
-		|| c == C_SINGLE_QUOTE || c == C_DOUBLE_QUOTE)
+	if (c == C_VERTICAL_BAR || c == C_LESS || c == C_GREAT)
 		return (1);
 	return (0);
 }
@@ -35,22 +41,18 @@ void	print_tokens(t_lex *lexer)
 		if (!lexer->word)
 		{
 			if (lexer->token == PIPE)
-				printf(" PIPE");
+				printf("PIPE===");
 			else if (lexer->token == LESS)
-				printf(" LESS");
+				printf("LESS===");
 			else if (lexer->token == LESS_LESS)
-				printf(" LESS_LESS");
+				printf("LESS_LESS===");
 			else if (lexer->token == GREAT)
-				printf(" GREAT");
+				printf("GREAT===");
 			else if (lexer->token == GREAT_GREAT)
-				printf(" GREAT_GREAT");
-			else if (lexer->token == SINGLE_QUOTE)
-				printf(" SINGLE_QUOTE");
-			else if (lexer->token == DOUBLE_QUOTE)
-				printf(" DOUBLE_QUOTE");
+				printf("GREAT_GREAT===");
 		}
 		else
-			printf(" %s ", lexer->word);
+			printf("%s===", lexer->word);
 		lexer = lexer->next;
 	}
 }
