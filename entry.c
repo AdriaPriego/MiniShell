@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/24 14:53:08 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/30 12:52:26 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,18 @@ char	*ft_joincolors(char *array)
 	char	*str;
 
 	aux = malloc(2 * sizeof(char *));
+	if (!aux)
+		return (NULL);
 	aux[0] = ft_strjoin(GREENBASH, array);
+	if (!aux)
+		return (ft_free_matrix((const char **)aux, ft_array_len(aux)));
 	aux[1] = ft_strjoin(aux[0], "$>");
+	if (!aux)
+		return (ft_free_matrix((const char **)aux,  ft_array_len(aux)));
 	str = ft_strjoin(aux[1], NO_COL);
-	ft_free_matrix((const char **)aux, 2);
+	if (!aux)
+		return (ft_free_matrix((const char **)aux,  ft_array_len(aux)));
+	ft_free_matrix((const char **)aux,  ft_array_len(aux));
 	return (str);
 }
 
@@ -52,6 +60,11 @@ char	*generate_entry(char **envp)
 		split = ft_strrchr(aux, '/');
 		entry = ft_joincolors(split + 1);
 	}
+	if (!entry)
+	{
+		free(aux);
+		return (NULL);
+	}
 	str = readline(entry);
 	free(aux);
 	free(entry);
@@ -63,8 +76,14 @@ char	**generate(char *str)
 	char	**args;
 
 	args = malloc(4 * sizeof(char *));
+	if (!args)
+		return (NULL);
 	args[0] = ft_strdup("/bin/bash");
+	if (!args[0])
+		return (ft_free_matrix((const char **)args, ft_array_len(args)));
 	args[1] = ft_strdup("-c");
+	if (!args[1])
+		return (ft_free_matrix((const char **)args, ft_array_len(args)));
 	args[2] = str;
 	args[3] = NULL;
 	return (args);

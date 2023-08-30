@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/24 10:50:46 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/30 12:27:49 by apriego-         ###   ########.fr       */
+/*   Created: 2023/08/24 17:47:17 by apriego-          #+#    #+#             */
+/*   Updated: 2023/08/28 12:59:31 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static void	sig_handler(int signum)
+void	ft_export(char **comand, char **envp)
 {
-	if (signum == CTRL_C)
-	{
-		ft_printf("\n");
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
+	int		i;
+	char	**aux;
 
-void	init_signals(void)
-{
-	rl_catch_signals = 0;
-	signal(CTRL_C, sig_handler);
-	signal(CTRL_SLASH, sig_handler);
+	i = 0;
+	aux = ft_splitn(comand[2], ' ', 2);
+	while (envp[i])
+		i++;
+	envp[i] = ft_strdup(aux[1]);
+	envp[i + 1] = NULL;
 }

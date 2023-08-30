@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/24 16:52:21 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/30 12:40:53 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	ft_cd(char **comand, char **envp)
 		else if (chdir(str[1]) != 0)
 			ft_printf("cd: no such file or directory: %s\n", str[1]);
 	}
+	ft_free_matrix((const char **)str, ft_array_len(str));
 }
 
 void	ft_pwd(void)
@@ -72,12 +73,12 @@ void	ft_echo(char **comand)
 	ft_free_matrix((const char **)split, 2);
 }
 
-void ft_unset(char **comand, char **envp)
+void	ft_unset(char **comand, char **envp)
 {
-	int	i;
-	int j;
-	char **var;
-	char *aux;
+	int		i;
+	int		j;
+	char	**var;
+	char	*aux;
 
 	i = 0;
 	var = ft_splitn(comand[2], ' ', 2);
@@ -97,4 +98,5 @@ void ft_unset(char **comand, char **envp)
 			i++;
 	}
 	ft_free_matrix((const char **)var, 2);
+	free(aux);
 }

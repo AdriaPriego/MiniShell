@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/24 16:52:56 by apriego-         ###   ########.fr        #
+#    Updated: 2023/08/30 18:17:05 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ RM		=	rm -fr
 
 NAME		=	minishell
 COMP		=	./libft/libft.a
-SRC			=	main.c entry.c signals.c built_ins.c utils.c
+SRC			=	main.c entry.c signals.c built_ins.c built_ins2.c utils.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/
@@ -47,7 +47,7 @@ LIB_ADD_DIR	:=	-L$(RDLINE_ROOT) -L$(LIBFT_ROOT)
 
 LIB_SEARCH	:=	-lreadline -lhistory -ltermcap -lft
 
-#<-------------------------------->HEADERS<---------------------------------->#
+#=================HEADERS==================#
 HEADERS		:=	$(INC_ROOT)
 HEADERS		+=	$(addsuffix $(INC_ROOT),$(LIBFT_ROOT))
 HEADERS		+=	$(RDLINE_ROOT)

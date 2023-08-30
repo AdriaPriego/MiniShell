@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/24 16:53:22 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/24 17:47:04 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*find_home(char **envp);
 void	ft_echo(char **comand);
 char	**ft_splitn(char *str, char c, int qtt);
 int		count_spaces(char *str);
-//void	ft_export(char **comand, char **envp);
+void	ft_export(char **comand, char **envp);
 void	ft_unset(char **comand, char **envp);
 
 #endif
