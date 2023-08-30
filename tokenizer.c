@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/30 01:39:53 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/08/30 18:45:39 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int	create_token(char *str, int i, t_lex *new)
 		new->token = PIPE;
 	else if (str[i] == C_LESS && str[i + 1] != C_LESS)
 		new->token = LESS;
-	else if (str[i] == C_LESS && str[i] == C_LESS)
+	else if (str[i] == C_LESS && str[i + 1] == C_LESS)
 		new->token = LESS_LESS;
 	else if (str[i] == C_GREAT && str[i + 1] != C_GREAT)
 		new->token = GREAT;
-	else if (str[i] == C_GREAT && str[i] == C_GREAT)
+	else if (str[i] == C_GREAT && str[i + 1] == C_GREAT)
 		new->token = GREAT_GREAT;
 	if (new->token == LESS_LESS || new->token == GREAT_GREAT)
 		count = 2;
