@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+         #
+#    By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/31 14:01:33 by apriego-         ###   ########.fr        #
+#    Updated: 2023/08/31 16:34:14 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ YELLOW	=	\033[38;5;190m
 
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
-INCLUDE	=	-I./inc #-I./readline
+INCLUDE	=	-I./inc -I./readline
 RM		=	rm -fr
 
 #==================FILES===================#
@@ -34,8 +34,8 @@ COMP		=	./libft/libft.a
 FILES_ENTRY	=	entry.c signals.c
 FILES_BUILT	=	built_ins.c built_ins2.c
 FILES_GEN	=	main.c utils.c
+FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 EXPAN_GEN	=	expansor.c
-TEMP_LEXER			=	tokenizer.c tokenizer_utils.c tokenizer_lists.c parser.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/
@@ -52,16 +52,21 @@ EXEC_DIR	=	executor/
 SRC_EXPAN	=	$(addprefix $(SRC_DIR),$(addprefix $(EXPAN_DIR),$(FILES_EXPAN)))
 SRC_ENTRY	=	$(addprefix $(SRC_DIR),$(addprefix $(ENTRY_DIR),$(FILES_ENTRY)))
 SRC_BUILT	=	$(addprefix $(SRC_DIR),$(addprefix $(BUILT_DIR),$(FILES_BUILT)))
+SRC_LEXER	=	$(addprefix $(SRC_DIR),$(addprefix $(LEXER_DIR),$(FILES_LEXER)))
 SRC_GEN		=	$(addprefix $(SRC_DIR), $(FILES_GEN))
 
 OBJ_EXPAN	=	$(addprefix $(DIR_OBJ),$(SRC_EXPAN:.c=.o))
 OBJ_ENTRY	=	$(addprefix $(DIR_OBJ),$(SRC_ENTRY:.c=.o))
 OBJ_BUILT	=	$(addprefix $(DIR_OBJ),$(SRC_BUILT:.c=.o))
+OBJ_LEXER	=	$(addprefix $(DIR_OBJ),$(SRC_LEXER:.c=.o))
 OBJ			=	$(addprefix $(DIR_OBJ),$(SRC_GEN:.c=.o))
 
-LIB_A		:=	$(LIBFT_ROOT)libft.a
+LIB_A		:=	$(RDLINE_ROOT)libreadline.a $(RDLINE_ROOT)libhistory.a \
+				$(LIBFT_ROOT)libft.a
 
-LIB_ADD_DIR	:=	-L$(LIBFT_ROOT)
+LIB_ADD_DIR	:=	-L$(RDLINE_ROOT) -L$(LIBFT_ROOT)
+
+LIB_SEARCH	:=	-lreadline -lhistory -ltermcap -lft
 
 #=================HEADERS==================#
 HEADERS		:=	$(INC_ROOT)
@@ -73,10 +78,10 @@ all : temp librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
-#@$(MAKE) rdline --no-print-directory
+	@$(MAKE) rdline --no-print-directory
 
-$(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY)
-	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
+$(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER)
+	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
 	@echo "${GREEN}Minishell Compiled${NC}"
 
 rdline :
@@ -110,7 +115,7 @@ norm	:
 	@printf "%i \n${NC}" $(shell grep "	printf" *.c | wc -l)
 	@printf "${YELLOW}Norminette...\n${NC}"
 	@printf "${RED}"
-	@norminette *.c inc/*.h > test && printf "$(GREEN)\t[OK]\n" || grep Error test
+	@norminette src/*/*.c src/*.c inc/*.h > test && printf "$(GREEN)\t[OK]\n" || grep Error test
 	@printf "${NC}"
 	@rm test
 

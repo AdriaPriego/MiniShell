@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/30 18:45:39 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/31 15:56:51 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	tokenizer(char *str, t_lex **lexer)
 	return (0);
 }
 
-int	main(int ac, char **av)
+/* int	main(int ac, char **av)
 {
 	t_lex	*lexer;
 	//t_cmd	*commands;
@@ -113,4 +113,4 @@ int	main(int ac, char **av)
 	//expander
 	lexer_lstclear(&lexer);
 	printf("\n");
-}
+} */

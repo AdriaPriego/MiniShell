@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/30 00:53:30 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/08/31 16:30:23 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,7 @@
 # define C_TWO_QUOTE 34
 
 char	*generate_entry(char **envp);
-char	**generate(char *str);
 int		ft_array_len(char **array);
-int		test_exist(char *str);
 void	init_signals(void);
 void	ft_pwd(void);
 void	ft_env(char **envp);
@@ -53,7 +51,6 @@ int		count_spaces(char *str);
 void	ft_export(char **comand, char **envp);
 void	ft_unset(char **comand, char **envp);
 void	generate_terminal(char **envp);
-int		execute_comand(char **comand, char **envp);
 
 /*------------------------------STRUCTURES-------------------------------*/
 
