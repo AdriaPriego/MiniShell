@@ -310,7 +310,7 @@ void _rl_parse_colors(void)
   p = sh_get_env_value ("LS_COLORS");
   if (p == 0 || *p == '\0')
     {
-      _rl_color_ext_list = NULL;
+      _rl_color_exvoid = NULL;
       return;
     }
 
@@ -342,8 +342,8 @@ void _rl_parse_colors(void)
                  having terminal-specific defs override global).  */
 
               ext = (COLOR_EXT_TYPE *)xmalloc (sizeof *ext);
-              ext->next = _rl_color_ext_list;
-              _rl_color_ext_list = ext;
+              ext->next = _rl_color_exvoid;
+              _rl_color_exvoid = ext;
 
               ++p;
               ext->ext.string = buf;
@@ -425,13 +425,13 @@ void _rl_parse_colors(void)
 
       _rl_errmsg ("unparsable value for LS_COLORS environment variable");
       free (color_buf);
-      for (e = _rl_color_ext_list; e != NULL; /* empty */)
+      for (e = _rl_color_exvoid; e != NULL; /* empty */)
         {
           e2 = e;
           e = e->next;
           free (e2);
         }
-      _rl_color_ext_list = NULL;
+      _rl_color_exvoid = NULL;
       _rl_colored_stats = 0;	/* can't have colored stats without colors */
     }
 #else /* !COLOR_SUPPORT */

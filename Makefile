@@ -3,7 +3,7 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
+#    By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
 #    Updated: 2023/08/31 14:01:33 by apriego-         ###   ########.fr        #
@@ -23,17 +23,19 @@ YELLOW	=	\033[38;5;190m
 
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
-INCLUDE	=	-I./inc -I./readline
+INCLUDE	=	-I./inc #-I./readline
 RM		=	rm -fr
 
 #==================FILES===================#
 
 NAME		=	minishell
 COMP		=	./libft/libft.a
+
 FILES_ENTRY	=	entry.c signals.c
 FILES_BUILT	=	built_ins.c built_ins2.c
 FILES_GEN	=	main.c utils.c
 EXPAN_GEN	=	expansor.c
+TEMP_LEXER			=	tokenizer.c tokenizer_utils.c tokenizer_lists.c parser.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/
@@ -57,17 +59,13 @@ OBJ_ENTRY	=	$(addprefix $(DIR_OBJ),$(SRC_ENTRY:.c=.o))
 OBJ_BUILT	=	$(addprefix $(DIR_OBJ),$(SRC_BUILT:.c=.o))
 OBJ			=	$(addprefix $(DIR_OBJ),$(SRC_GEN:.c=.o))
 
-LIB_A		:=	$(RDLINE_ROOT)libreadline.a $(RDLINE_ROOT)libhistory.a \
-				$(LIBFT_ROOT)libft.a
+LIB_A		:=	$(LIBFT_ROOT)libft.a
 
-LIB_ADD_DIR	:=	-L$(RDLINE_ROOT) -L$(LIBFT_ROOT)
-
-LIB_SEARCH	:=	-lreadline -lhistory -ltermcap -lft
+LIB_ADD_DIR	:=	-L$(LIBFT_ROOT)
 
 #=================HEADERS==================#
 HEADERS		:=	$(INC_ROOT)
 HEADERS		+=	$(addsuffix $(INC_ROOT),$(LIBFT_ROOT))
-HEADERS		+=	$(RDLINE_ROOT)
 
 #==================RULES===================#
 
