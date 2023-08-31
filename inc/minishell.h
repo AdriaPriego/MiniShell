@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/24 17:47:04 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/31 14:02:58 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <sys/stat.h>
 # include <readline.h>
 # include <history.h>
+# include <errno.h>
 
 /*--------------------------------MACROS--------------------------------*/
 
@@ -46,5 +47,7 @@ char	**ft_splitn(char *str, char c, int qtt);
 int		count_spaces(char *str);
 void	ft_export(char **comand, char **envp);
 void	ft_unset(char **comand, char **envp);
+void	generate_terminal(char **envp);
+int		execute_comand(char **comand, char **envp);
 
 #endif

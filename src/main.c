@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_ins2.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/24 17:47:17 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/28 12:59:31 by apriego-         ###   ########.fr       */
+/*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
+/*   Updated: 2023/08/31 10:48:40 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	ft_export(char **comand, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	int		i;
-	char	**aux;
-
-	i = 0;
-	aux = ft_splitn(comand[2], ' ', 2);
-	while (envp[i])
-		i++;
-	envp[i] = ft_strdup(aux[1]);
-	envp[i + 1] = NULL;
+	(void)argc;
+	(void)argv;
+	init_signals();
+	generate_terminal(envp);
+	return (0);
 }

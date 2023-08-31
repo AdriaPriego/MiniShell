@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/30 12:40:53 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/31 14:06:48 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ void	ft_cd(char **comand, char **envp)
 			chdir(find_home(envp));
 		else if (chdir(str[1]) != 0)
 			ft_printf("cd: no such file or directory: %s\n", str[1]);
+	}
+	else
+	{
+		errno = 1;
+		perror("minishell: ");
+		//ft_printf_fd(2, "minishell: command not found: %s\n", str[0]);
 	}
 	ft_free_matrix((const char **)str, ft_array_len(str));
 }

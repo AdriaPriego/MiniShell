@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/30 12:52:26 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/31 13:15:19 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ char	*ft_joincolors(char *array)
 		return (NULL);
 	aux[0] = ft_strjoin(GREENBASH, array);
 	if (!aux)
-		return (ft_free_matrix((const char **)aux, ft_array_len(aux)));
+		return ((char *)ft_free_matrix((const char **)aux, ft_array_len(aux)));
 	aux[1] = ft_strjoin(aux[0], "$>");
 	if (!aux)
-		return (ft_free_matrix((const char **)aux,  ft_array_len(aux)));
+		return ((char *)ft_free_matrix((const char **)aux,  ft_array_len(aux)));
 	str = ft_strjoin(aux[1], NO_COL);
-	if (!aux)
-		return (ft_free_matrix((const char **)aux,  ft_array_len(aux)));
-	ft_free_matrix((const char **)aux,  ft_array_len(aux));
+	if (!str)
+		return ((char *)ft_free_matrix((const char **)aux,  ft_array_len(aux)));
+	ft_free_matrix((const char **)aux,  2);
 	return (str);
 }
 
@@ -87,4 +87,61 @@ char	**generate(char *str)
 	args[2] = str;
 	args[3] = NULL;
 	return (args);
+}
+
+// SEGURAMENTE COMAND[2] SE DEBE DE CANVIAR SI SE CANVIA
+// COMO SE GUARDAN LAS COMANDAS
+
+int	execute_comand(char **comand, char **envp)
+{
+	pid_t	pid;
+
+	if (ft_strlen(comand[2]) == 0)
+		return (EXIT_DAD);
+	else if (ft_strnstr(comand[2], "cd", ft_strlen(comand[2])) != 0)
+		ft_cd(comand, envp);
+	else if (ft_strnstr(comand[2], "env", ft_strlen(comand[2])) != 0)
+		ft_env(envp);
+	else if (ft_strnstr(comand[2], "pwd", ft_strlen(comand[2])) != 0)
+		ft_pwd();
+	else if (ft_strnstr(comand[2], "echo", ft_strlen(comand[2])) != 0)
+		ft_echo(comand);
+	else if (ft_strnstr(comand[2], "unset", ft_strlen(comand[2])) != 0)
+		ft_unset(comand, envp);
+	else if (ft_strnstr(comand[2], "export", ft_strlen(comand[2])) != 0)
+		ft_export(comand, envp);
+	else
+	{
+		pid = fork();
+		if (pid == 0)
+			execve("/bin/bash", comand, envp);
+		wait(0);
+	}
+	return (EXIT_DAD);
+}
+
+void	generate_terminal(char **envp)
+{
+	char	*str;
+	char	**comand;
+
+	str = generate_entry(envp);
+	if (!str)
+		return ;
+	while (str && (ft_strnstr(str, "exit", ft_strlen(str)) == 0
+			|| ft_strlen(str) == 0))
+	{
+		add_history(str);
+		//COMAND COSA GUARRA
+		comand = generate(str);
+		if (execute_comand(comand, envp) == EXIT_SON)
+			return ;
+		ft_free_matrix((const char **)comand, 3);
+		str = generate_entry(envp);
+		if (!str)
+			return ;
+	}
+	if (!str || !ft_strncmp(str, "exit", ft_strlen(str)))
+		ft_printf("exit\n");
+	free(str);
 }
