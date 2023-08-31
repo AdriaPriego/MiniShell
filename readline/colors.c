@@ -75,7 +75,7 @@ static void restore_default_color (void);
 
 #define RL_COLOR_PREFIX_EXTENSION	"readline-colored-completion-prefix"
 
-COLOR_EXT_TYPE *_rl_color_ext_list = 0;
+COLOR_EXT_TYPE *_rl_color_exvoid = 0;
 
 /* Output a color indicator (which may contain nulls).  */
 void
@@ -119,7 +119,7 @@ _rl_custom_readline_prefix (void)
   COLOR_EXT_TYPE *ext;
 
   len = strlen (RL_COLOR_PREFIX_EXTENSION);
-  for (ext = _rl_color_ext_list; ext; ext = ext->next)
+  for (ext = _rl_color_exvoid; ext; ext = ext->next)
     if (ext->ext.len == len && STREQN (ext->ext.string, RL_COLOR_PREFIX_EXTENSION, len))
       return (&ext->seq);
   return (NULL);
@@ -276,7 +276,7 @@ _rl_print_color_indicator (const char *f)
       /* Test if NAME has a recognized suffix.  */
       len = strlen (name);
       name += len;		/* Pointer to final \0.  */
-      for (ext = _rl_color_ext_list; ext != NULL; ext = ext->next)
+      for (ext = _rl_color_exvoid; ext != NULL; ext = ext->next)
         {
           if (ext->ext.len <= len
               && strncmp (name - ext->ext.len, ext->ext.string,

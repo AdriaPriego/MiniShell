@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 15:52:31 by fbosch           ###   ########.fr       */
+/*   Created: 2023/08/26 22:38:29 by fbosch            #+#    #+#             */
+/*   Updated: 2023/08/27 21:54:01 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "minishell.h"
 
-int	main(int ac, char **av, char **envp)
+t_cmd	*parser(t_lex *lexer)
 {
-	(void)av;
-	if (ac != 1)
-		return (1);
-	init_signals();
-	generate_terminal(envp);
-	return (0);
+	(void)lexer;
+	return (NULL);
 }
