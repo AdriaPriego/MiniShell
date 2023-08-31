@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 16:15:09 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/31 21:26:08 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ char	*generate_entry(char **envp)
 void	generate_terminal(char **envp)
 {
 	t_lex	*lexer;
+	t_cmd	*commands;
 	char	*str;
 
 	str = generate_entry(envp);
@@ -83,11 +84,14 @@ void	generate_terminal(char **envp)
 			|| ft_strlen(str) == 0))
 	{
 		add_history(str);
-		tokenizer(str, &lexer);
+		tokenizer(str, &lexer); //Protect return
 		printf("entry: %s\n", str);
 		printf("token: ");
 		print_tokens(lexer);
 		printf("\n");
+		parser(&commands, lexer); //protect return
+		lexer_lstclear(&lexer);
+		free (str);
 		str = generate_entry(envp);
 		if (!str)
 			return ;

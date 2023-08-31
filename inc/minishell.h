@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 19:33:24 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/08/31 21:32:18 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ typedef struct s_lexer
 typedef struct s_cmd
 {
 	char			**args;
+	char			*infile;
+	char			*outfile;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }	t_cmd;
@@ -107,7 +109,7 @@ t_lex	*lexer_lstlast(t_lex *lst);
 
 //Converts token list (lexer) into a simple arguments list
 /*	PARSER	*/
-t_cmd	*parser(t_lex *lexer);
+int	*parser(t_cmd **commands, t_lex *lexer);
 
 //Reads from lexer structure and expands variables
 /*	EXPANSOR	*/
