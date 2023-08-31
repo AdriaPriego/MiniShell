@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 13:15:02 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/24 14:53:23 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:14:20 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,22 @@ int	count_spaces(char *str)
 		i++;
 	}
 	return (count);
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t			i;
+	unsigned char	*str;
+	unsigned char	*str1;
+
+	i = 0;
+	str = (unsigned char *)s1;
+	str1 = (unsigned char *)s2;
+	while ((str[i] != '\0' || str1[i] != '\0'))
+	{
+		if (str[i] != str1[i])
+			return (str[i] - str1[i]);
+		i++;
+	}
+	return (0);
 }

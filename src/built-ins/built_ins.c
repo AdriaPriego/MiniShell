@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 14:06:48 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/31 15:50:56 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ void	ft_cd(char **comand, char **envp)
 	str = ft_split(comand[2], ' ');
 	if (ft_strncmp(str[0], "cd", ft_strlen(str[0])) == 0)
 	{
-		if (ft_strncmp(str[1], "..", ft_strlen(str[1])) == 0)
+		if (!str[1])
+			chdir(find_home(envp));
+		else if (ft_strncmp(str[1], "..", ft_strlen(str[1])) == 0)
 			chdir("..");
 		else if (ft_strncmp(str[1], ".", ft_strlen(str[1])) == 0)
 			chdir(".");

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 14:02:58 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:14:44 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,6 @@ void	ft_export(char **comand, char **envp);
 void	ft_unset(char **comand, char **envp);
 void	generate_terminal(char **envp);
 int		execute_comand(char **comand, char **envp);
+int		ft_strcmp(const char *s1, const char *s2);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 13:15:19 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:15:09 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ char	*generate_entry(char **envp)
 	char	*split;
 	char	*str;
 
-	aux = getcwd(NULL, 0);
-	if (ft_strncmp(aux, find_home(envp), ft_strlen(aux)) == 0)
+	aux = getcwd(NULL, 0);	
+	if (ft_strcmp(find_home(envp), aux) == 0)
 		entry = ft_joincolors("~");
-	else if (ft_strncmp(aux, "/", ft_strlen(aux)) == 0)
+	else if (ft_strcmp(aux, "/") == 0)
 		entry = ft_joincolors(aux);
 	else
 	{
