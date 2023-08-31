@@ -6,7 +6,7 @@
 #    By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/27 20:10:04 by fbosch           ###   ########.fr        #
+#    Updated: 2023/08/31 14:01:33 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,31 +30,53 @@ RM		=	rm -fr
 
 NAME		=	minishell
 COMP		=	./libft/libft.a
-SRC			=	tokenizer.c tokenizer_utils.c tokenizer_lists.c parser.c
+
+FILES_ENTRY	=	entry.c signals.c
+FILES_BUILT	=	built_ins.c built_ins2.c
+FILES_GEN	=	main.c utils.c
+EXPAN_GEN	=	expansor.c
+TEMP_LEXER			=	tokenizer.c tokenizer_utils.c tokenizer_lists.c parser.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/
 DIR_OBJ		:=	temp/
 INC_ROOT	:=	inc/
-OBJ		=	$(addprefix $(DIR_OBJ),$(SRC:.c=.o))
+SRC_DIR		=	src/
+ENTRY_DIR	=	entry/
+BUILT_DIR	=	built-ins/
+LEXER_DIR	=	lexer/
+PARSER_DIR	=	parser/
+EXPAN_DIR	=	expansor/
+EXEC_DIR	=	executor/
 
-#==================RULES===================#
+SRC_EXPAN	=	$(addprefix $(SRC_DIR),$(addprefix $(EXPAN_DIR),$(FILES_EXPAN)))
+SRC_ENTRY	=	$(addprefix $(SRC_DIR),$(addprefix $(ENTRY_DIR),$(FILES_ENTRY)))
+SRC_BUILT	=	$(addprefix $(SRC_DIR),$(addprefix $(BUILT_DIR),$(FILES_BUILT)))
+SRC_GEN		=	$(addprefix $(SRC_DIR), $(FILES_GEN))
+
+OBJ_EXPAN	=	$(addprefix $(DIR_OBJ),$(SRC_EXPAN:.c=.o))
+OBJ_ENTRY	=	$(addprefix $(DIR_OBJ),$(SRC_ENTRY:.c=.o))
+OBJ_BUILT	=	$(addprefix $(DIR_OBJ),$(SRC_BUILT:.c=.o))
+OBJ			=	$(addprefix $(DIR_OBJ),$(SRC_GEN:.c=.o))
 
 LIB_A		:=	$(LIBFT_ROOT)libft.a
 
 LIB_ADD_DIR	:=	-L$(LIBFT_ROOT)
 
-#<-------------------------------->HEADERS<---------------------------------->#
+#=================HEADERS==================#
 HEADERS		:=	$(INC_ROOT)
 HEADERS		+=	$(addsuffix $(INC_ROOT),$(LIBFT_ROOT))
+
+#==================RULES===================#
 
 all : temp librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
+#@$(MAKE) rdline --no-print-directory
 
-$(NAME) : $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIB_ADD_DIR) $(LIB_A) -o $@
+$(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY)
+	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
 	@echo "${GREEN}Minishell Compiled${NC}"
 
 rdline :
@@ -64,7 +86,8 @@ rdline :
 	@echo "${GREEN}Readline Compiled${NC}"
 
 
-$(DIR_OBJ)%.o: %.c
+$(DIR_OBJ)%.o: %.c Makefile $(LIB_A) $(HEADER)
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(INCLUDE) -c $< -o $@
 	@echo "${YELLOW}Compiling obj $@...${NC}"
 
@@ -78,9 +101,9 @@ clean	:
 
 fclean	: clean
 	@$(MAKE) -C libft cleaname --no-print-directory
-	@$(MAKE) -C readline clean --no-print-directory
 	@$(RM) $(NAME)
 	@printf "${RED}Minishell deleted\n${NC}"
+	@$(MAKE) -C readline clean --no-print-directory
 
 norm	:
 	@printf "${PURPLE}SEARCHING FOR A PRINTF IN THE PROJECT: "
