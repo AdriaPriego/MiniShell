@@ -74,7 +74,7 @@ typedef struct _color_ext_type
 
 /* file extensions indicators (.txt, .log, .jpg, ...)
    Values are taken from $LS_COLORS in rl_parse_colors(). */
-extern COLOR_EXT_TYPE *_rl_color_ext_list;
+extern COLOR_EXT_TYPE *_rl_color_exvoid;
 
 #define FILETYPE_INDICATORS				\
   {							\

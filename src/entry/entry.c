@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   entry.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
 /*   Updated: 2023/08/31 16:15:09 by apriego-         ###   ########.fr       */
@@ -71,59 +71,10 @@ char	*generate_entry(char **envp)
 	return (str);
 }
 
-char	**generate(char *str)
-{
-	char	**args;
-
-	args = malloc(4 * sizeof(char *));
-	if (!args)
-		return (NULL);
-	args[0] = ft_strdup("/bin/bash");
-	if (!args[0])
-		return (ft_free_matrix((const char **)args, ft_array_len(args)));
-	args[1] = ft_strdup("-c");
-	if (!args[1])
-		return (ft_free_matrix((const char **)args, ft_array_len(args)));
-	args[2] = str;
-	args[3] = NULL;
-	return (args);
-}
-
-// SEGURAMENTE COMAND[2] SE DEBE DE CANVIAR SI SE CANVIA
-// COMO SE GUARDAN LAS COMANDAS
-
-int	execute_comand(char **comand, char **envp)
-{
-	pid_t	pid;
-
-	if (ft_strlen(comand[2]) == 0)
-		return (EXIT_DAD);
-	else if (ft_strnstr(comand[2], "cd", ft_strlen(comand[2])) != 0)
-		ft_cd(comand, envp);
-	else if (ft_strnstr(comand[2], "env", ft_strlen(comand[2])) != 0)
-		ft_env(envp);
-	else if (ft_strnstr(comand[2], "pwd", ft_strlen(comand[2])) != 0)
-		ft_pwd();
-	else if (ft_strnstr(comand[2], "echo", ft_strlen(comand[2])) != 0)
-		ft_echo(comand);
-	else if (ft_strnstr(comand[2], "unset", ft_strlen(comand[2])) != 0)
-		ft_unset(comand, envp);
-	else if (ft_strnstr(comand[2], "export", ft_strlen(comand[2])) != 0)
-		ft_export(comand, envp);
-	else
-	{
-		pid = fork();
-		if (pid == 0)
-			execve("/bin/bash", comand, envp);
-		wait(0);
-	}
-	return (EXIT_DAD);
-}
-
 void	generate_terminal(char **envp)
 {
+	t_lex	*lexer;
 	char	*str;
-	char	**comand;
 
 	str = generate_entry(envp);
 	if (!str)
@@ -132,11 +83,11 @@ void	generate_terminal(char **envp)
 			|| ft_strlen(str) == 0))
 	{
 		add_history(str);
-		//COMAND COSA GUARRA
-		comand = generate(str);
-		if (execute_comand(comand, envp) == EXIT_SON)
-			return ;
-		ft_free_matrix((const char **)comand, 3);
+		tokenizer(str, &lexer);
+		printf("entry: %s\n", str);
+		printf("token: ");
+		print_tokens(lexer);
+		printf("\n");
 		str = generate_entry(envp);
 		if (!str)
 			return ;
