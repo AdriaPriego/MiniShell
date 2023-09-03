@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 21:32:18 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/03 04:38:26 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,6 @@
 # define CTRL_C SIGINT
 # define CTRL_SLASH SIGQUIT
 
-//Exit
-# define EXIT_SON 0
-# define EXIT_DAD 1
-
 //ASCII characters
 # define C_VERTICAL_BAR 124
 # define C_LESS 60
@@ -45,6 +41,12 @@
 # define C_DOLLAR 36
 # define C_ONE_QUOTE 39
 # define C_TWO_QUOTE 34
+
+//Redirection type
+# define IN 0
+# define HERE_DOC 1
+# define OUT_TRUNC 2
+# define OUT_APPEND 3
 
 /*===============================	STRUCTURES	==============================*/
 
@@ -65,13 +67,19 @@ typedef struct s_lexer
 	struct s_lexer	*next;
 }	t_lex;
 
+typedef struct s_in_out
+{
+	int				type;
+	char			*file;
+	struct s_in_out	*next;
+}	t_in_out;
+
 typedef struct s_cmd
 {
 	char			**args;
-	char			*infile;
-	char			*outfile;
-	struct s_cmd	*next;
+	t_in_out		*redirect;
 	struct s_cmd	*prev;
+	struct s_cmd	*next;
 }	t_cmd;
 
 /*===============================	FUNCTIONS	==============================*/
@@ -100,7 +108,7 @@ int		create_token(char *str, int i, t_lex *lexer);
 int		ft_isspace(int c);
 int		ft_isquote(int c);
 int		ft_isreserved(int c);
-void	print_tokens(t_lex *lexer);
+void	print_tokens(t_lex *lexer, char *str);
 t_lex	*lexer_lstnew(void);
 void	lexer_lstadd_back(t_lex **lst, t_lex *new);
 void	lexer_lstclear(t_lex **lst);
@@ -109,7 +117,12 @@ t_lex	*lexer_lstlast(t_lex *lst);
 
 //Converts token list (lexer) into a simple arguments list
 /*	PARSER	*/
-int	*parser(t_cmd **commands, t_lex *lexer);
+int		parser(t_cmd **commands, t_lex **lexer);
+t_cmd	*parser_lstnew(void);
+void	parser_lstadd_back(t_cmd **lst, t_cmd *new);
+void	parser_lstclear(t_cmd **lst);
+int		parser_lstsize(t_cmd *lst);
+t_cmd	*parser_lstlast(t_cmd *lst);
 
 //Reads from lexer structure and expands variables
 /*	EXPANSOR	*/

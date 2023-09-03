@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+         #
+#    By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/08/31 21:36:46 by fbosch           ###   ########.fr        #
+#    Updated: 2023/09/03 04:42:36 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ YELLOW	=	\033[38;5;190m
 #=================COMMANDS=================#
 
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	#-Wall -Wextra -Werror
 INCLUDE	=	-I./inc -I./readline
 RM		=	rm -fr
 

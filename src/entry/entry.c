@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   entry.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 21:26:08 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/03 04:25:21 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,8 @@ void	generate_terminal(char **envp)
 	{
 		add_history(str);
 		tokenizer(str, &lexer); //Protect return
-		printf("entry: %s\n", str);
-		printf("token: ");
-		print_tokens(lexer);
-		printf("\n");
-		parser(&commands, lexer); //protect return
+		print_tokens(lexer, str);
+		parser(&commands, &lexer); //protect return
 		lexer_lstclear(&lexer);
 		free (str);
 		str = generate_entry(envp);

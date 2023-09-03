@@ -430,7 +430,7 @@ Copyright (C) 2021 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/Users/fbosch/Desktop/MiniShell/readline'
+ac_pwd='/Users/ferran/Documents/42_school/minishell/readline'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 test -n "$AWK" || AWK=awk
@@ -613,7 +613,7 @@ S["ARFLAGS"]="cr"
 S["LOCAL_DEFS"]=""
 S["LOCAL_LDFLAGS"]=""
 S["LOCAL_CFLAGS"]=""
-S["BUILD_DIR"]="/Users/fbosch/Desktop/MiniShell/readline"
+S["BUILD_DIR"]="/Users/ferran/Documents/42_school/minishell/readline"
 S["EXAMPLES_INSTALL_TARGET"]="install-examples"
 S["SHARED_INSTALL_TARGET"]="install-shared"
 S["STATIC_INSTALL_TARGET"]="install-static"
@@ -657,14 +657,14 @@ S["CC"]="gcc"
 S["SET_MAKE"]=""
 S["CROSS_COMPILE"]=""
 S["BRACKETED_PASTE"]="-DBRACKETED_PASTE_DEFAULT=1"
-S["host_os"]="darwin19.6.0"
+S["host_os"]="darwin22.4.0"
 S["host_vendor"]="apple"
 S["host_cpu"]="x86_64"
-S["host"]="x86_64-apple-darwin19.6.0"
-S["build_os"]="darwin19.6.0"
+S["host"]="x86_64-apple-darwin22.4.0"
+S["build_os"]="darwin22.4.0"
 S["build_vendor"]="apple"
 S["build_cpu"]="x86_64"
-S["build"]="x86_64-apple-darwin19.6.0"
+S["build"]="x86_64-apple-darwin22.4.0"
 S["target_alias"]=""
 S["host_alias"]=""
 S["build_alias"]=""
