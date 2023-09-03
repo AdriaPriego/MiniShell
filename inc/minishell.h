@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/03 04:38:26 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/03 19:16:30 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,35 @@
 # define C_ONE_QUOTE 39
 # define C_TWO_QUOTE 34
 
-//Redirection type
+/* //Redirection type
 # define IN 0
 # define HERE_DOC 1
 # define OUT_TRUNC 2
-# define OUT_APPEND 3
+# define OUT_APPEND 3 */
+
+//Parser syntax errors
+#define SYNTAX_NL 0
+#define SYNTAX_PIPE 1
+#define SYNTAX_LESS 2
+#define SYNTAX_GREAT 3
+#define SYNTAX_LESS_LESS 4
+#define SYNTAX_GREAT_GREAT 5
 
 /*===============================	STRUCTURES	==============================*/
 
+typedef enum s_redirect_type
+{
+	REDIRECT_NONE = 0,
+	IN,
+	HERE_DOC,
+	OUT_TRUNC,
+	OUT_APPEND,
+}	t_type;
+
 typedef enum s_token
 {
-	PIPE = 1,
+	NONE = 0,
+	PIPE,
 	GREAT,
 	GREAT_GREAT,
 	LESS,
@@ -69,15 +87,15 @@ typedef struct s_lexer
 
 typedef struct s_in_out
 {
-	int				type;
+	t_type			type;
 	char			*file;
 	struct s_in_out	*next;
-}	t_in_out;
+}	t_io;
 
 typedef struct s_cmd
 {
 	char			**args;
-	t_in_out		*redirect;
+	t_io		*redirect;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -118,11 +136,24 @@ t_lex	*lexer_lstlast(t_lex *lst);
 //Converts token list (lexer) into a simple arguments list
 /*	PARSER	*/
 int		parser(t_cmd **commands, t_lex **lexer);
+void	parser_error(int error);
+int		check_duplicate_tokens(t_lex *lexer);
+int		check_pipe_error(t_lex *lexer);
+int		check_syntax_error(t_lex *lexer);
+
+
 t_cmd	*parser_lstnew(void);
 void	parser_lstadd_back(t_cmd **lst, t_cmd *new);
 void	parser_lstclear(t_cmd **lst);
 int		parser_lstsize(t_cmd *lst);
 t_cmd	*parser_lstlast(t_cmd *lst);
+
+t_io	*redirect_lstnew(void);
+void	redirect_lstadd_back(t_io **lst, t_io *new);
+void	redirect_lstclear(t_io **lst);
+int		redirect_lstsize(t_io *lst);
+t_io	*redirect_lstlast(t_io *lst);
+
 
 //Reads from lexer structure and expands variables
 /*	EXPANSOR	*/

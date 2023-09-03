@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:33:56 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/01 18:36:30 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/03 14:53:45 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	print_tokens(t_lex *lexer, char *str)
 	printf("token: ");
 	while (lexer)
 	{
-		if (!lexer->word)
+		if (lexer->token != NONE)
 		{
 			if (lexer->token == PIPE)
 				printf("PIPE===");

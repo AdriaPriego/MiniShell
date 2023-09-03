@@ -6,7 +6,7 @@
 #    By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/03 04:42:36 by fbosch           ###   ########.fr        #
+#    Updated: 2023/09/03 19:24:06 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ FILES_ENTRY	=	entry.c signals.c
 FILES_BUILT	=	built_ins.c built_ins2.c
 FILES_GEN	=	main.c utils.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
-FILES_PARSE	=	parser.c
+FILES_PARSE	=	parser.c parser_syntax.c cmd_lists.c redirect_lists.c
 EXPAN_GEN	=	expansor.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/

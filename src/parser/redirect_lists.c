@@ -1,63 +1,60 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_cmd_lists.c                                 :+:      :+:    :+:   */
+/*   redirect_lists.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/01 17:32:11 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/01 17:54:07 by fbosch           ###   ########.fr       */
+/*   Created: 2023/09/03 19:00:30 by fbosch            #+#    #+#             */
+/*   Updated: 2023/09/03 19:23:20 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_cmd	*parser_lstnew(void)
+t_io	*redirect_lstnew(void)
 {
-	t_cmd	*node;
+	t_io	*node;
 
-	node = malloc(sizeof(t_cmd));
+	node = malloc(sizeof(t_io));
 	if (!node)
 		return (NULL);
-	node->args = NULL;
-	node->redirect = NULL;
-	node->prev = NULL;
+	node->file = NULL;
+	node->type = REDIRECT_NONE;
 	node->next = NULL;
 	return (node);
 }
 
-void	parser_lstadd_back(t_cmd **lst, t_cmd *new)
+void	redirect_lstadd_back(t_io **lst, t_io *new)
 {
-	t_cmd	*last;
+	t_io	*last;
 
 	if ((*lst))
 	{
-		last = parser_lstlast(*lst);
+		last = redirect_lstlast(*lst);
 		last->next = new;
-		new->prev = last;
 	}
 	else
 		(*lst) = new;
 }
 
-void	parser_lstclear(t_cmd **lst)
+void	redirect_lstclear(t_io **lst)
 {
-	t_cmd	*temp;
-	t_cmd	*aux;
+	t_io	*temp;
+	t_io	*aux;
 
 	aux = *lst;
 	while (aux)
 	{
 		temp = aux->next;
-		//free args
-		//free redirect structure
+		free(aux->file);
 		free(aux);
 		aux = temp;
 	}
 	*lst = NULL;
 }
 
-int	parser_lstsize(t_cmd *lst)
+int	redirect_lstsize(t_io *lst)
 {
 	int	i;
 
@@ -70,9 +67,9 @@ int	parser_lstsize(t_cmd *lst)
 	return (i);
 }
 
-t_cmd	*parser_lstlast(t_cmd *lst)
+t_io	*redirect_lstlast(t_io *lst)
 {
-	t_cmd	*node;
+	t_io	*node;
 
 	if (!lst)
 		return (0);
