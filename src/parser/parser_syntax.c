@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:14:54 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/03 18:22:08 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/05 00:29:30 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ int	check_syntax_error(t_lex *lexer)
 		if (lexer->token != NONE)
 		{
 			if (check_duplicate_tokens(lexer) == 1)
-				return (1);
+				return (SYNTAX_ERR);
 			if (check_pipe_error(lexer) == 1)
-				return (1);
+				return (SYNTAX_ERR);
 		}
 		lexer = lexer->next;
 	}

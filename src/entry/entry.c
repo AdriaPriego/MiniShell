@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/05 00:06:53 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/05 00:57:37 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,30 +63,26 @@ char	*generate_entry(char **envp)
 
 int	string_to_command(char *str, t_cmd **commands, char **env)
 {
+	int		status;
 	t_lex	*lexer;
 
 	lexer = NULL;
 	*commands = NULL;
-	if (tokenizer(str, &lexer) == 1)
+	status = tokenizer(str, &lexer);
+	if (status == 0)
 	{
-		lexer_lstclear(&lexer);
-		ft_printf_fd(STDERR_FILENO, MEMORY_ERROR);
-		return (1);
-	}
-	/*
-	
+		/*
+
 		SPACE RESERVED FOR EXPANSOR
 
-	*/
-	if (parser(commands, &lexer) != 0)
-	{
-		lexer_lstclear(&lexer);
-		ft_printf_fd(STDERR_FILENO, MEMORY_ERROR);
-		return (1);
+		*/
+		status = parser(commands, &lexer);
 	}
 	print_commands(*commands);
+	if (status == 1)
+		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);
 	lexer_lstclear(&lexer);
-	return (0);
+	return (status);
 }
 
 void	generate_terminal(char **envp)
@@ -101,7 +97,7 @@ void	generate_terminal(char **envp)
 			|| ft_strlen(str) == 0))
 	{
 		add_history(str);
-		if (string_to_command(str, &commands, envp) == 0)
+		if (string_to_command(str, &commands, envp) == 0 && commands != NULL)
 		{
 			/*
 				SPACE RESERVED FOR EXECUTOR

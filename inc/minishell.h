@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/05 00:08:29 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/05 00:28:37 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,11 @@
 # define OUT_APPEND 3 */
 
 //General errors
-# define INVALID_ARGS "Invalid arguments: Usage [./minishell]\n"
-# define MEMORY_ERROR "Memory error, please free space and attempt again\n"
+# define MSSG_INVALID_ARGS "Invalid arguments: Usage [./minishell]\n"
+# define MSSG_MEMORY_ERROR "Memory error, please free space and attempt again\n"
 
 //Parser syntax errors
+# define SYNTAX_ERR 42
 # define SYNTAX_NL 0
 # define SYNTAX_PIPE 1
 # define SYNTAX_LESS 2

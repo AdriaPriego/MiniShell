@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 22:38:29 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/04 23:18:17 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/05 01:08:15 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int	create_simple_command(t_lex **head, t_cmd *cmd)
 void	print_commands(t_cmd *commands)
 {
 	int	i;
+	t_io	*temp;
+
 	printf("\n\n\n");
 	while (commands)
 	{
@@ -126,20 +128,21 @@ void	print_commands(t_cmd *commands)
 			printf("NULL");
 		printf("\n");
 		printf("Redirections: ");
-		while (commands->redirect)
+		temp = commands->redirect;
+		while (temp)
 		{
-			if (commands->redirect->type == IN)
+			if (temp->type == IN)
 				printf("(IN)");
-			else if (commands->redirect->type == OUT_TRUNC)
+			else if (temp->type == OUT_TRUNC)
 				printf("(OUT_TRUNC)");
-			else if (commands->redirect->type == OUT_APPEND)
+			else if (temp->type == OUT_APPEND)
 				printf("(OUT_APPEND)");
-			else if (commands->redirect->type == HERE_DOC)
+			else if (temp->type == HERE_DOC)
 				printf("(HERE_DOC)");
-			printf("->%s, ", commands->redirect->file);
-			commands->redirect = commands->redirect->next;
+			printf("->%s, ", temp->file);
+			temp = temp->next;
 		}
-		if (commands->redirect == NULL)
+		if (temp == NULL)
 			printf("NULL");
 		printf("\n");
 		printf("		|\n");
@@ -159,14 +162,14 @@ int	parser(t_cmd **commands, t_lex **lexer)
 
 	if (!lexer)
 		return (0);
-	if (check_syntax_error(*lexer) == 1)
-		return (lexer_lstclear(lexer), 1);
+	if (check_syntax_error(*lexer) == SYNTAX_ERR)
+		return (lexer_lstclear(lexer), SYNTAX_ERR);
 	head = *lexer;
 	while (head)
 	{
 		new = parser_lstnew();
 		if (!new)
-			return (lexer_lstclear(lexer), 1);
+			return (1);
 		parser_lstadd_back(commands, new);
 		create_simple_command(&head, new);
 		/* create_redirection_structure(&redirect);
@@ -181,13 +184,3 @@ int	parser(t_cmd **commands, t_lex **lexer)
 	}
 	return (0);
 }
-
-		/* if (head->token == GREAT || head->token == GREAT_GREAT
-			|| head->token == LESS || head->token == LESS_LESS)
-		{
-
-		}
-		if (head->token == PIPE)
-		{
-
-		} */
