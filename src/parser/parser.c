@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 22:38:29 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/03 19:22:55 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/04 02:33:08 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,127 @@
 	When it comes to redirections the last parameter is used, the rest of files will be created independently"
 */
 
+int	count_arguments(t_lex *lexer)
+{
+	int	i;
+
+	i = 0;
+	while (lexer && lexer->token != PIPE)
+	{
+		if (lexer->token == NONE)
+		{
+			if (!lexer->prev)
+				i++;
+			else if (lexer->prev->token == NONE || lexer->prev->token == PIPE)
+				i++;
+		}
+		lexer = lexer->next;
+	}
+	return (i);
+}
+
+int	add_redirection(t_io **redirect, t_lex **head)
+{
+	t_lex	*temp;
+	t_io	*new;
+
+	temp = *head;
+	new = redirect_lstnew();
+	if (!new)
+		return (1);
+	redirect_lstadd_back(redirect, new);
+	if (temp->token == LESS)
+		new->type = IN;
+	else if (temp->token == LESS_LESS)
+		new->type = HERE_DOC;
+	else if (temp->token == GREAT)
+		new->type = OUT_TRUNC;
+	else if (temp->token == GREAT_GREAT)
+		new->type = OUT_APPEND;
+	new->file = ft_strdup(temp->next->word);
+	if (!new->file)
+		return (1);
+	*head = (*head)->next;
+	return (0);
+}
+
+int	create_simple_command(t_lex **head, t_cmd *cmd)
+{
+	int		i;
+	int		n_args;
+	t_io	*redirect;
+
+	redirect = NULL;
+	n_args = count_arguments(*head);
+	cmd->args = malloc(sizeof(char *) * (n_args + 1));
+	if (!cmd->args)
+		return (1);
+	cmd->args[n_args] = NULL;
+	i = 0;
+	while (*head && (*head)->token != PIPE)
+	{
+		if ((*head)->token != NONE)
+		{
+			if (add_redirection(&redirect, head) == 1)
+				return (1);
+		}
+		else
+		{
+			cmd->args[i] = ft_strdup((*head)->word);
+			if (!cmd->args[i])
+			{
+				cmd->args = ft_free_matrix((char const **)cmd->args, i);
+				return (1);
+			}
+			i++;
+		}
+		*head = (*head)->next;
+	}
+	cmd->redirect = redirect;
+	if (*head && (*head)->token == PIPE)
+		*head = (*head)->next;
+	return (0);
+}
+
+void	print_commands(t_cmd *commands)
+{
+	int	i;
+	printf("\n\n\n");
+	while (commands)
+	{
+		printf("Args[][]: ");
+		i = 0;
+		while (commands->args[i])
+		{
+			printf("\"%s\",", commands->args[i]);
+			i++;
+		}
+		printf("\n");
+		printf("Redirections: ");
+		while (commands->redirect)
+		{
+			if (commands->redirect->type == IN)
+				printf("(IN)");
+			else if (commands->redirect->type == OUT_TRUNC)
+				printf("(OUT_TRUNC)");
+			else if (commands->redirect->type == OUT_APPEND)
+				printf("(OUT_APPEND)");
+			else if (commands->redirect->type == HERE_DOC)
+				printf("(HERE_DOC)");
+			printf("->%s, ", commands->redirect->file);
+			commands->redirect = commands->redirect->next;
+		}
+		printf("\n");
+		printf("		|\n");
+		printf("		|\n");
+		printf("		V\n");
+		commands = commands->next;
+	}
+	printf("\n");
+}
+
 int	parser(t_cmd **commands, t_lex **lexer)
 {
-	int		pipes;
 	t_cmd	*new;
 	t_lex	*head;
 
@@ -41,15 +159,31 @@ int	parser(t_cmd **commands, t_lex **lexer)
 	head = *lexer;
 	while (head)
 	{
-		if (head->token == GREAT || head->token == GREAT_GREAT)
+		new = parser_lstnew();
+		if (!new)
+			return (lexer_lstclear(lexer), 1);
+		parser_lstadd_back(commands, new);
+		create_simple_command(&head, new);
+		/* create_redirection_structure(&redirect);
+				--fill *redirect
+				--delete redirect nodes from lexer
+		new = create_simple_command();
+		if (!new)
+			return (1);
+		parser_lstadd_back(commands, new);
+		while (head->token != ) */
+		//head = head->next;
+	}
+	print_commands(*commands);
+	return (0);
+}
+
+		/* if (head->token == GREAT || head->token == GREAT_GREAT
+			|| head->token == LESS || head->token == LESS_LESS)
 		{
 
 		}
 		if (head->token == PIPE)
 		{
 
-		}
-		head = head->next;
-	}
-	return (0);
-}
+		} */
