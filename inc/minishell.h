@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 16:14:44 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/04 15:41:57 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,31 +38,19 @@
 # define C_ONE_QUOTE 39
 # define C_TWO_QUOTE 34
 
-char	*generate_entry(char **envp);
-int		ft_array_len(char **array);
-void	init_signals(void);
-void	ft_pwd(void);
-void	ft_env(char **envp);
-void	ft_cd(char **comand, char **envp);
-char	*find_home(char **envp);
-void	ft_echo(char **comand);
-char	**ft_splitn(char *str, char c, int qtt);
-int		count_spaces(char *str);
-void	ft_export(char **comand, char **envp);
-void	ft_unset(char **comand, char **envp);
-void	generate_terminal(char **envp);
-int		execute_comand(char **comand, char **envp);
-int		ft_strcmp(const char *s1, const char *s2);
+# define EXPAND 0
+# define NO_EXPAND 1
 
 /*------------------------------STRUCTURES-------------------------------*/
 
 typedef enum s_token
 {
-	PIPE = 1,
+	NONE = 0,
+	PIPE,
 	GREAT,
 	GREAT_GREAT,
 	LESS,
-	LESS_LESS,
+	LESS_LESS
 }	t_token;
 
 typedef struct s_lexer
@@ -79,6 +67,24 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }	t_cmd;
+
+char	*generate_entry(char **envp);
+int		ft_array_len(char **array);
+void	init_signals(void);
+void	ft_pwd(void);
+void	ft_env(char **envp);
+void	ft_cd(char **comand, char **envp);
+char	*find_home(char **envp);
+void	ft_echo(char **comand);
+char	**ft_splitn(char *str, char c, int qtt);
+int		count_spaces(char *str);
+void	ft_export(char **comand, char **envp);
+void	ft_unset(char **comand, char **envp);
+void	generate_terminal(char **envp);
+int		execute_comand(char **comand, char **envp);
+int		ft_strcmp(const char *s1, const char *s2);
+void	expansor(t_lex **def, char **envp);
+int		ft_strlen_chr(char *str, char c);
 
 /*------------------------------TOKENIZER-------------------------------*/
 int		tokenizer(char *str, t_lex **lexer);
