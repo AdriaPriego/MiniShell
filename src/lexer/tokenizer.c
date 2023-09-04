@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/03 02:17:45 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/04 23:17:25 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ int	tokenizer(char *str, t_lex **lexer)
 	int		i;
 	int		quoted;
 
-	*lexer = NULL;
 	quoted = 0;
 	i = 0;
 	while (str[i])

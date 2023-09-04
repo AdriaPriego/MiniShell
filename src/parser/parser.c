@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 22:38:29 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/04 02:33:08 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/04 23:18:17 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ void	print_commands(t_cmd *commands)
 			printf("\"%s\",", commands->args[i]);
 			i++;
 		}
+		if (commands->args[i] == NULL)
+			printf("NULL");
 		printf("\n");
 		printf("Redirections: ");
 		while (commands->redirect)
@@ -137,12 +139,16 @@ void	print_commands(t_cmd *commands)
 			printf("->%s, ", commands->redirect->file);
 			commands->redirect = commands->redirect->next;
 		}
+		if (commands->redirect == NULL)
+			printf("NULL");
 		printf("\n");
 		printf("		|\n");
 		printf("		|\n");
 		printf("		V\n");
 		commands = commands->next;
 	}
+	if (commands == NULL)
+			printf("NULL");
 	printf("\n");
 }
 
@@ -151,7 +157,6 @@ int	parser(t_cmd **commands, t_lex **lexer)
 	t_cmd	*new;
 	t_lex	*head;
 
-	*commands = NULL;
 	if (!lexer)
 		return (0);
 	if (check_syntax_error(*lexer) == 1)
@@ -174,7 +179,6 @@ int	parser(t_cmd **commands, t_lex **lexer)
 		while (head->token != ) */
 		//head = head->next;
 	}
-	print_commands(*commands);
 	return (0);
 }
 

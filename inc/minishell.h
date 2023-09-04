@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/03 19:16:30 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/05 00:08:29 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,17 @@
 # define OUT_TRUNC 2
 # define OUT_APPEND 3 */
 
+//General errors
+# define INVALID_ARGS "Invalid arguments: Usage [./minishell]\n"
+# define MEMORY_ERROR "Memory error, please free space and attempt again\n"
+
 //Parser syntax errors
-#define SYNTAX_NL 0
-#define SYNTAX_PIPE 1
-#define SYNTAX_LESS 2
-#define SYNTAX_GREAT 3
-#define SYNTAX_LESS_LESS 4
-#define SYNTAX_GREAT_GREAT 5
+# define SYNTAX_NL 0
+# define SYNTAX_PIPE 1
+# define SYNTAX_LESS 2
+# define SYNTAX_GREAT 3
+# define SYNTAX_LESS_LESS 4
+# define SYNTAX_GREAT_GREAT 5
 
 /*===============================	STRUCTURES	==============================*/
 
@@ -105,8 +109,8 @@ typedef struct s_cmd
 //Holds minishell loop: MiniShell$>....
 /*	ENTRY	*/
 void	generate_terminal(char **envp);
+int		string_to_command(char *str, t_cmd **commands, char **env);
 char	*generate_entry(char **envp);
-int		ft_array_len(char **array);
 char	*ft_joincolors(char *array);
 
 //Builtint shell commands
@@ -140,6 +144,8 @@ void	parser_error(int error);
 int		check_duplicate_tokens(t_lex *lexer);
 int		check_pipe_error(t_lex *lexer);
 int		check_syntax_error(t_lex *lexer);
+
+void	print_commands(t_cmd *commands); //DEBUG ONLY
 
 
 t_cmd	*parser_lstnew(void);

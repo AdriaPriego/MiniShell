@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_cmd_lists.c                                 :+:      :+:    :+:   */
+/*   cmd_lists.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 17:32:11 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/03 18:53:22 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/04 23:12:48 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	parser_lstclear(t_cmd **lst)
 	{
 		temp = aux->next;
 		ft_free_malloc_array(aux->args, ft_array_len(aux->args));
-		//free redirect structure
+		redirect_lstclear(&aux->redirect);
 		free(aux);
 		aux = temp;
 	}
