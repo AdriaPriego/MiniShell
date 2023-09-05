@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/04 14:20:20 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/05 12:41:33 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,13 @@ void	generate_terminal(char **envp)
 		add_history(str);
 		tokenizer(str, &lexer);
 		expansor(&lexer, envp);
+		ft_optimize_expan(&lexer);
 		printf("entry: %s\n", str);
 		printf("token: ");
 		print_tokens(lexer);
 		printf("\n");
 		free(str);
+		lexer_lstclear(&lexer);
 		str = generate_entry(envp);
 		if (!str)
 			return ;

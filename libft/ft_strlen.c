@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 15:04:53 by apriego-          #+#    #+#             */
-/*   Updated: 2023/07/11 18:11:44 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/05 15:56:12 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
+	if (!s)
+		return (0);	
 	while (s[i] != '\0')
 		i++;
 	return (i);

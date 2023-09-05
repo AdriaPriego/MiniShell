@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/04 15:41:57 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/05 16:03:53 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,11 @@ int		execute_comand(char **comand, char **envp);
 int		ft_strcmp(const char *s1, const char *s2);
 void	expansor(t_lex **def, char **envp);
 int		ft_strlen_chr(char *str, char c);
+void	ft_optimize_expan(t_lex **lexer);
+char	*expand(char *str, char **envp);
+int		ft_omit_var(char *var);
+int		calc_len_expanded(char *str, char **envp);
+char	*obtain_var(char *str);
 
 /*------------------------------TOKENIZER-------------------------------*/
 int		tokenizer(char *str, t_lex **lexer);

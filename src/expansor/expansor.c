@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/04 18:35:43 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/05 19:28:37 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,67 +14,155 @@
 
 #include <minishell.h>
 
+void	ft_optimize_expan(t_lex **lexer)
+{
+	t_lex	*aux;
+	t_lex	*tmp;
+
+	if ((*lexer)->word && (*lexer)->word[0] == '\0')
+	{
+		aux = *lexer;
+		free(aux->word);
+		free(aux);
+		*lexer = (*lexer)->next;
+	}
+	aux = *lexer;
+	tmp = aux;
+	while (aux)
+	{
+		if (aux->word && aux->word[0] == '\0')
+		{
+			tmp->next = aux->next;
+			free(aux->word);
+			free(aux);
+		}
+		else
+			tmp = aux;
+		aux = tmp->next;
+	}
+}
+
+t_lex	*ft_change_lexer(t_lex *lexer, char *str)
+{
+	free(lexer->word);
+	lexer->word = ft_strdup(str);
+	lexer = lexer->next;
+	str[0] = '\0';
+	return (lexer);
+}
+
+int		ft_omit_var(char *var)
+{
+	int	i;
+
+	i = 1;
+	while (ft_isalnum(var[i]))
+		i++;
+	return (i);
+}
+
 char	*obtain_var(char *str)
 {
-	char	*val;
+	char	*var;
 	int		i;
 
 	i = 0;
 	str++;
-	val = malloc(ft_strlen_chr(str, '$') + 1);
-	if (!val)
+	var = malloc(ft_strlen_chr(str, '$') + 1);
+	if (!var)
 		return (NULL);
-	while (ft_isdigit(str[i]) == 1 || ft_isalpha(str[i]) == 1)
+	while (ft_isalnum(str[i]) == 1)
 	{
-		val[i] = str[i];
+		var[i] = str[i];
 		i++;
 	}
-	val[i] = '\0';
-	return (val);
+	var[i] = '\0';
+	return (var);
 }
-// CON ESTO VAR LO TENGO PERFECTO SI USO EL STRNCMP JUNTO AL STRLEN_CHR LO TENGO TODO EN TEORIA FUNCIONANDO
+
 char	*expand(char *str, char **envp)
 {
 	int	i;
 	char	*var;
+	char	*value;
 
 	i = 0;
-	(void)envp;
+	value = NULL;
 	var = obtain_var(str);
-	ft_printf("%s\n", var);
+	if (var == NULL)
+		return (NULL);	
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], var, ft_strlen_chr(envp[i], '=')) == 0)
+		{
+			value = ft_strchr(envp[i], '=');
+			free(var);
+			return (value + 1);
+		}
+		i++;
+	}
+	free(var);
 	return (NULL);
 }
 
 void	expansor(t_lex **def, char **envp)
 {
 	t_lex	*lexer;
-	char	str[200] = "";
+	char	*str;
 	int		i;
 	int		j;
 	int		quote;
+	char	*value;
+	int		double_quote;
 
-	j = 0;
+
 	lexer = *def;
-	quote = 0;
 	while (lexer)
 	{
+		quote = 0;
+		double_quote = 0;
+		j = 0;
 		i = 0;
+		str = malloc(calc_len_expanded(lexer->word, envp) + 1);
+		ft_memset(str, '\0', calc_len_expanded(lexer->word, envp) + 1);
 		while (lexer->token == NONE && lexer->word[i] != '\0')
 		{
-			if (lexer->word[i] == C_ONE_QUOTE)
+			if (lexer->word[i] == C_TWO_QUOTE && quote == 0 && double_quote == 0)
+			{
+				double_quote = 1;
+				i++;
+			}
+			else if (lexer->word[i] == C_TWO_QUOTE && quote == 0 && double_quote == 1)
+			{
+				double_quote = 0;
+				i++;
+			}
+			if (lexer->word[i] == C_ONE_QUOTE && quote == 0 && double_quote == 0)
+			{
 				quote = 1;
-			else if (lexer->word[i] == C_ONE_QUOTE && quote == 1)
+				i++;
+			}
+			else if (lexer->word[i] == C_ONE_QUOTE && quote == 1 && double_quote == 0)
+			{
 				quote = 0;
+				i++;
+			}
 			if (lexer->word[i] == '$' && quote == 0)
 			{
-				expand(&lexer->word[i], envp);
-				j = ft_strlen(str);
+				value = expand(&lexer->word[i], envp);
+				if (value)
+				{
+					ft_strlcat(str, value, calc_len_expanded(lexer->word, envp) + 1);
+					j = ft_strlen(str);
+				}
+				i += ft_omit_var(&lexer->word[i]) - 1;
 			}
 			else
 				str[j++] = lexer->word[i];
 			i++;
 		}
-		lexer = lexer->next;
+		str[j] = '\0';
+		lexer = ft_change_lexer(lexer, str);
+		free(str);
 	}
 }
-
