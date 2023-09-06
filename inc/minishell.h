@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/05 16:03:53 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/06 19:41:08 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,12 @@ typedef enum s_token
 	LESS,
 	LESS_LESS
 }	t_token;
+
+typedef struct s_quote
+{
+	int				two;
+	int				one;
+}					t_quote;
 
 typedef struct s_lexer
 {
@@ -111,5 +117,7 @@ t_lex	*lexer_lstlast(t_lex *lst);
 
 /*------------------------------PARSER-------------------------------*/
 t_cmd	*parser(t_lex *lexer);
+t_quote	*init_quote(void);
+int	find_quote(t_quote *quote, int i, char *str);
 
 #endif
