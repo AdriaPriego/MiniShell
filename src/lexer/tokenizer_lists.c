@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_lists.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:34:14 by fbosch            #+#    #+#             */
-/*   Updated: 2023/08/27 21:54:45 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/06 18:00:51 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_lex	*lexer_lstnew(void)
 	if (!node)
 		return (NULL);
 	node->word = NULL;
+	node->token = NONE;
 	node->prev = NULL;
 	node->next = NULL;
 	return (node);

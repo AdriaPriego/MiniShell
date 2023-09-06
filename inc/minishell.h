@@ -3,15 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/05 00:28:37 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/06 22:01:05 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+
+/*
+	> out							"Redirects {empty} to a file called out"
+	< out							"It redirects standard input to a file called 'out' if it exists"
+	ls |							"Opens std input" // (((("Syntax error"))))
+	cat | cat						"Standard input open to write something"
+	ls -la <						"Syntax error"
+	|								"Syntax error"
+	ls | sleep 3 | < dssd			"Executes 3 pipes and throws error for last process {file doesn't exist}"
+	ls | sleep 3 | << eof			"Calls here doc and doesn't execute any process until here doc is finished"
+	cat << eof < infile				"Open here_doc but uses infile as input for cat"
+	< no_file wc
+				-c < out | ls		"First command not executed because no_file doesn't exist,
+				'ls' executed"
+
+	When it comes to redirections the last parameter is used,
+		the rest of files will be created independently"
+*/
 
 /*==============================	LIBRARIES	==============================*/
 
@@ -138,32 +157,36 @@ void	lexer_lstclear(t_lex **lst);
 int		lexer_lstsize(t_lex *lst);
 t_lex	*lexer_lstlast(t_lex *lst);
 
+//Reads from lexer structure and expands variables
+/*	EXPANSOR	*/
+
+
 //Converts token list (lexer) into a simple arguments list
 /*	PARSER	*/
 int		parser(t_cmd **commands, t_lex **lexer);
+int		create_simple_command(t_lex **head, t_cmd *cmd);
+int		fill_command(t_lex **head, t_io **redirect, t_cmd *cmd);
+int		add_redirection(t_io **redirect, t_lex **head);
+int		count_arguments(t_lex *lexer);
+void	print_commands(t_cmd *commands); //DEBUG ONLY
 void	parser_error(int error);
 int		check_duplicate_tokens(t_lex *lexer);
 int		check_pipe_error(t_lex *lexer);
 int		check_syntax_error(t_lex *lexer);
-
-void	print_commands(t_cmd *commands); //DEBUG ONLY
-
-
 t_cmd	*parser_lstnew(void);
 void	parser_lstadd_back(t_cmd **lst, t_cmd *new);
 void	parser_lstclear(t_cmd **lst);
 int		parser_lstsize(t_cmd *lst);
 t_cmd	*parser_lstlast(t_cmd *lst);
-
 t_io	*redirect_lstnew(void);
 void	redirect_lstadd_back(t_io **lst, t_io *new);
 void	redirect_lstclear(t_io **lst);
 int		redirect_lstsize(t_io *lst);
 t_io	*redirect_lstlast(t_io *lst);
 
-
-//Reads from lexer structure and expands variables
-/*	EXPANSOR	*/
+//Receives clean arguments in a t_cmd* linked list and manages execution
+/*	EXECUTOR	*/
+int		execute_commands(t_cmd *commands, char **envp);
 
 //Handle signals
 /*	SIGNALS	*/

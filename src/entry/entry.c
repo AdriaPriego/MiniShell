@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   entry.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/05 00:57:37 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/06 21:45:41 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,23 +91,17 @@ void	generate_terminal(char **envp)
 	char	*str;
 
 	str = generate_entry(envp);
-	if (!str) //Es pot eliminar?
-		return ;
 	while (str && (ft_strnstr(str, "exit", ft_strlen(str)) == 0
 			|| ft_strlen(str) == 0))
 	{
 		add_history(str);
 		if (string_to_command(str, &commands, envp) == 0 && commands != NULL)
 		{
-			/*
-				SPACE RESERVED FOR EXECUTOR
-			*/
+			execute_commands(commands, envp);
 		}
 		parser_lstclear(&commands);
 		free (str);
 		str = generate_entry(envp);
-		if (!str) //Es pot eliminar?
-			return ;
 	}
 	if (!str || !ft_strncmp(str, "exit", ft_strlen(str)))
 		ft_printf("exit\n");

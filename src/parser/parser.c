@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 22:38:29 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/05 01:08:15 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/06 21:48:45 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-	> out							"Redirects {empty} to a file called out"
-	< out							"It redirects standard input to a file called 'out' if it exists"
-	ls |							"Opens std input" // (((("Syntax error"))))
-	cat | cat						"Standard input open to write something"
-	ls -la <						"Syntax error"
-	|								"Syntax error"
-	ls | sleep 3 | < dssd			"Executes 3 pipes and throws error for last process {file doesn't exist}"
-	ls | sleep 3 | << eof			"Calls here doc and doesn't execute any process until here doc is finished"
-	cat << eof < infile				"Open here_doc but uses infile as input for cat"
-	< no_file wc -c < out | ls		"First command not executed because no_file doesn't exist, 'ls' executed"
-
-	When it comes to redirections the last parameter is used, the rest of files will be created independently"
-*/
 
 int	count_arguments(t_lex *lexer)
 {
@@ -71,24 +56,16 @@ int	add_redirection(t_io **redirect, t_lex **head)
 	return (0);
 }
 
-int	create_simple_command(t_lex **head, t_cmd *cmd)
+int	fill_command(t_lex **head, t_io **redirect, t_cmd *cmd)
 {
-	int		i;
-	int		n_args;
-	t_io	*redirect;
+	int	i;
 
-	redirect = NULL;
-	n_args = count_arguments(*head);
-	cmd->args = malloc(sizeof(char *) * (n_args + 1));
-	if (!cmd->args)
-		return (1);
-	cmd->args[n_args] = NULL;
 	i = 0;
 	while (*head && (*head)->token != PIPE)
 	{
 		if ((*head)->token != NONE)
 		{
-			if (add_redirection(&redirect, head) == 1)
+			if (add_redirection(redirect, head) == 1)
 				return (1);
 		}
 		else
@@ -103,15 +80,54 @@ int	create_simple_command(t_lex **head, t_cmd *cmd)
 		}
 		*head = (*head)->next;
 	}
-	cmd->redirect = redirect;
+	cmd->redirect = *redirect;
+	return (0);
+}
+
+int	create_simple_command(t_lex **head, t_cmd *cmd)
+{
+	int		i;
+	int		n_args;
+	t_io	*redirect;
+
+	redirect = NULL;
+	n_args = count_arguments(*head);
+	cmd->args = malloc(sizeof(char *) * (n_args + 1));
+	if (!cmd->args)
+		return (1);
+	cmd->args[n_args] = NULL;
+	if (fill_command(head, &redirect, cmd) == 1)
+		return (1);
 	if (*head && (*head)->token == PIPE)
 		*head = (*head)->next;
 	return (0);
 }
 
+int	parser(t_cmd **commands, t_lex **lexer)
+{
+	t_cmd	*new;
+	t_lex	*head;
+
+	if (!lexer)
+		return (0);
+	if (check_syntax_error(*lexer) == SYNTAX_ERR)
+		return (lexer_lstclear(lexer), SYNTAX_ERR);
+	head = *lexer;
+	while (head)
+	{
+		new = parser_lstnew();
+		if (!new)
+			return (1);
+		parser_lstadd_back(commands, new);
+		if (create_simple_command(&head, new) == 1)
+			return (1);
+	}
+	return (0);
+}
+
 void	print_commands(t_cmd *commands)
 {
-	int	i;
+	int		i;
 	t_io	*temp;
 
 	printf("\n\n\n");
@@ -151,36 +167,6 @@ void	print_commands(t_cmd *commands)
 		commands = commands->next;
 	}
 	if (commands == NULL)
-			printf("NULL");
+		printf("NULL");
 	printf("\n");
-}
-
-int	parser(t_cmd **commands, t_lex **lexer)
-{
-	t_cmd	*new;
-	t_lex	*head;
-
-	if (!lexer)
-		return (0);
-	if (check_syntax_error(*lexer) == SYNTAX_ERR)
-		return (lexer_lstclear(lexer), SYNTAX_ERR);
-	head = *lexer;
-	while (head)
-	{
-		new = parser_lstnew();
-		if (!new)
-			return (1);
-		parser_lstadd_back(commands, new);
-		create_simple_command(&head, new);
-		/* create_redirection_structure(&redirect);
-				--fill *redirect
-				--delete redirect nodes from lexer
-		new = create_simple_command();
-		if (!new)
-			return (1);
-		parser_lstadd_back(commands, new);
-		while (head->token != ) */
-		//head = head->next;
-	}
-	return (0);
 }
