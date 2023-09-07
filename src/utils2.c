@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 13:35:16 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/04 14:02:14 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/07 11:02:50 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_strlen_chr(char *str, char c)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if(str[i] == c)
+		if (str[i] == c)
 			return (i);
 		i++;
 	}

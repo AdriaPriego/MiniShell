@@ -6,17 +6,14 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 15:03:59 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/06 19:54:18 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/07 10:52:51 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_quote	*init_quote(void)
+t_quote	*init_quote(t_quote	*quote)
 {
-	t_quote	*quote;
-
-	quote = malloc(sizeof(t_quote));
 	quote->one = 0;
 	quote->two = 0;
 	return (quote);
@@ -56,7 +53,8 @@ int	calc_len_expanded(char *str, char **envp)
 
 	i = 0;
 	len = 0;
-	quote = init_quote();
+	quote = malloc(sizeof(t_quote));
+	quote = init_quote(quote);
 	while (str[i] != '\0')
 	{
 		i = find_quote(quote, i, str);

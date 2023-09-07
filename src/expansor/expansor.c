@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/06 19:54:33 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/07 11:01:29 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	*expand(char *str, char **envp)
 	return (NULL);
 }
 
-void	test(t_lex *lexer, t_quote *quote, char **envp, char *str)
+void	check_expand(t_lex *lexer, t_quote *quote, char **envp, char *str)
 {
 	int		i;
 	int		j;
@@ -92,7 +92,8 @@ void	test(t_lex *lexer, t_quote *quote, char **envp, char *str)
 			value = expand(&lexer->word[i], envp);
 			if (value)
 			{
-				ft_strlcat(str, value, calc_len_expanded(lexer->word, envp)+ 1);
+				ft_strlcat(str, value, calc_len_expanded(lexer->word, envp)
+					+ 1);
 				j = ft_strlen(str);
 			}
 			i += ft_omit_var(&lexer->word[i]) - 1;
@@ -111,13 +112,18 @@ void	expansor(t_lex **def, char **envp)
 	t_quote	*quote;
 
 	lexer = *def;
+	quote = malloc(sizeof(t_quote));
 	while (lexer)
 	{
-		str = malloc(calc_len_expanded(lexer->word, envp) + 1);
-		ft_memset(str, '\0', calc_len_expanded(lexer->word, envp) + 1);
-		quote = init_quote();
-		test(lexer, quote, envp, str);
-		lexer = ft_change_lexer(lexer, str);
-		free(str);
+		if (lexer->word != NULL)
+		{
+			str = malloc(calc_len_expanded(lexer->word, envp) + 1);
+			ft_memset(str, '\0', calc_len_expanded(lexer->word, envp) + 1);
+			quote = init_quote(quote);
+			check_expand(lexer, quote, envp, str);
+			lexer = ft_change_lexer(lexer, str);
+		}
+		else
+			lexer = lexer->next;
 	}
 }
