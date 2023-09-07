@@ -6,42 +6,28 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 15:03:59 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/07 10:52:51 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/07 13:38:30 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_quote	*init_quote(t_quote	*quote)
+void	init_quote(t_quote	*quote)
 {
 	quote->one = 0;
 	quote->two = 0;
-	return (quote);
 }
 
-int	find_quote(t_quote *quote, int i, char *str)
+void	find_quote(t_quote *quote, int i, char *str)
 {
 	if (str[i] == C_TWO_QUOTE && quote->one == 0 && quote->two == 0)
-	{
 		quote->two = 1;
-		i++;
-	}
 	else if (str[i] == C_TWO_QUOTE && quote->one == 0 && quote->two == 1)
-	{
 		quote->two = 0;
-		i++;
-	}
 	if (str[i] == C_ONE_QUOTE && quote->one == 0 && quote->two == 0)
-	{
 		quote->one = 1;
-		i++;
-	}
 	else if (str[i] == C_ONE_QUOTE && quote->one == 1 && quote->two == 0)
-	{
 		quote->one = 0;
-		i++;
-	}
-	return (i);
 }
 
 int	calc_len_expanded(char *str, char **envp)
@@ -49,16 +35,15 @@ int	calc_len_expanded(char *str, char **envp)
 	int		i;
 	int		len;
 	char	*value;
-	t_quote	*quote;
+	t_quote	quote;
 
 	i = 0;
 	len = 0;
-	quote = malloc(sizeof(t_quote));
-	quote = init_quote(quote);
+	init_quote(&quote);
 	while (str[i] != '\0')
 	{
-		i = find_quote(quote, i, str);
-		if (str[i] == '$' && quote->one == 0)
+		find_quote(&quote, i, str);
+		if (str[i] == '$' && quote.one == 0)
 		{
 			value = expand(&str[i], envp);
 			len += ft_strlen(value);

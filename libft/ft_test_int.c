@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 12:32:23 by apriego-          #+#    #+#             */
-/*   Updated: 2023/06/29 17:46:29 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/07 13:30:36 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static int	ft_isspace(const char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\r' || str[i] == '\n'
-		|| str[i] == '\v' || str[i] == '\f')
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\r'
+		|| str[i] == '\n' || str[i] == '\v' || str[i] == '\f')
 		i++;
 	return (i);
 }

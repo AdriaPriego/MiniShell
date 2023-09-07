@@ -6,45 +6,34 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/07 11:01:29 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/07 13:41:34 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	ft_optimize_expan(t_lex **lexer)
+int	ft_isliteral(char c, t_quote *quote)
 {
-	t_lex	*aux;
-	t_lex	*tmp;
-
-	if ((*lexer)->word && (*lexer)->word[0] == '\0')
-	{
-		aux = *lexer;
-		*lexer = (*lexer)->next;
-	}
-	aux = *lexer;
-	tmp = aux;
-	while (aux)
-	{
-		if (aux->word && aux->word[0] == '\0')
-		{
-			tmp->next = aux->next;
-			free(aux->word);
-			free(aux);
-		}
-		else
-			tmp = aux;
-		aux = tmp->next;
-	}
+	if ((c == C_ONE_QUOTE && quote->two == 1) || (c == C_TWO_QUOTE
+			&& quote->one == 1) || ft_isquote(c) == 0)
+		return (1);
+	return (0);
 }
 
-t_lex	*ft_change_lexer(t_lex *lexer, char *str)
+int	ft_change_lexer(t_lex **lexer, char *str)
 {
-	free(lexer->word);
-	lexer->word = ft_strdup(str);
-	lexer = lexer->next;
-	str[0] = '\0';
-	return (lexer);
+	t_lex	*temp;
+
+	temp = *lexer;
+	free(temp->word);
+	temp->word = ft_strdup(str);
+	if (!temp->word && temp->token == NONE)
+		return (1);
+	temp = temp->next;
+	*lexer = temp;
+	free(str);
+	str = NULL;
+	return (0);
 }
 
 char	*expand(char *str, char **envp)
@@ -86,7 +75,7 @@ void	check_expand(t_lex *lexer, t_quote *quote, char **envp, char *str)
 	j = 0;
 	while (lexer->token == NONE && lexer->word[i] != '\0')
 	{
-		i = find_quote(quote, i, lexer->word);
+		find_quote(quote, i, lexer->word);
 		if (lexer->word[i] == '$' && quote->one == 0)
 		{
 			value = expand(&lexer->word[i], envp);
@@ -98,32 +87,35 @@ void	check_expand(t_lex *lexer, t_quote *quote, char **envp, char *str)
 			}
 			i += ft_omit_var(&lexer->word[i]) - 1;
 		}
-		else
+		else if (ft_isliteral(lexer->word[i], quote) == 1)
 			str[j++] = lexer->word[i];
 		i++;
 	}
 	str[j] = '\0';
 }
 
-void	expansor(t_lex **def, char **envp)
+int	expansor(t_lex **def, char **envp)
 {
 	t_lex	*lexer;
 	char	*str;
-	t_quote	*quote;
+	t_quote	quote;
 
 	lexer = *def;
-	quote = malloc(sizeof(t_quote));
 	while (lexer)
 	{
 		if (lexer->word != NULL)
 		{
 			str = malloc(calc_len_expanded(lexer->word, envp) + 1);
+			if (!str)
+				return (1);
 			ft_memset(str, '\0', calc_len_expanded(lexer->word, envp) + 1);
-			quote = init_quote(quote);
-			check_expand(lexer, quote, envp, str);
-			lexer = ft_change_lexer(lexer, str);
+			init_quote(&quote);
+			check_expand(lexer, &quote, envp, str);
+			if (ft_change_lexer(&lexer, str) == 1)
+				return (1);
 		}
 		else
 			lexer = lexer->next;
 	}
+	return (0);
 }

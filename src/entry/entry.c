@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/06 21:45:41 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/07 13:36:20 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,14 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 	int		status;
 	t_lex	*lexer;
 
+	(void)env;
 	lexer = NULL;
 	*commands = NULL;
 	status = tokenizer(str, &lexer);
 	if (status == 0)
-	{
-		/*
-
-		SPACE RESERVED FOR EXPANSOR
-
-		*/
+		status = expansor(&lexer, env);
+	if (status == 0)
 		status = parser(commands, &lexer);
-	}
 	print_commands(*commands);
 	if (status == 1)
 		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);

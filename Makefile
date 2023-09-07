@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/06 22:04:12 by fbosch           ###   ########.fr        #
+#    Updated: 2023/09/07 13:50:46 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ YELLOW	=	\033[38;5;190m
 #=================COMMANDS=================#
 
 CC		=	gcc
-CFLAGS	=	#-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror
 INCLUDE	=	-I./inc -I./readline
 RM		=	rm -fr
 
@@ -85,7 +85,7 @@ all : temp librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
-#@$(MAKE) rdline --no-print-directory
+	@$(MAKE) rdline --no-print-directory
 
 $(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC)
 	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@

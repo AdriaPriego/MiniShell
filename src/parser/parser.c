@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 22:38:29 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/06 21:48:45 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/07 11:47:32 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int	fill_command(t_lex **head, t_io **redirect, t_cmd *cmd)
 
 int	create_simple_command(t_lex **head, t_cmd *cmd)
 {
-	int		i;
 	int		n_args;
 	t_io	*redirect;
 

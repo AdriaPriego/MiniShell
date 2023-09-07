@@ -6,13 +6,12 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/06 22:01:05 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/07 13:38:41 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 
 /*
 	> out							"Redirects {empty} to a file called out"
@@ -44,16 +43,16 @@
 
 /*=================================	MACROS	==================================*/
 
-//Colours
+// Colours
 # define GREENBASH "\033[1;38;2;180;235;31m"
 # define NO_COL "\033[0m"
 # define REDBASH "\033[1;38;2;255;0;0m"
 
-//Signals
+// Signals
 # define CTRL_C SIGINT
 # define CTRL_SLASH SIGQUIT
 
-//ASCII characters
+// ASCII characters
 # define C_VERTICAL_BAR 124
 # define C_LESS 60
 # define C_GREAT 62
@@ -67,11 +66,13 @@
 # define OUT_TRUNC 2
 # define OUT_APPEND 3 */
 
-//General errors
+extern int			g_exit;
+
+// General errors
 # define MSSG_INVALID_ARGS "Invalid arguments: Usage [./minishell]\n"
 # define MSSG_MEMORY_ERROR "Memory error, please free space and attempt again\n"
 
-//Parser syntax errors
+// Parser syntax errors
 # define SYNTAX_ERR 42
 # define SYNTAX_NL 0
 # define SYNTAX_PIPE 1
@@ -89,7 +90,7 @@ typedef enum s_redirect_type
 	HERE_DOC,
 	OUT_TRUNC,
 	OUT_APPEND,
-}	t_type;
+}					t_type;
 
 typedef enum s_token
 {
@@ -120,97 +121,96 @@ typedef struct s_in_out
 	t_type			type;
 	char			*file;
 	struct s_in_out	*next;
-}	t_io;
+}					t_io;
 
 typedef struct s_cmd
 {
 	char			**args;
-	t_io		*redirect;
+	t_io			*redirect;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
-}	t_cmd;
+}					t_cmd;
 
 /*===============================	FUNCTIONS	==============================*/
 
-//Holds minishell loop: MiniShell$>....
+// Holds minishell loop: MiniShell$>....
 /*	ENTRY	*/
-void	generate_terminal(char **envp);
-int		string_to_command(char *str, t_cmd **commands, char **env);
-char	*generate_entry(char **envp);
-char	*ft_joincolors(char *array);
+void				generate_terminal(char **envp);
+int					string_to_command(char *str, t_cmd **commands, char **env);
+char				*generate_entry(char **envp);
+char				*ft_joincolors(char *array);
 
-//Builtint shell commands
+// Builtint shell commands
 /*	BUILTINS	*/
-void	ft_export(char **comand, char **envp);
-void	ft_unset(char **comand, char **envp);
-void	ft_echo(char **comand);
-void	ft_pwd(void);
-void	ft_env(char **envp);
-void	ft_cd(char **comand, char **envp);
+void				ft_export(char **comand, char **envp);
+void				ft_unset(char **comand, char **envp);
+void				ft_echo(char **comand);
+void				ft_pwd(void);
+void				ft_env(char **envp);
+void				ft_cd(char **comand, char **envp);
 
-//Converts input string to tokens for minishell to interpret
+// Converts input string to tokens for minishell to interpret
 /*	TOKENIZER	*/
-int		tokenizer(char *str, t_lex **lexer);
-int		create_word(char *str, int i, t_lex *new, int *quoted);
-int		create_token(char *str, int i, t_lex *lexer);
-int		ft_isspace(int c);
-int		ft_isquote(int c);
-int		ft_isreserved(int c);
-void	print_tokens(t_lex *lexer, char *str);
-t_lex	*lexer_lstnew(void);
-void	lexer_lstadd_back(t_lex **lst, t_lex *new);
-void	lexer_lstclear(t_lex **lst);
-int		lexer_lstsize(t_lex *lst);
-t_lex	*lexer_lstlast(t_lex *lst);
+int					tokenizer(char *str, t_lex **lexer);
+int					create_word(char *str, int i, t_lex *new);
+int					create_token(char *str, int i, t_lex *lexer);
+int					ft_isspace(int c);
+int					ft_isquote(int c);
+int					ft_isreserved(int c);
+void				print_tokens(t_lex *lexer, char *str);
+t_lex				*lexer_lstnew(void);
+void				lexer_lstadd_back(t_lex **lst, t_lex *new);
+void				lexer_lstclear(t_lex **lst);
+int					lexer_lstsize(t_lex *lst);
+t_lex				*lexer_lstlast(t_lex *lst);
 
-//Reads from lexer structure and expands variables
+// Reads from lexer structure and expands variables
 /*	EXPANSOR	*/
-void				expansor(t_lex **def, char **envp);
-void				ft_optimize_expan(t_lex **lexer);
+int					expansor(t_lex **def, char **envp);
 char				*expand(char *str, char **envp);
 int					ft_omit_var(char *var);
 int					calc_len_expanded(char *str, char **envp);
 char				*obtain_var(char *str);
-t_quote			*init_quote(t_quote *quote);
-int					find_quote(t_quote *quote, int i, char *str);
+void				init_quote(t_quote *quote);
+void				find_quote(t_quote *quote, int i, char *str);
 
-//Converts token list (lexer) into a simple arguments list
+// Converts token list (lexer) into a simple arguments list
 /*	PARSER	*/
-int		parser(t_cmd **commands, t_lex **lexer);
-int		create_simple_command(t_lex **head, t_cmd *cmd);
-int		fill_command(t_lex **head, t_io **redirect, t_cmd *cmd);
-int		add_redirection(t_io **redirect, t_lex **head);
-int		count_arguments(t_lex *lexer);
-void	print_commands(t_cmd *commands); //DEBUG ONLY
-void	parser_error(int error);
-int		check_duplicate_tokens(t_lex *lexer);
-int		check_pipe_error(t_lex *lexer);
-int		check_syntax_error(t_lex *lexer);
-t_cmd	*parser_lstnew(void);
-void	parser_lstadd_back(t_cmd **lst, t_cmd *new);
-void	parser_lstclear(t_cmd **lst);
-int		parser_lstsize(t_cmd *lst);
-t_cmd	*parser_lstlast(t_cmd *lst);
-t_io	*redirect_lstnew(void);
-void	redirect_lstadd_back(t_io **lst, t_io *new);
-void	redirect_lstclear(t_io **lst);
-int		redirect_lstsize(t_io *lst);
-t_io	*redirect_lstlast(t_io *lst);
+int					parser(t_cmd **commands, t_lex **lexer);
+int					create_simple_command(t_lex **head, t_cmd *cmd);
+int					fill_command(t_lex **head, t_io **redirect, t_cmd *cmd);
+int					add_redirection(t_io **redirect, t_lex **head);
+int					count_arguments(t_lex *lexer);
+void				print_commands(t_cmd *commands); // DEBUG ONLY AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+void				parser_error(int error);
+int					check_duplicate_tokens(t_lex *lexer);
+int					check_pipe_error(t_lex *lexer);
+int					check_syntax_error(t_lex *lexer);
+t_cmd				*parser_lstnew(void);
+void				parser_lstadd_back(t_cmd **lst, t_cmd *new);
+void				parser_lstclear(t_cmd **lst);
+int					parser_lstsize(t_cmd *lst);
+t_cmd				*parser_lstlast(t_cmd *lst);
+t_io				*redirect_lstnew(void);
+void				redirect_lstadd_back(t_io **lst, t_io *new);
+void				redirect_lstclear(t_io **lst);
+int					redirect_lstsize(t_io *lst);
+t_io				*redirect_lstlast(t_io *lst);
 
-//Receives clean arguments in a t_cmd* linked list and manages execution
+// Receives clean arguments in a t_cmd* linked list and manages execution
 /*	EXECUTOR	*/
-int		execute_commands(t_cmd *commands, char **envp);
+int					execute_commands(t_cmd *commands, char **envp);
 
-//Handle signals
+// Handle signals
 /*	SIGNALS	*/
-void	init_signals(void);
+void				init_signals(void);
 
-//General utility functions
+// General utility functions
 /*	UTILS	*/
-char	*find_home(char **envp);
-char	**ft_splitn(char *str, char c, int qtt);
-int		count_spaces(char *str);
-int		ft_strcmp(const char *s1, const char *s2);
-int		ft_strlen_chr(char *str, char c);
+char				*find_home(char **envp);
+char				**ft_splitn(char *str, char c, int qtt);
+int					count_spaces(char *str);
+int					ft_strcmp(const char *s1, const char *s2);
+int					ft_strlen_chr(char *str, char c);
 
 #endif
