@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/02 15:04:53 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/05 15:56:12 by apriego-         ###   ########.fr       */
+/*   Created: 2023/09/04 13:35:16 by apriego-          #+#    #+#             */
+/*   Updated: 2023/09/07 11:02:50 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-size_t	ft_strlen(const char *s)
+int	ft_strlen_chr(char *str, char c)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	if (!s)
-		return (0);	
-	while (s[i] != '\0')
+	while (str[i] != '\0')
+	{
+		if (str[i] == c)
+			return (i);
 		i++;
-	return (i);
+	}
+	return (-1);
 }

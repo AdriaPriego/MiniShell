@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 15:50:56 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/08/31 17:07:13 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	ft_cd(char **comand, char **envp)
 	{
 		errno = 1;
 		perror("minishell: ");
-		//ft_printf_fd(2, "minishell: command not found: %s\n", str[0]);
 	}
 	ft_free_matrix((const char **)str, ft_array_len(str));
 }
