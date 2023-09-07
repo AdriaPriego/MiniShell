@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/07 13:38:41 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/07 17:27:09 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,6 @@
 # define HERE_DOC 1
 # define OUT_TRUNC 2
 # define OUT_APPEND 3 */
-
-extern int			g_exit;
 
 // General errors
 # define MSSG_INVALID_ARGS "Invalid arguments: Usage [./minishell]\n"
@@ -200,6 +198,7 @@ t_io				*redirect_lstlast(t_io *lst);
 // Receives clean arguments in a t_cmd* linked list and manages execution
 /*	EXECUTOR	*/
 int					execute_commands(t_cmd *commands, char **envp);
+int					error_return(char *error);
 
 // Handle signals
 /*	SIGNALS	*/

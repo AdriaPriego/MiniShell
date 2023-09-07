@@ -1,30 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/24 10:50:46 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/07 16:29:15 by fbosch           ###   ########.fr       */
+/*   Created: 2023/09/07 16:02:01 by fbosch            #+#    #+#             */
+/*   Updated: 2023/09/07 16:26:38 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "minishell.h"
 
-static void	sig_handler(int signum)
+int	error_return(char *error)
 {
-	if (signum == CTRL_C)
-	{
-		ft_printf("\n");
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-
-void	init_signals(void)
-{
-	rl_catch_signals = 0;
-	//signal(CTRL_C, sig_handler);
-	signal(CTRL_SLASH, sig_handler);
+	write(2, error, ft_strlen(error));
+	exit(EXIT_FAILURE);
 }

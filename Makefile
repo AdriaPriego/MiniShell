@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
+#    By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/07 13:50:46 by apriego-         ###   ########.fr        #
+#    Updated: 2023/09/07 17:33:13 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ YELLOW	=	\033[38;5;190m
 #=================COMMANDS=================#
 
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	#-Wall -Wextra -Werror
 INCLUDE	=	-I./inc -I./readline
 RM		=	rm -fr
 
@@ -38,7 +38,7 @@ FILES_EXPAN	=	expansor.c expansor_utils.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 EXPAN_GEN	=	expansor.c
 FILES_PARSE	=	parser.c parser_syntax.c cmd_lists.c redirect_lists.c
-FILES_EXEC	=	executor.c
+FILES_EXEC	=	executor.c executor_utils.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/
