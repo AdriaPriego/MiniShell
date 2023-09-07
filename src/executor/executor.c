@@ -6,51 +6,39 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/07 17:00:57 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/07 21:56:19 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	new_pipe(t_cmd *commands, char **envp, int fd[2])
+void	new_pipe(t_cmd *commands, char **envp)
 {
-	char	*path = ft_strdup("/bin");
-
-	perror("jaja");
-	close(fd[0]);
-	close(fd[1]);
+	int		exit_code;
+	char	*path;
+	
+	exit_code = search_path(commands->args[0], envp, &path);
+	if (exit_code != EXIT_SUCCESS)                  //MANAGE COMMAND NOT FOUND && COMMAND NO ACCESS (PERROR DOESN'T DO IT)
+		perror_exit(exit_code, commands->args[0]);
 	execve(path, commands->args, envp);
-	return (1);
+	perror_exit(EXIT_FAILURE, MSSG_EXECVE_ERR);
 }
 
 int	execute_commands(t_cmd *commands, char **envp)
-{	
-	int temp_in;
-	int	temp_out;
-	int		fd[2];
-	pid_t	pid1;
+{
+	t_pipe	data;
 
-	temp_in = dup(STDIN_FILENO);
-	temp_out = dup(STDOUT_FILENO);
-	dup2(fd[0], STDIN_FILENO);
-	dup2(fd[1], STDOUT_FILENO);
-	if (pipe(fd) == -1)
-		return (error_return("Minishell: Pipe: Error creating Pipe"));
+	if (!commands)
+		return (0);
 	while (commands)
 	{
-		if (!commands->prev)
-			dup2(fd[0], STDIN_FILENO);
-		if (!commands->next)
-			dup2(fd[1], temp_out);
-		pid1 = fork();
-		if (pid1 == 0)
-			new_pipe(commands, envp, fd);
+		data.pid = fork();
+		if (data.pid == 0)
+			new_pipe(commands, envp);
 		commands = commands->next;
 	}
-	perror("jaja2");
-	waitpid(pid1, NULL, 0);
-	dup2(temp_in, STDIN_FILENO);
-	dup2(temp_out, STDOUT_FILENO);
-	perror("jaja3");
+	waitpid(data.pid, &data.exit_status, 0);
+	if (WIFEXITED(data.exit_status))
+		printf("Exit: %i\n", (WEXITSTATUS(data.exit_status)));
 	return (0);
 }

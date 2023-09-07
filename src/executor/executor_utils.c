@@ -6,14 +6,15 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:02:01 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/07 16:26:38 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/07 21:47:07 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	error_return(char *error)
+void	perror_exit(int exit_code, char *error)
 {
-	write(2, error, ft_strlen(error));
-	exit(EXIT_FAILURE);
+	ft_printf_fd(STDERR_FILENO, "minishell: ");
+	perror(error);
+	exit(exit_code);
 }

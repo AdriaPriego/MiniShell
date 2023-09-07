@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/07 17:27:09 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/07 21:57:57 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,13 @@
 # define SYNTAX_LESS_LESS 4
 # define SYNTAX_GREAT_GREAT 5
 
+//Command errors
+# define MSSG_EXECVE_ERR "Execve"
+# define MSSG_PIPE_ERR "Pipe"
+# define MSSG_FORK_ERR "Fork"
+# define CMD_NO_ACCESS 126
+# define CMD_NOT_FOUND 127
+
 /*===============================	STRUCTURES	==============================*/
 
 typedef enum s_redirect_type
@@ -128,6 +135,20 @@ typedef struct s_cmd
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }					t_cmd;
+
+typedef struct s_pipe
+{
+	int		fd_input;
+	int		fd_output;
+	int		fd[2];
+	pid_t	pid;
+	char	*path;
+	int		exit_status;
+	//pid_t	pid1;
+	//pid_t	pid2;
+	//int		status;
+	//char	**cmd;
+}	t_pipe; 
 
 /*===============================	FUNCTIONS	==============================*/
 
@@ -198,7 +219,10 @@ t_io				*redirect_lstlast(t_io *lst);
 // Receives clean arguments in a t_cmd* linked list and manages execution
 /*	EXECUTOR	*/
 int					execute_commands(t_cmd *commands, char **envp);
-int					error_return(char *error);
+int					search_path(char *cmd, char **envp, char **path);
+int					try_paths(char **full_path, char *cmd, char **path);
+int					try_local_path(char *cmd, char **path);
+void				perror_exit(int exit_code, char *error);
 
 // Handle signals
 /*	SIGNALS	*/
