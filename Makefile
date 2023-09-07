@@ -3,7 +3,7 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+         #
+#    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
 #    Updated: 2023/09/06 22:04:12 by fbosch           ###   ########.fr        #
@@ -33,7 +33,8 @@ COMP		=	./libft/libft.a
 
 FILES_ENTRY	=	entry.c signals.c
 FILES_BUILT	=	built_ins.c built_ins2.c
-FILES_GEN	=	main.c utils.c
+FILES_GEN	=	main.c utils.c utils2.c
+FILES_EXPAN	=	expansor.c expansor_utils.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 EXPAN_GEN	=	expansor.c
 FILES_PARSE	=	parser.c parser_syntax.c cmd_lists.c redirect_lists.c
@@ -84,10 +85,10 @@ all : temp librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
-	@$(MAKE) rdline --no-print-directory
+#@$(MAKE) rdline --no-print-directory
 
-$(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXEC)
-	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXEC) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
+$(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC)
+	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
 	@echo "${GREEN}Minishell Compiled${NC}"
 
 rdline :

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   entry.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
 /*   Updated: 2023/09/06 21:45:41 by fbosch           ###   ########.fr       */
@@ -25,11 +25,11 @@ char	*ft_joincolors(char *array)
 		return ((char *)ft_free_matrix((const char **)aux, ft_array_len(aux)));
 	aux[1] = ft_strjoin(aux[0], "$>");
 	if (!aux)
-		return ((char *)ft_free_matrix((const char **)aux,  ft_array_len(aux)));
+		return ((char *)ft_free_matrix((const char **)aux, ft_array_len(aux)));
 	str = ft_strjoin(aux[1], NO_COL);
 	if (!str)
-		return ((char *)ft_free_matrix((const char **)aux,  ft_array_len(aux)));
-	ft_free_matrix((const char **)aux,  2);
+		return ((char *)ft_free_matrix((const char **)aux, ft_array_len(aux)));
+	ft_free_matrix((const char **)aux, 2);
 	return (str);
 }
 
@@ -40,7 +40,7 @@ char	*generate_entry(char **envp)
 	char	*split;
 	char	*str;
 
-	aux = getcwd(NULL, 0);	
+	aux = getcwd(NULL, 0);
 	if (ft_strcmp(find_home(envp), aux) == 0)
 		entry = ft_joincolors("~");
 	else if (ft_strcmp(aux, "/") == 0)

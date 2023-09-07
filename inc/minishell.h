@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
 /*   Updated: 2023/09/06 22:01:05 by fbosch           ###   ########.fr       */
@@ -98,8 +98,14 @@ typedef enum s_token
 	GREAT,
 	GREAT_GREAT,
 	LESS,
-	LESS_LESS,
-}	t_token;
+	LESS_LESS
+}					t_token;
+
+typedef struct s_quote
+{
+	int				two;
+	int				one;
+}					t_quote;
 
 typedef struct s_lexer
 {
@@ -107,7 +113,7 @@ typedef struct s_lexer
 	t_token			token;
 	struct s_lexer	*prev;
 	struct s_lexer	*next;
-}	t_lex;
+}					t_lex;
 
 typedef struct s_in_out
 {
@@ -159,7 +165,14 @@ t_lex	*lexer_lstlast(t_lex *lst);
 
 //Reads from lexer structure and expands variables
 /*	EXPANSOR	*/
-
+void				expansor(t_lex **def, char **envp);
+void				ft_optimize_expan(t_lex **lexer);
+char				*expand(char *str, char **envp);
+int					ft_omit_var(char *var);
+int					calc_len_expanded(char *str, char **envp);
+char				*obtain_var(char *str);
+t_quote			*init_quote(t_quote *quote);
+int					find_quote(t_quote *quote, int i, char *str);
 
 //Converts token list (lexer) into a simple arguments list
 /*	PARSER	*/
@@ -198,5 +211,6 @@ char	*find_home(char **envp);
 char	**ft_splitn(char *str, char c, int qtt);
 int		count_spaces(char *str);
 int		ft_strcmp(const char *s1, const char *s2);
+int		ft_strlen_chr(char *str, char c);
 
 #endif
