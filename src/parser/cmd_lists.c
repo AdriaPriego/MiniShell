@@ -1,38 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_lists.c                                  :+:      :+:    :+:   */
+/*   cmd_lists.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/25 20:34:14 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/06 18:00:51 by fbosch           ###   ########.fr       */
+/*   Created: 2023/09/01 17:32:11 by fbosch            #+#    #+#             */
+/*   Updated: 2023/09/06 17:44:52 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "minishell.h"
 
-t_lex	*lexer_lstnew(void)
+t_cmd	*parser_lstnew(void)
 {
-	t_lex	*node;
+	t_cmd	*node;
 
-	node = malloc(sizeof(t_lex));
+	node = malloc(sizeof(t_cmd));
 	if (!node)
 		return (NULL);
-	node->word = NULL;
-	node->token = NONE;
+	node->args = NULL;
+	node->redirect = NULL;
 	node->prev = NULL;
 	node->next = NULL;
 	return (node);
 }
 
-void	lexer_lstadd_back(t_lex **lst, t_lex *new)
+void	parser_lstadd_back(t_cmd **lst, t_cmd *new)
 {
-	t_lex	*last;
+	t_cmd	*last;
 
 	if ((*lst))
 	{
-		last = lexer_lstlast(*lst);
+		last = parser_lstlast(*lst);
 		last->next = new;
 		new->prev = last;
 	}
@@ -40,23 +40,24 @@ void	lexer_lstadd_back(t_lex **lst, t_lex *new)
 		(*lst) = new;
 }
 
-void	lexer_lstclear(t_lex **lst)
+void	parser_lstclear(t_cmd **lst)
 {
-	t_lex	*nxt;
-	t_lex	*aux;
+	t_cmd	*temp;
+	t_cmd	*aux;
 
 	aux = *lst;
 	while (aux)
 	{
-		nxt = aux->next;
-		free(aux->word);
+		temp = aux->next;
+		ft_free_malloc_array(aux->args, ft_array_len(aux->args));
+		redirect_lstclear(&aux->redirect);
 		free(aux);
-		aux = nxt;
+		aux = temp;
 	}
 	*lst = NULL;
 }
 
-int	lexer_lstsize(t_lex *lst)
+int	parser_lstsize(t_cmd *lst)
 {
 	int	i;
 
@@ -69,9 +70,9 @@ int	lexer_lstsize(t_lex *lst)
 	return (i);
 }
 
-t_lex	*lexer_lstlast(t_lex *lst)
+t_cmd	*parser_lstlast(t_cmd *lst)
 {
-	t_lex	*node;
+	t_cmd	*node;
 
 	if (!lst)
 		return (0);

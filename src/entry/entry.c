@@ -6,21 +6,11 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/05 12:41:33 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/06 21:45:41 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-int	ft_array_len(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i])
-		i++;
-	return (i);
-}
 
 char	*ft_joincolors(char *array)
 {
@@ -71,30 +61,47 @@ char	*generate_entry(char **envp)
 	return (str);
 }
 
+int	string_to_command(char *str, t_cmd **commands, char **env)
+{
+	int		status;
+	t_lex	*lexer;
+
+	lexer = NULL;
+	*commands = NULL;
+	status = tokenizer(str, &lexer);
+	if (status == 0)
+	{
+		/*
+
+		SPACE RESERVED FOR EXPANSOR
+
+		*/
+		status = parser(commands, &lexer);
+	}
+	print_commands(*commands);
+	if (status == 1)
+		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);
+	lexer_lstclear(&lexer);
+	return (status);
+}
+
 void	generate_terminal(char **envp)
 {
-	t_lex	*lexer;
+	t_cmd	*commands;
 	char	*str;
 
 	str = generate_entry(envp);
-	if (!str)
-		return ;
 	while (str && (ft_strnstr(str, "exit", ft_strlen(str)) == 0
 			|| ft_strlen(str) == 0))
 	{
 		add_history(str);
-		tokenizer(str, &lexer);
-		expansor(&lexer, envp);
-		ft_optimize_expan(&lexer);
-		printf("entry: %s\n", str);
-		printf("token: ");
-		print_tokens(lexer);
-		printf("\n");
-		free(str);
-		lexer_lstclear(&lexer);
+		if (string_to_command(str, &commands, envp) == 0 && commands != NULL)
+		{
+			execute_commands(commands, envp);
+		}
+		parser_lstclear(&commands);
+		free (str);
 		str = generate_entry(envp);
-		if (!str)
-			return ;
 	}
 	if (!str || !ft_strncmp(str, "exit", ft_strlen(str)))
 		ft_printf("exit\n");

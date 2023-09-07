@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:33:56 by fbosch            #+#    #+#             */
-/*   Updated: 2023/08/30 01:39:54 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/03 14:53:45 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,13 @@ int	ft_isreserved(int c)
 	return (0);
 }
 
-void	print_tokens(t_lex *lexer)
+void	print_tokens(t_lex *lexer, char *str)
 {
+	printf("entry: %s\n", str);
+	printf("token: ");
 	while (lexer)
 	{
-		if (!lexer->word)
+		if (lexer->token != NONE)
 		{
 			if (lexer->token == PIPE)
 				printf("PIPE===");
@@ -55,4 +57,5 @@ void	print_tokens(t_lex *lexer)
 			printf("%s===", lexer->word);
 		lexer = lexer->next;
 	}
+	printf("\n");
 }

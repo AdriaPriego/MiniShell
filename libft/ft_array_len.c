@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_array_len.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/05 00:24:25 by fbosch           ###   ########.fr       */
+/*   Created: 2023/09/03 18:49:48 by fbosch            #+#    #+#             */
+/*   Updated: 2023/09/03 18:50:04 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "libft.h"
 
-int	main(int ac, char **av, char **envp)
+int	ft_array_len(char **arr)
 {
-	(void)av;
-	if (ac != 1)
-	{
-		ft_printf_fd(STDERR_FILENO, MSSG_INVALID_ARGS);
-		return (1);
-	}
-	init_signals();
-	generate_terminal(envp);
-	return (0);
+	int	i;
+
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
 }

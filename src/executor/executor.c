@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/05 00:24:25 by fbosch           ###   ########.fr       */
+/*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
+/*   Updated: 2023/09/06 21:46:20 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "minishell.h"
 
-int	main(int ac, char **av, char **envp)
+int	execute_commands(t_cmd *commands, char **envp)
 {
-	(void)av;
-	if (ac != 1)
-	{
-		ft_printf_fd(STDERR_FILENO, MSSG_INVALID_ARGS);
-		return (1);
-	}
-	init_signals();
-	generate_terminal(envp);
+
 	return (0);
 }

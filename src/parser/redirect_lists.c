@@ -1,62 +1,60 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_lists.c                                  :+:      :+:    :+:   */
+/*   redirect_lists.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/25 20:34:14 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/06 18:00:51 by fbosch           ###   ########.fr       */
+/*   Created: 2023/09/03 19:00:30 by fbosch            #+#    #+#             */
+/*   Updated: 2023/09/05 01:06:56 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "minishell.h"
 
-t_lex	*lexer_lstnew(void)
+t_io	*redirect_lstnew(void)
 {
-	t_lex	*node;
+	t_io	*node;
 
-	node = malloc(sizeof(t_lex));
+	node = malloc(sizeof(t_io));
 	if (!node)
 		return (NULL);
-	node->word = NULL;
-	node->token = NONE;
-	node->prev = NULL;
+	node->file = NULL;
+	node->type = REDIRECT_NONE;
 	node->next = NULL;
 	return (node);
 }
 
-void	lexer_lstadd_back(t_lex **lst, t_lex *new)
+void	redirect_lstadd_back(t_io **lst, t_io *new)
 {
-	t_lex	*last;
+	t_io	*last;
 
 	if ((*lst))
 	{
-		last = lexer_lstlast(*lst);
+		last = redirect_lstlast(*lst);
 		last->next = new;
-		new->prev = last;
 	}
 	else
 		(*lst) = new;
 }
 
-void	lexer_lstclear(t_lex **lst)
+void	redirect_lstclear(t_io **lst)
 {
-	t_lex	*nxt;
-	t_lex	*aux;
+	t_io	*temp;
+	t_io	*aux;
 
 	aux = *lst;
 	while (aux)
 	{
-		nxt = aux->next;
-		free(aux->word);
+		temp = aux->next;
+		free(aux->file);
 		free(aux);
-		aux = nxt;
+		aux = temp;
 	}
 	*lst = NULL;
 }
 
-int	lexer_lstsize(t_lex *lst)
+int	redirect_lstsize(t_io *lst)
 {
 	int	i;
 
@@ -69,9 +67,9 @@ int	lexer_lstsize(t_lex *lst)
 	return (i);
 }
 
-t_lex	*lexer_lstlast(t_lex *lst)
+t_io	*redirect_lstlast(t_io *lst)
 {
-	t_lex	*node;
+	t_io	*node;
 
 	if (!lst)
 		return (0);

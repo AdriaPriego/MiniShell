@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/05 19:31:12 by apriego-         ###   ########.fr        #
+#    Updated: 2023/09/06 22:04:12 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ YELLOW	=	\033[38;5;190m
 #=================COMMANDS=================#
 
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	#-Wall -Wextra -Werror
 INCLUDE	=	-I./inc -I./readline
 RM		=	rm -fr
 
@@ -37,11 +37,13 @@ FILES_GEN	=	main.c utils.c utils2.c
 FILES_EXPAN	=	expansor.c expansor_utils.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 EXPAN_GEN	=	expansor.c
+FILES_PARSE	=	parser.c parser_syntax.c cmd_lists.c redirect_lists.c
+FILES_EXEC	=	executor.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/
 DIR_OBJ		:=	temp/
-INC_ROOT	:=	inc/
+INC_ROOT	:=	inc/m
 SRC_DIR		=	src/
 ENTRY_DIR	=	entry/
 BUILT_DIR	=	built-ins/
@@ -54,12 +56,16 @@ SRC_EXPAN	=	$(addprefix $(SRC_DIR),$(addprefix $(EXPAN_DIR),$(FILES_EXPAN)))
 SRC_ENTRY	=	$(addprefix $(SRC_DIR),$(addprefix $(ENTRY_DIR),$(FILES_ENTRY)))
 SRC_BUILT	=	$(addprefix $(SRC_DIR),$(addprefix $(BUILT_DIR),$(FILES_BUILT)))
 SRC_LEXER	=	$(addprefix $(SRC_DIR),$(addprefix $(LEXER_DIR),$(FILES_LEXER)))
+SRC_PARSER	=	$(addprefix $(SRC_DIR),$(addprefix $(PARSER_DIR),$(FILES_PARSE)))
+SRC_EXEC	=	$(addprefix $(SRC_DIR),$(addprefix $(EXEC_DIR),$(FILES_EXEC)))
 SRC_GEN		=	$(addprefix $(SRC_DIR), $(FILES_GEN))
 
 OBJ_EXPAN	=	$(addprefix $(DIR_OBJ),$(SRC_EXPAN:.c=.o))
 OBJ_ENTRY	=	$(addprefix $(DIR_OBJ),$(SRC_ENTRY:.c=.o))
 OBJ_BUILT	=	$(addprefix $(DIR_OBJ),$(SRC_BUILT:.c=.o))
 OBJ_LEXER	=	$(addprefix $(DIR_OBJ),$(SRC_LEXER:.c=.o))
+OBJ_PARSER	=	$(addprefix $(DIR_OBJ),$(SRC_PARSER:.c=.o))
+OBJ_EXEC	=	$(addprefix $(DIR_OBJ),$(SRC_EXEC:.c=.o))
 OBJ			=	$(addprefix $(DIR_OBJ),$(SRC_GEN:.c=.o))
 
 LIB_A		:=	$(RDLINE_ROOT)libreadline.a $(RDLINE_ROOT)libhistory.a \
@@ -81,8 +87,8 @@ librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
 #@$(MAKE) rdline --no-print-directory
 
-$(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_EXPAN)
-	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_EXPAN) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
+$(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC)
+	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
 	@echo "${GREEN}Minishell Compiled${NC}"
 
 rdline :

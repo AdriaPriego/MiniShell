@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 15:56:51 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/04 23:17:25 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	create_word(char *str, int i, t_lex *new, int *quoted)
 			*quoted = 0;
 		else if (*quoted == 0 && ft_isquote(str[i + j]) == 1)
 			*quoted = 1;
-		if (*quoted == 0 && (ft_isspace(str[i + j]) || ft_isreserved(str[i + j])))
+		if (*quoted == 0 && (ft_isspace(str[i + j])
+				|| ft_isreserved(str[i + j])))
 			break ;
 		j++;
 	}
@@ -54,6 +55,22 @@ int	create_word(char *str, int i, t_lex *new, int *quoted)
 		return (-1);
 	new->word = word;
 	return (j);
+}
+
+int	initialize_lexer_node(t_lex *new, char *str, int i, int *quoted)
+{
+	int		temp;
+
+	if (ft_isreserved(str[i]))
+		i += create_token(str, i, new);
+	else
+	{
+		temp = create_word(str, i, new, quoted);
+		if (temp == -1)
+			return (-1);
+		i += temp;
+	}
+	return (i);
 }
 
 /*	This function receives the input given on the terminal as a string
@@ -68,10 +85,8 @@ int	tokenizer(char *str, t_lex **lexer)
 {
 	t_lex	*new;
 	int		i;
-	int		temp;
 	int		quoted;
 
-	*lexer = NULL;
 	quoted = 0;
 	i = 0;
 	while (str[i])
@@ -82,35 +97,12 @@ int	tokenizer(char *str, t_lex **lexer)
 			if (!new)
 				return (1);
 			lexer_lstadd_back(lexer, new);
-			if (ft_isreserved(str[i]))
-				i += create_token(str, i, new);
-			else
-			{
-				temp = create_word(str, i, new, &quoted);
-				if (temp == -1)
-					return (1);
-				i += temp;
-			}
+			i = initialize_lexer_node(new, str, i, &quoted);
+			if (i == -1)
+				return (1);
 		}
 		else
 			i++;
 	}
 	return (0);
 }
-
-/* int	main(int ac, char **av)
-{
-	t_lex	*lexer;
-	//t_cmd	*commands;
-	if (ac != 2)
-		return (1);
-	printf("entry: %s\n", av[1]);
-	printf("token: ");
-	if (tokenizer(av[1], &lexer) == 1)
-		return (1);
-	print_tokens(lexer);
-	//commands = parser(lexer);
-	//expander
-	lexer_lstclear(&lexer);
-	printf("\n");
-} */
