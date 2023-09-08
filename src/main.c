@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/05 00:24:25 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/08 16:28:02 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,14 @@ int	main(int ac, char **av, char **envp)
 		ft_printf_fd(STDERR_FILENO, MSSG_INVALID_ARGS);
 		return (1);
 	}
+	g_global.env = ft_dup_matrix(envp);
+	if (!g_global.env)
+	{
+		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);
+		return (0);
+	}
 	init_signals();
-	generate_terminal(envp);
+	generate_terminal();
+	ft_matrix_free(g_global.env);
 	return (0);
 }

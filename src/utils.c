@@ -6,21 +6,21 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 13:15:02 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/31 16:14:20 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/08 17:07:19 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-char	*find_home(char **envp)
+char	*find_home(void)
 {
 	int	i;
 
 	i = 0;
-	while (envp[i])
+	while (g_global.env[i])
 	{
-		if (ft_strncmp(envp[i], "HOME=", ft_strlen("HOME=")) == 0)
-			return (envp[i] + ft_strlen("HOME="));
+		if (ft_strncmp(g_global.env[i], "HOME=", ft_strlen("HOME=")) == 0)
+			return (g_global.env[i] + ft_strlen("HOME="));
 		i++;
 	}
 	return (NULL);

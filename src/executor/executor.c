@@ -6,15 +6,14 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/07 13:37:09 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:21:27 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	execute_commands(t_cmd *commands, char **envp)
+int	execute_commands(t_cmd *commands)
 {
 	(void)commands;
-	(void)envp;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 15:03:59 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/07 13:38:30 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:05:41 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	find_quote(t_quote *quote, int i, char *str)
 		quote->one = 0;
 }
 
-int	calc_len_expanded(char *str, char **envp)
+int	calc_len_expanded(char *str)
 {
 	int		i;
 	int		len;
@@ -45,7 +45,7 @@ int	calc_len_expanded(char *str, char **envp)
 		find_quote(&quote, i, str);
 		if (str[i] == '$' && quote.one == 0)
 		{
-			value = expand(&str[i], envp);
+			value = expand(&str[i]);
 			len += ft_strlen(value);
 			i += ft_omit_var(&str[i]) - 1;
 		}

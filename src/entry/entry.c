@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/07 13:36:20 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/08 19:36:15 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*ft_joincolors(char *array)
 	return (str);
 }
 
-char	*generate_entry(char **envp)
+char	*generate_entry(void)
 {
 	char	*entry;
 	char	*aux;
@@ -41,7 +41,7 @@ char	*generate_entry(char **envp)
 	char	*str;
 
 	aux = getcwd(NULL, 0);
-	if (ft_strcmp(find_home(envp), aux) == 0)
+	if (ft_strcmp(find_home(), aux) == 0)
 		entry = ft_joincolors("~");
 	else if (ft_strcmp(aux, "/") == 0)
 		entry = ft_joincolors(aux);
@@ -61,45 +61,44 @@ char	*generate_entry(char **envp)
 	return (str);
 }
 
-int	string_to_command(char *str, t_cmd **commands, char **env)
+int	string_to_command(char *str, t_cmd **commands)
 {
 	int		status;
 	t_lex	*lexer;
 
-	(void)env;
 	lexer = NULL;
 	*commands = NULL;
 	status = tokenizer(str, &lexer);
 	if (status == 0)
-		status = expansor(&lexer, env);
+		status = expansor(&lexer);
 	if (status == 0)
 		status = parser(commands, &lexer);
-	print_commands(*commands);
+	if (status == 0)
+		status = heredoc(*commands);
 	if (status == 1)
 		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);
 	lexer_lstclear(&lexer);
 	return (status);
 }
 
-void	generate_terminal(char **envp)
+void	generate_terminal(void)
 {
 	t_cmd	*commands;
 	char	*str;
 
-	str = generate_entry(envp);
-	while (str && (ft_strnstr(str, "exit", ft_strlen(str)) == 0
-			|| ft_strlen(str) == 0))
+	str = generate_entry();
+	while (str && (ft_strcmp(str, "exit") != 0 || ft_strlen(str) == 0))
 	{
 		add_history(str);
-		if (string_to_command(str, &commands, envp) == 0 && commands != NULL)
+		if (string_to_command(str, &commands) == 0 && commands != NULL)
 		{
-			execute_commands(commands, envp);
+			execute_commands(commands);
 		}
 		parser_lstclear(&commands);
-		free (str);
-		str = generate_entry(envp);
+		free(str);
+		str = generate_entry();
 	}
-	if (!str || !ft_strncmp(str, "exit", ft_strlen(str)))
+	if (!str || ft_strcmp(str, "exit") == 0)
 		ft_printf("exit\n");
 	free(str);
 }
