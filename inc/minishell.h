@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/08 01:24:26 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/08 19:57:16 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,10 @@
 //Command errors
 # define CMD_NO_ACCESS 126
 # define CMD_NOT_FOUND 127
+
+//File modes
+# define FILE_IN 0
+# define FILE_OUT 1
 
 /*===============================	STRUCTURES	==============================*/
 
