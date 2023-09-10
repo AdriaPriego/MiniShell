@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/08 20:22:10 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/11 01:13:30 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,91 +22,11 @@ void	wait_childs(t_pipe *data)
 		waitpid(data->pid[i], &data->exit_status, 0);
 		i++;
 	}
+	free (data->pid);
 	if (WIFEXITED(data->exit_status))
 		ft_printf("Exit: %i\n", (WEXITSTATUS(data->exit_status)));
 }
 
-int	check_files(char *file, int mode)
-{
-	if (mode == FILE_IN)
-	{
-		if (file != NULL && access(file, F_OK) == 0)
-		{
-			if (access(file, R_OK) != 0)
-				return (1);
-		}
-		else
-			return (1);
-	}
-	else if (mode == FILE_OUT)
-	{
-		if (file != NULL && access(file, F_OK) == 0)
-			if (access(file, W_OK) != 0)
-				return (1);
-	}
-	return (0);
-	/* if (file != NULL && access(file, F_OK) == 0)
-	{
-		if (access(file, R_OK) != 0)
-			perror(file);
-	}
-	else if (file != NULL)
-		perror(file);
-	if (access(output, F_OK) == 0)
-	{
-		if (access(output, W_OK) != 0)
-			perror(output);
-	} */
-}
-//No such file or directory -> 1
-//Permission denied -> 1
-int	manage_redirections(t_cmd *commands, t_pipe *data)
-{
-	t_io	*temp;
-	int		status;
-
-	temp = commands->redirect;
-	if (!commands->prev && commands->next)
-		dup2(data->fd[1], STDOUT_FILENO);
-	else if (commands->prev && !commands->next)
-		dup2(data->fd[0], STDIN_FILENO);
-	else if (commands->prev && commands->next)
-	{
-		dup2(data->fd[0], STDIN_FILENO);
-		dup2(data->fd[1], STDOUT_FILENO);
-	}
-	while (temp)
-	{
-		if (temp->type == IN || temp->type == HERE_DOC)
-			status = check_files(temp->file, FILE_IN);
-		else if (temp->type == OUT_TRUNC || temp->type == OUT_APPEND)
-			status = check_files(temp->file, FILE_OUT);
-		if (status != 0)
-			perror_exit(status, temp->file);
-		if (temp->type == IN)
-		{
-			data->fd_input = open(temp->file, O_RDONLY);
-			if (data->fd_input < 0)
-				perror_exit(1, temp->file);
-			dup2(data->fd_input, STDIN_FILENO);
-		}
-		else if (temp->type == OUT_TRUNC)
-		{
-			data->fd_output = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (data->fd_output < 0)
-				perror_exit(1, temp->file);
-			dup2(data->fd_output, STDOUT_FILENO);
-		}
-		else if (temp->type == OUT_APPEND)
-		{
-			data->fd_output = open(temp->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (data->fd_output < 0)
-				perror_exit(1, temp->file);
-			dup2(data->fd_output, STDOUT_FILENO);
-		}
-		temp = temp->next;
-	}
-}
 void	new_pipe(t_cmd *commands, t_pipe *data, char **envp)
 {
 	int		exit_code;
@@ -116,21 +36,12 @@ void	new_pipe(t_cmd *commands, t_pipe *data, char **envp)
 	close(data->fd[0]);
 	close(data->fd[1]);
 	exit_code = search_path(commands->args[0], envp, &path);
-	if (exit_code != EXIT_SUCCESS)                  //MANAGE COMMAND NOT FOUND && COMMAND NO ACCESS (PERROR DOESN'T DO IT)
+	if (exit_code == CMD_NOT_FOUND)
+		error_exit(exit_code, commands->args[0], MSSG_CMD_NOT_FOUND);
+	else if (exit_code != 0)
 		perror_exit(exit_code, commands->args[0]);
 	execve(path, commands->args, envp);
 	perror_exit(EXIT_FAILURE, "Execve:");
-}
-
-int	init_data(t_pipe *data, t_cmd *commands)
-{
-	int	i;
-
-	data->n_cmds = count_commands(commands);
-	data->pid  = malloc(sizeof(pid_t) * data->n_cmds);
-	if (!data->pid)
-		return (1);
-	return (0);
 }
 
 int	execute_commands(t_cmd *commands, char **envp)

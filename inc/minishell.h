@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/08 19:57:16 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/11 01:22:10 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,11 @@
 # define C_ONE_QUOTE 39
 # define C_TWO_QUOTE 34
 
-/* //Redirection type
-# define IN 0
-# define HERE_DOC 1
-# define OUT_TRUNC 2
-# define OUT_APPEND 3 */
-
 // General errors
 # define MSSG_INVALID_ARGS "Invalid arguments: Usage [./minishell]\n"
 # define MSSG_MEMORY_ERROR "Memory error, please free space and attempt again\n"
-# define EXECUTOR_ERROR "Error during command execution\n"
+# define MSSG_EXECUTOR_ERROR "Error during command execution\n"
+# define MSSG_CMD_NOT_FOUND "command not found"
 
 // Parser syntax errors
 # define SYNTAX_ERR 42
@@ -141,8 +136,8 @@ typedef struct s_cmd
 typedef struct s_pipe
 {
 	int		n_cmds;
-	int		fd_input;
-	int		fd_output;
+	int		fd_in;
+	int		fd_out;
 	int		fd[2];
 	pid_t	*pid;
 	char	*path;
@@ -222,11 +217,19 @@ t_io				*redirect_lstlast(t_io *lst);
 // Receives clean arguments in a t_cmd* linked list and manages execution
 /*	EXECUTOR	*/
 int					execute_commands(t_cmd *commands, char **envp);
+void				new_pipe(t_cmd *commands, t_pipe *data, char **envp);
+void				wait_childs(t_pipe *data);
 int					search_path(char *cmd, char **envp, char **path);
 int					try_paths(char **full_path, char *cmd, char **path);
 int					try_local_path(char *cmd, char **path);
+int					check_access(char *file, int mode);
+void				check_files(t_io *temp);
+void				dup_custom_redirections(t_pipe *data, t_io *temp);
+void				manage_redirections(t_cmd *commands, t_pipe *data);
+int					init_data(t_pipe *data, t_cmd *commands);
 int					count_commands(t_cmd *commands);
 void				perror_exit(int exit_code, char *error);
+void				error_exit(int exit_code, char *name, char *error);
 
 // Handle signals
 /*	SIGNALS	*/

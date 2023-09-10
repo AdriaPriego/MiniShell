@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/08 01:24:48 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/11 00:33:04 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	generate_terminal(char **envp)
 		if (string_to_command(str, &commands, envp) == 0 && commands != NULL)
 		{
 			if (execute_commands(commands, envp) == 1)
-				ft_printf_fd(STDERR_FILENO, EXECUTOR_ERROR);
+				ft_printf_fd(STDERR_FILENO, MSSG_EXECUTOR_ERROR);
 		}
 		parser_lstclear(&commands);
 		free (str);
