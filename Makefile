@@ -6,7 +6,7 @@
 #    By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/11 01:22:33 by fbosch           ###   ########.fr        #
+#    Updated: 2023/09/11 15:46:51 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ FILES_EXPAN	=	expansor.c expansor_utils.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 EXPAN_GEN	=	expansor.c
 FILES_PARSE	=	parser.c parser_syntax.c cmd_lists.c redirect_lists.c
-FILES_EXEC	=	executor.c executor_utils.c find_path.c
+FILES_EXEC	=	executor.c executor_utils.c find_path.c redirections.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/

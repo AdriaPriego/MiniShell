@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 01:12:21 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/11 01:13:03 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/11 15:39:35 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	check_access(char *file, int mode)
 	return (0);
 }
 
-void	check_files(t_io *temp)
+void	check_files(t_pipe *data, t_io *temp)
 {
 	int		status;
 
@@ -42,7 +42,7 @@ void	check_files(t_io *temp)
 	else if (temp->type == OUT_TRUNC || temp->type == OUT_APPEND)
 		status = check_access(temp->file, FILE_OUT);
 	if (status != 0)
-		perror_exit(status, temp->file);
+		perror_exit(data, status, temp->file);
 }
 
 void	dup_custom_redirections(t_pipe *data, t_io *temp)
@@ -51,7 +51,7 @@ void	dup_custom_redirections(t_pipe *data, t_io *temp)
 	{
 		data->fd_in = open(temp->file, O_RDONLY);
 		if (data->fd_in < 0)
-			perror_exit(EXIT_FAILURE, temp->file);
+			perror_exit(data, EXIT_FAILURE, temp->file);
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
 		/* if (temp->type == HERE_DOC)   WILL HAVE TO CHECK
@@ -61,7 +61,7 @@ void	dup_custom_redirections(t_pipe *data, t_io *temp)
 	{
 		data->fd_out = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (data->fd_out < 0)
-			perror_exit(EXIT_FAILURE, temp->file);
+			perror_exit(data, EXIT_FAILURE, temp->file);
 		dup2(data->fd_out, STDOUT_FILENO);
 		close(data->fd_out);
 	}
@@ -69,7 +69,7 @@ void	dup_custom_redirections(t_pipe *data, t_io *temp)
 	{
 		data->fd_out = open(temp->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (data->fd_out < 0)
-			perror_exit(EXIT_FAILURE, temp->file);
+			perror_exit(data, EXIT_FAILURE, temp->file);
 		dup2(data->fd_out, STDOUT_FILENO);
 		close(data->fd_out);
 	}
@@ -91,7 +91,7 @@ void	manage_redirections(t_cmd *commands, t_pipe *data)
 	temp = commands->redirect;
 	while (temp)
 	{
-		check_files(temp);
+		check_files(data, temp);
 		dup_custom_redirections(data, temp);
 		temp = temp->next;
 	}

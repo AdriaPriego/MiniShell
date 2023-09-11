@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 21:45:52 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/11 00:07:13 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/11 13:29:17 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	try_paths(char **full_path, char *cmd, char **path)
 {
 	char	*temp;
 	int		i;
-	
+
 	i = -1;
 	while (full_path[++i])
 	{

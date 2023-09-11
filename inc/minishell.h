@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/11 01:22:10 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/11 13:26:32 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,13 +223,13 @@ int					search_path(char *cmd, char **envp, char **path);
 int					try_paths(char **full_path, char *cmd, char **path);
 int					try_local_path(char *cmd, char **path);
 int					check_access(char *file, int mode);
-void				check_files(t_io *temp);
+void				check_files(t_pipe *data, t_io *temp);
 void				dup_custom_redirections(t_pipe *data, t_io *temp);
 void				manage_redirections(t_cmd *commands, t_pipe *data);
 int					init_data(t_pipe *data, t_cmd *commands);
-int					count_commands(t_cmd *commands);
-void				perror_exit(int exit_code, char *error);
-void				error_exit(int exit_code, char *name, char *error);
+void				perror_exit(t_pipe *data, int exit_code, char *error);
+void				error_exit(t_pipe *data, int exit_code, char *name, char *error);
+int					perror_return(t_pipe *data, int exit_code, char *error);
 
 // Handle signals
 /*	SIGNALS	*/
