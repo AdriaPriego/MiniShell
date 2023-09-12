@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/11 15:42:35 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/11 22:11:38 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 	lexer_lstclear(&lexer);
 	return (status);
 }
+int		g_exit_status = 0;
 
 void	generate_terminal(char **envp)
 {
@@ -100,7 +101,7 @@ void	generate_terminal(char **envp)
 		free (str);
 		str = generate_entry(envp);
 	}
-	if (!str || !ft_strncmp(str, "exit", ft_strlen(str)))
+	if ((!str || !ft_strncmp(str, "exit", ft_strlen(str))) && isatty(STDIN_FILENO))
 		ft_printf("exit\n");
 	free(str);
 }

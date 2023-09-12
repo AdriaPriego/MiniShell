@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/11 13:26:32 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/12 02:27:48 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@
 # include <errno.h>
 
 /*=================================	MACROS	==================================*/
+
+extern int	g_exit_status;
 
 // Colours
 # define GREENBASH "\033[1;38;2;180;235;31m"
@@ -141,11 +143,6 @@ typedef struct s_pipe
 	int		fd[2];
 	pid_t	*pid;
 	char	*path;
-	int		exit_status;
-	//pid_t	pid1;
-	//pid_t	pid2;
-	//int		status;
-	//char	**cmd;
 }	t_pipe; 
 
 /*===============================	FUNCTIONS	==============================*/
@@ -222,6 +219,7 @@ void				wait_childs(t_pipe *data);
 int					search_path(char *cmd, char **envp, char **path);
 int					try_paths(char **full_path, char *cmd, char **path);
 int					try_local_path(char *cmd, char **path);
+int					try_absolute_path(char *cmd, char **path);
 int					check_access(char *file, int mode);
 void				check_files(t_pipe *data, t_io *temp);
 void				dup_custom_redirections(t_pipe *data, t_io *temp);

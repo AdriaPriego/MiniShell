@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/07 13:41:34 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/12 11:47:30 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,11 @@ int	expansor(t_lex **def, char **envp)
 	{
 		if (lexer->word != NULL)
 		{
+			if (ft_strcmp("$?", lexer->word) == 0)   //BORRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR
+			{
+				free (lexer->word);
+				lexer->word = ft_itoa(g_exit_status);
+			}
 			str = malloc(calc_len_expanded(lexer->word, envp) + 1);
 			if (!str)
 				return (1);

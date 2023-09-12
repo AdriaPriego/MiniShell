@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/11 15:42:50 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/12 11:50:33 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,17 @@
 void	wait_childs(t_pipe *data)
 {
 	int	i;
+	int	status;
 
-	close(data->fd[0]);
-	close(data->fd[1]);
 	i = 0;
 	while (i < data->n_cmds)
 	{
-		waitpid(data->pid[i], &data->exit_status, 0);
+		waitpid(data->pid[i], &status, 0);
 		i++;
 	}
 	free (data->pid);
-	if (WIFEXITED(data->exit_status))
-		ft_printf("Exit: %i\n", (WEXITSTATUS(data->exit_status)));
+	if (WIFEXITED(status))
+		g_exit_status = (WEXITSTATUS(status));
 }
 
 void	new_pipe(t_cmd *commands, t_pipe *data, char **envp)
@@ -50,7 +49,7 @@ int	execute_commands(t_cmd *commands, char **envp)
 {
 	t_pipe	data;
 	int		i;
-
+	
 	if (!commands)
 		return (0);
 	if (init_data(&data, commands) == 1)
@@ -68,6 +67,8 @@ int	execute_commands(t_cmd *commands, char **envp)
 		commands = commands->next;
 		i++;
 	}
+	close(data.fd[0]);
+	close(data.fd[1]);
 	wait_childs(&data);
 	return (0);
 }
