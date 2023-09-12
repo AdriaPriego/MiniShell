@@ -6,18 +6,18 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:09:24 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/08 20:00:42 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/12 10:55:04 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	do_heredoc(char *delimiter, char *path)
+void	create_heredoc(char *delimiter, char *path)
 {
 	char	*str;
 	int		fd;
 
-	fd = open(path, O_CREAT | O_WRONLY, 0666);
+	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	str = readline("> ");
 	while (ft_strcmp(delimiter, str) != 0)
 	{
@@ -30,29 +30,37 @@ void	do_heredoc(char *delimiter, char *path)
 	free(str);
 }
 
+void	do_heredoc(int i, t_io *aux)
+{
+	char	*num;
+	char	*path;
+
+	num = ft_itoa(i);
+	path = ft_strjoin("/tmp/minishell", num);
+	free(num);
+	create_heredoc(aux->file, path);
+	free(aux->file);
+	aux->file = ft_strdup(path);
+	free(path);
+}
+
 int	heredoc(t_cmd *commands)
 {
-	char	*path;
-	char	*num;
+	t_io	*aux;
 	int		i;
 
 	i = 0;
 	while (commands)
 	{
-		while (commands->redirect)
+		aux = commands->redirect;
+		while (aux)
 		{
-			if (commands->redirect->type == HERE_DOC)
+			if (aux->type == HERE_DOC)
 			{
-				num = ft_itoa(i);
-				path = ft_strjoin("/tmp/minishell", num);
-				free(num);
-				do_heredoc(commands->redirect->file, path);
-				free(commands->redirect->file);
-				commands->redirect->file = ft_strdup(path);
-				free(path);
+				do_heredoc(i, aux);
 				i++;
 			}
-			commands->redirect = commands->redirect->next;
+			aux = aux->next;
 		}
 		commands = commands->next;
 	}
