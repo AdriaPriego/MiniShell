@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/08 17:08:05 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/12 16:53:57 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_cd(char **comands)
 {
 	if (!comands[1])
-		chdir(find_home(g_global.env));
+		chdir(find_home());
 	else if (ft_strcmp(comands[1], "..") == 0)
 		chdir("..");
 	else if (ft_strcmp(comands[1], ".") == 0)
@@ -23,7 +23,7 @@ void	ft_cd(char **comands)
 	else if (ft_strcmp(comands[1], "/") == 0)
 		chdir("/");
 	else if (ft_strcmp(comands[1], "~") == 0)
-		chdir(find_home(g_global.env));
+		chdir(find_home());
 	else if (chdir(comands[1]) != 0)
 		ft_printf_fd(2, "minishell: cd: %s: No such file or directory\n",
 			comands[1]);

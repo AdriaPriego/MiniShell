@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/08 17:46:29 by apriego-         ###   ########.fr        #
+#    Updated: 2023/09/12 11:37:43 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ COMP		=	./libft/libft.a
 FILES_ENTRY	=	entry.c signals.c
 FILES_BUILT	=	built_ins.c built_ins2.c
 FILES_GEN	=	main.c utils.c utils2.c
-FILES_EXPAN	=	expansor.c expansor_utils.c
+FILES_EXPAN	=	expansor.c expansor_utils.c expand_files.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 FILES_HDOC	=	heredoc.c
 EXPAN_GEN	=	expansor.c
