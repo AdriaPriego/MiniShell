@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/12 18:18:05 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 12:11:52 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_change_comand(t_cmd	*comand, int i, char *str)
 	return (0);
 }
 
-char	*expand(char *str)
+char	*expand(char *str, char **env)
 {
 	int		i;
 	char	*var;
@@ -43,13 +43,13 @@ char	*expand(char *str)
 	var = obtain_var(str);
 	if (var == NULL)
 		return (NULL);
-	while (g_global.env[i])
+	while (env[i])
 	{
-		dup = malloc(ft_strlen_chr(g_global.env[i], '='));
-		ft_memcpy(dup, g_global.env[i], ft_strlen_chr(g_global.env[i], '='));
-		if (ft_strncmp(dup, var, ft_strlen_chr(g_global.env[i], '=')) == 0)
+		dup = malloc(ft_strlen_chr(env[i], '='));
+		ft_memcpy(dup, env[i], ft_strlen_chr(env[i], '='));
+		if (ft_strncmp(dup, var, ft_strlen_chr(env[i], '=')) == 0)
 		{
-			value = ft_strchr(g_global.env[i], '=');
+			value = ft_strchr(env[i], '=');
 			free(var);
 			free(dup);
 			return (value + 1);
@@ -61,7 +61,7 @@ char	*expand(char *str)
 	return (NULL);
 }
 
-void	check_expand(char *word, t_quote *quote, char *str)
+void	check_expand(char *word, t_quote *quote, char *str, char **env)
 {
 	int		i;
 	int		j;
@@ -74,10 +74,10 @@ void	check_expand(char *word, t_quote *quote, char *str)
 		find_quote(quote, i, word);
 		if (word[i] == '$' && quote->one == 0)
 		{
-			value = expand(&word[i]);
+			value = expand(&word[i], env);
 			if (value)
 			{
-				ft_strlcat(str, value, calc_len_expanded(word)
+				ft_strlcat(str, value, calc_len_expanded(word, env)
 					+ 1);
 				j = ft_strlen(str);
 			}
@@ -90,7 +90,7 @@ void	check_expand(char *word, t_quote *quote, char *str)
 	str[j] = '\0';
 }
 
-int	expansor(t_cmd *def)
+int	expansor(t_cmd *def, char **env)
 {
 	char	*str;
 	int		i;
@@ -101,12 +101,12 @@ int	expansor(t_cmd *def)
 	{
 		if (def->args[i] != NULL)
 		{
-			str = malloc(calc_len_expanded(def->args[i]) + 1);
+			str = malloc(calc_len_expanded(def->args[i], env) + 1);
 			if (!str)
 				return (1);
-			ft_memset(str, '\0', calc_len_expanded(def->args[i]) + 1);
+			ft_memset(str, '\0', calc_len_expanded(def->args[i], env) + 1);
 			init_quote(&quote);
-			check_expand(def->args[i], &quote, str);
+			check_expand(def->args[i], &quote, str, env);
 			if (ft_change_comand(def, i, str) == 1)
 				return (1);
 			i++;

@@ -6,16 +6,16 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/12 16:53:57 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 11:58:14 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	ft_cd(char **comands)
+void	ft_cd(char **comands, char **env)
 {
 	if (!comands[1])
-		chdir(find_home());
+		chdir(find_home(env));
 	else if (ft_strcmp(comands[1], "..") == 0)
 		chdir("..");
 	else if (ft_strcmp(comands[1], ".") == 0)
@@ -23,7 +23,7 @@ void	ft_cd(char **comands)
 	else if (ft_strcmp(comands[1], "/") == 0)
 		chdir("/");
 	else if (ft_strcmp(comands[1], "~") == 0)
-		chdir(find_home());
+		chdir(find_home(env));
 	else if (chdir(comands[1]) != 0)
 		ft_printf_fd(2, "minishell: cd: %s: No such file or directory\n",
 			comands[1]);
@@ -38,14 +38,14 @@ void	ft_pwd(void)
 	free(str);
 }
 
-void	ft_env(void)
+void	ft_env(char **env)
 {
 	int	i;
 
 	i = 0;
-	while (g_global.env[i])
+	while (env[i])
 	{
-		ft_printf("%s\n", g_global.env[i]);
+		ft_printf("%s\n", env[i]);
 		i++;
 	}
 }
@@ -67,25 +67,25 @@ void	ft_echo(char **comand)
 	}
 }
 
-int	ft_unset(char **comand)
+int	ft_unset(char **comand, char **env)
 {
 	int		i;
 	int		j;
 	char	*str;
 
 	i = 0;
-	while (g_global.env[i])
+	while (env[i])
 	{
-		str = ft_strdup(g_global.env[i]);
+		str = ft_strdup(env[i]);
 		if (!str)
 			return (1);
 		if (ft_strcmp(str, comand[1]) == 0)
 		{
 			j = i;
-			free(g_global.env[j]);
-			while (g_global.env[j])
+			free(env[j]);
+			while (env[j])
 			{
-				g_global.env[j] = g_global.env[j + 1];
+				env[j] = env[j + 1];
 				j++;
 			}
 		}

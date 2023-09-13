@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:35:53 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/12 18:39:28 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 12:29:55 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int	rewrite_file(char *path, char **aux)
 	int	i;
 
 	fd = open(path, O_TRUNC | O_WRONLY);
+	if (fd == -1)
+		return (1);
 	i = 0;
-	ft_printf("HOLA");
 	while (aux[i])
 	{
 		ft_printf_fd(fd, "%s", aux[i]);
@@ -71,12 +72,31 @@ int	fill_aux(char *path, char **file)
 	return (0);
 }
 
-int	expand_file(char *path)
+int	expand_vars_file(char **file, char **aux, char **env)
+{
+	int		i;
+	t_quote	quote;
+
+	init_quote(&quote);
+	i = 0;
+	while (file[i])
+	{
+		aux[i] = malloc(calc_len_expanded(file[i], env) + 1);
+		if (!aux[i])
+			return (1);
+		aux[i][0] = '\0';
+		check_expand(file[i], &quote, aux[i], env);
+		i++;
+	}
+	aux[i] = NULL;
+	return (0);
+}
+
+int	expand_file(char *path, char **env)
 {
 	char	**file;
 	char	**aux;
-	int		i;
-	t_quote quote;
+	int		status;
 
 	file = malloc((calc_len_file(path) + 1) * sizeof (char *));
 	if (!file)
@@ -87,23 +107,29 @@ int	expand_file(char *path)
 	if (fill_aux(path, file) == 1)
 	{
 		ft_matrix_free(file);
+		ft_matrix_free(aux);
 		return (1);
 	}
-	init_quote(&quote);
-	i = 0;
-	while (file[i])
+	status = expand_vars_file(file, aux, env);
+	if (status == 1)
 	{
-		aux[i] = malloc(calc_len_expanded(file[i]) + 1);
-		aux[i][0] = '\0';
-		check_expand(file[i], &quote, aux[i]);
-		i++;
+		ft_matrix_free(file);
+		ft_matrix_free(aux);
+		return (1);
 	}
-	aux[i] = NULL;
-	rewrite_file(path, aux);
+	status = rewrite_file(path, aux);
+	if (status == 1)
+	{
+		ft_matrix_free(file);
+		ft_matrix_free(aux);
+		return (1);
+	}
+	ft_matrix_free(file);
+	ft_matrix_free(aux);
 	return (0);
 }
 
-int	expansor_files(t_cmd *comands)
+int	expansor_files(t_cmd *comands, char **env)
 {
 	t_io	*aux;
 
@@ -114,7 +140,7 @@ int	expansor_files(t_cmd *comands)
 		{
 			if (aux->type == HERE_DOC)
 			{
-				if (expand_file(aux->file) == 1)
+				if (expand_file(aux->file, env) == 1)
 					return (1);
 			}
 			aux = aux->next;

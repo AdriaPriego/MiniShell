@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/12 18:14:32 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 12:13:11 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,31 +129,23 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }					t_cmd;
 
-typedef struct s_global
-{
-	char	**env;
-	int		last_exit;
-}				t_global;
-
-t_global			g_global;
-
 /*===============================	FUNCTIONS	==============================*/
 
 // Holds minishell loop: MiniShell$>....
 /*-------------------------------	ENTRY	----------------------------------*/
-void				generate_terminal(void);
-int					string_to_command(char *str, t_cmd **commands);
-char				*generate_entry(void);
+void				generate_terminal(char **env);
+int					string_to_command(char *str, t_cmd **commands, char **env);
+char				*generate_entry(char **env);
 char				*ft_joincolors(char *array);
 
 // Builtint shell commands
 /*-----------------------------	  BUILTINS	--------------------------------*/
-void				ft_export(char **comand);
-int					ft_unset(char **comand);
+void				ft_export(char **comand, char **env);
+int					ft_unset(char **comand, char **env);
 void				ft_echo(char **comand);
 void				ft_pwd(void);
-void				ft_env(void);
-void				ft_cd(char **comand);
+void				ft_env(char **env);
+void				ft_cd(char **comand, char **env);
 
 /*-----------------------------	HEREDOC --------------------------------*/
 int					heredoc(t_cmd *commands);
@@ -175,15 +167,15 @@ t_lex				*lexer_lstlast(t_lex *lst);
 
 // Reads from lexer structure and expands variables
 /*-----------------------------		EXPANSOR	--------------------------------*/
-int					expansor(t_cmd *def);
-char				*expand(char *str);
+int					expansor(t_cmd *def, char **env);
+char				*expand(char *str, char **env);
 int					ft_omit_var(char *var);
-int					calc_len_expanded(char *str);
+int					calc_len_expanded(char *str, char **env);
 char				*obtain_var(char *str);
 void				init_quote(t_quote *quote);
-void				check_expand(char *word, t_quote *quote, char *str);
+void				check_expand(char *word, t_quote *quote, char *str, char **env);
 void				find_quote(t_quote *quote, int i, char *str);
-int					expansor_files(t_cmd *comands);
+int					expansor_files(t_cmd *comands, char **env);
 
 // Converts token list (lexer) into a simple arguments list
 /*-----------------------------		PARSER	   --------------------------------*/
@@ -218,7 +210,7 @@ void				init_signals(void);
 
 // General utility functions
 /*-------------------------------      UTILS     -------------------------------*/
-char				*find_home(void);
+char				*find_home(char **env);
 char				**ft_splitn(char *str, char c, int qtt);
 int					count_spaces(char *str);
 int					ft_strcmp(const char *s1, const char *s2);
