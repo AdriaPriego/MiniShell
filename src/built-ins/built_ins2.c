@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 17:47:17 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 11:59:30 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 18:20:27 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,33 @@ void	ft_export(char **args, char **env)
 			i++;
 		}
 	}
+}
+
+void	ft_exit(char **args)
+{
+	int	i;
+
+	i = 0;
+	if (ft_array_len(args) > 2)
+	{
+		ft_printf_fd(STDERR_FILENO, "minishell: exit: too many arguments\n");
+		exit(1);
+	}
+	if (args[1])
+	{
+		if (ft_test_int(args[1]) != 0)
+		{
+			ft_printf("exit\n");
+			ft_printf_fd(STDERR_FILENO,
+				"minishell: exit: %s: numeric argument required\n", args[1]);
+			exit(255);
+		}
+		else
+		{
+			ft_printf("exit\n");
+			exit(ft_atoi(args[1]));
+		}
+	}
+	ft_printf("exit\n");
+	exit(0);
 }

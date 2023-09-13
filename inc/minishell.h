@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 12:13:11 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 18:29:01 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ void				ft_echo(char **comand);
 void				ft_pwd(void);
 void				ft_env(char **env);
 void				ft_cd(char **comand, char **env);
+void				ft_exit(char **args);
 
 /*-----------------------------	HEREDOC --------------------------------*/
 int					heredoc(t_cmd *commands);
@@ -176,6 +177,12 @@ void				init_quote(t_quote *quote);
 void				check_expand(char *word, t_quote *quote, char *str, char **env);
 void				find_quote(t_quote *quote, int i, char *str);
 int					expansor_files(t_cmd *comands, char **env);
+int					expansor_files_aux(t_cmd *comands, char **env, int i);
+int					expand_file(char *path, char **env);
+int					calc_len_file(char *path);
+int					fill_aux(char *path, char **file);
+int					expand_vars_file(char **file, char **aux, char **env);
+int					rewrite_file(char *path, char **aux);
 
 // Converts token list (lexer) into a simple arguments list
 /*-----------------------------		PARSER	   --------------------------------*/
