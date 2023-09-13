@@ -34,11 +34,11 @@ COMP		=	./libft/libft.a
 FILES_ENTRY	=	entry.c signals.c
 FILES_BUILT	=	built_ins.c built_ins2.c
 FILES_GEN	=	main.c utils.c utils2.c
-FILES_EXPAN	=	expansor.c expansor_utils.c
+FILES_EXPAN	=	expansor.c expansor_utils.c expand_files.c expand_files_utils.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
-EXPAN_GEN	=	expansor.c
 FILES_PARSE	=	parser.c parser_syntax.c cmd_lists.c redirect_lists.c
 FILES_EXEC	=	executor.c executor_utils.c find_path.c redirections.c
+FILES_HERE	=	heredoc.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
 RDLINE_ROOT	:=	readline/
@@ -46,6 +46,7 @@ DIR_OBJ		:=	temp/
 INC_ROOT	:=	inc/m
 SRC_DIR		=	src/
 ENTRY_DIR	=	entry/
+HERE_DIR	=	heredoc/
 BUILT_DIR	=	built-ins/
 LEXER_DIR	=	lexer/
 PARSER_DIR	=	parser/
@@ -58,6 +59,7 @@ SRC_BUILT	=	$(addprefix $(SRC_DIR),$(addprefix $(BUILT_DIR),$(FILES_BUILT)))
 SRC_LEXER	=	$(addprefix $(SRC_DIR),$(addprefix $(LEXER_DIR),$(FILES_LEXER)))
 SRC_PARSER	=	$(addprefix $(SRC_DIR),$(addprefix $(PARSER_DIR),$(FILES_PARSE)))
 SRC_EXEC	=	$(addprefix $(SRC_DIR),$(addprefix $(EXEC_DIR),$(FILES_EXEC)))
+SRC_HERE	=	$(addprefix $(SRC_DIR),$(addprefix $(HERE_DIR),$(FILES_HERE)))
 SRC_GEN		=	$(addprefix $(SRC_DIR), $(FILES_GEN))
 
 OBJ_EXPAN	=	$(addprefix $(DIR_OBJ),$(SRC_EXPAN:.c=.o))
@@ -66,6 +68,7 @@ OBJ_BUILT	=	$(addprefix $(DIR_OBJ),$(SRC_BUILT:.c=.o))
 OBJ_LEXER	=	$(addprefix $(DIR_OBJ),$(SRC_LEXER:.c=.o))
 OBJ_PARSER	=	$(addprefix $(DIR_OBJ),$(SRC_PARSER:.c=.o))
 OBJ_EXEC	=	$(addprefix $(DIR_OBJ),$(SRC_EXEC:.c=.o))
+OBJ_HERE	=	$(addprefix $(DIR_OBJ),$(SRC_HERE:.c=.o))
 OBJ			=	$(addprefix $(DIR_OBJ),$(SRC_GEN:.c=.o))
 
 LIB_A		:=	$(RDLINE_ROOT)libreadline.a $(RDLINE_ROOT)libhistory.a \
@@ -85,10 +88,10 @@ all : temp librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
-	@$(MAKE) rdline --no-print-directory
+#s@$(MAKE) rdline --no-print-directory
 
-$(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC)
-	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
+$(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC) $(OBJ_HERE)
+	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_HERE) $(OBJ_EXEC) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
 	@echo "${GREEN}Minishell Compiled${NC}"
 
 rdline :

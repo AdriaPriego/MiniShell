@@ -14,13 +14,22 @@
 
 int	main(int ac, char **av, char **envp)
 {
+	char	**env;
+
 	(void)av;
 	if (ac != 1)
 	{
 		ft_printf_fd(STDERR_FILENO, MSSG_INVALID_ARGS);
 		return (1);
 	}
+	env = ft_dup_matrix(envp);
+	if (!env)
+	{
+		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);
+		return (0);
+	}
 	init_signals();
-	generate_terminal(envp);
+	generate_terminal(env);
+	ft_matrix_free(env);
 	return (0);
 }
