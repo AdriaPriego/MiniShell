@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/07 13:41:34 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 12:11:52 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,19 @@ int	ft_isliteral(char c, t_quote *quote)
 	return (0);
 }
 
-int	ft_change_lexer(t_lex **lexer, char *str)
+int	ft_change_comand(t_cmd	*comand, int i, char *str)
 {
-	t_lex	*temp;
-
-	temp = *lexer;
-	free(temp->word);
-	temp->word = ft_strdup(str);
-	if (!temp->word && temp->token == NONE)
+	free(comand->args[i]);
+	comand->args[i] = ft_strdup(str);
+	if (!comand->args[i])
 		return (1);
-	temp = temp->next;
-	*lexer = temp;
+	comand = comand->next;
 	free(str);
 	str = NULL;
 	return (0);
 }
 
-char	*expand(char *str, char **envp)
+char	*expand(char *str, char **env)
 {
 	int		i;
 	char	*var;
@@ -47,13 +43,13 @@ char	*expand(char *str, char **envp)
 	var = obtain_var(str);
 	if (var == NULL)
 		return (NULL);
-	while (envp[i])
+	while (env[i])
 	{
-		dup = malloc(ft_strlen_chr(envp[i], '='));
-		ft_memcpy(dup, envp[i], ft_strlen_chr(envp[i], '='));
-		if (ft_strncmp(dup, var, ft_strlen_chr(envp[i], '=')) == 0)
+		dup = malloc(ft_strlen_chr(env[i], '='));
+		ft_memcpy(dup, env[i], ft_strlen_chr(env[i], '='));
+		if (ft_strncmp(dup, var, ft_strlen_chr(env[i], '=')) == 0)
 		{
-			value = ft_strchr(envp[i], '=');
+			value = ft_strchr(env[i], '=');
 			free(var);
 			free(dup);
 			return (value + 1);
@@ -65,7 +61,7 @@ char	*expand(char *str, char **envp)
 	return (NULL);
 }
 
-void	check_expand(t_lex *lexer, t_quote *quote, char **envp, char *str)
+void	check_expand(char *word, t_quote *quote, char *str, char **env)
 {
 	int		i;
 	int		j;
@@ -73,49 +69,50 @@ void	check_expand(t_lex *lexer, t_quote *quote, char **envp, char *str)
 
 	i = 0;
 	j = 0;
-	while (lexer->token == NONE && lexer->word[i] != '\0')
+	while (word[i] != '\0')
 	{
-		find_quote(quote, i, lexer->word);
-		if (lexer->word[i] == '$' && quote->one == 0)
+		find_quote(quote, i, word);
+		if (word[i] == '$' && quote->one == 0)
 		{
-			value = expand(&lexer->word[i], envp);
+			value = expand(&word[i], env);
 			if (value)
 			{
-				ft_strlcat(str, value, calc_len_expanded(lexer->word, envp)
+				ft_strlcat(str, value, calc_len_expanded(word, env)
 					+ 1);
 				j = ft_strlen(str);
 			}
-			i += ft_omit_var(&lexer->word[i]) - 1;
+			i += ft_omit_var(&word[i]) - 1;
 		}
-		else if (ft_isliteral(lexer->word[i], quote) == 1)
-			str[j++] = lexer->word[i];
+		else if (ft_isliteral(word[i], quote) == 1)
+			str[j++] = word[i];
 		i++;
 	}
 	str[j] = '\0';
 }
 
-int	expansor(t_lex **def, char **envp)
+int	expansor(t_cmd *def, char **env)
 {
-	t_lex	*lexer;
 	char	*str;
+	int		i;
 	t_quote	quote;
 
-	lexer = *def;
-	while (lexer)
+	i = 0;
+	while (def->args[i])
 	{
-		if (lexer->word != NULL)
+		if (def->args[i] != NULL)
 		{
-			str = malloc(calc_len_expanded(lexer->word, envp) + 1);
+			str = malloc(calc_len_expanded(def->args[i], env) + 1);
 			if (!str)
 				return (1);
-			ft_memset(str, '\0', calc_len_expanded(lexer->word, envp) + 1);
+			ft_memset(str, '\0', calc_len_expanded(def->args[i], env) + 1);
 			init_quote(&quote);
-			check_expand(lexer, &quote, envp, str);
-			if (ft_change_lexer(&lexer, str) == 1)
+			check_expand(def->args[i], &quote, str, env);
+			if (ft_change_comand(def, i, str) == 1)
 				return (1);
+			i++;
 		}
 		else
-			lexer = lexer->next;
+			def = def->next;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/07 13:38:41 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 18:29:01 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,6 @@
 # define HERE_DOC 1
 # define OUT_TRUNC 2
 # define OUT_APPEND 3 */
-
-extern int			g_exit;
 
 // General errors
 # define MSSG_INVALID_ARGS "Invalid arguments: Usage [./minishell]\n"
@@ -134,23 +132,27 @@ typedef struct s_cmd
 /*===============================	FUNCTIONS	==============================*/
 
 // Holds minishell loop: MiniShell$>....
-/*	ENTRY	*/
-void				generate_terminal(char **envp);
+/*-------------------------------	ENTRY	----------------------------------*/
+void				generate_terminal(char **env);
 int					string_to_command(char *str, t_cmd **commands, char **env);
-char				*generate_entry(char **envp);
+char				*generate_entry(char **env);
 char				*ft_joincolors(char *array);
 
 // Builtint shell commands
-/*	BUILTINS	*/
-void				ft_export(char **comand, char **envp);
-void				ft_unset(char **comand, char **envp);
+/*-----------------------------	  BUILTINS	--------------------------------*/
+void				ft_export(char **comand, char **env);
+int					ft_unset(char **comand, char **env);
 void				ft_echo(char **comand);
 void				ft_pwd(void);
-void				ft_env(char **envp);
-void				ft_cd(char **comand, char **envp);
+void				ft_env(char **env);
+void				ft_cd(char **comand, char **env);
+void				ft_exit(char **args);
+
+/*-----------------------------	HEREDOC --------------------------------*/
+int					heredoc(t_cmd *commands);
 
 // Converts input string to tokens for minishell to interpret
-/*	TOKENIZER	*/
+/*-----------------------------	 TOKENIZER	--------------------------------*/
 int					tokenizer(char *str, t_lex **lexer);
 int					create_word(char *str, int i, t_lex *new);
 int					create_token(char *str, int i, t_lex *lexer);
@@ -165,17 +167,25 @@ int					lexer_lstsize(t_lex *lst);
 t_lex				*lexer_lstlast(t_lex *lst);
 
 // Reads from lexer structure and expands variables
-/*	EXPANSOR	*/
-int					expansor(t_lex **def, char **envp);
-char				*expand(char *str, char **envp);
+/*-----------------------------		EXPANSOR	--------------------------------*/
+int					expansor(t_cmd *def, char **env);
+char				*expand(char *str, char **env);
 int					ft_omit_var(char *var);
-int					calc_len_expanded(char *str, char **envp);
+int					calc_len_expanded(char *str, char **env);
 char				*obtain_var(char *str);
 void				init_quote(t_quote *quote);
+void				check_expand(char *word, t_quote *quote, char *str, char **env);
 void				find_quote(t_quote *quote, int i, char *str);
+int					expansor_files(t_cmd *comands, char **env);
+int					expansor_files_aux(t_cmd *comands, char **env, int i);
+int					expand_file(char *path, char **env);
+int					calc_len_file(char *path);
+int					fill_aux(char *path, char **file);
+int					expand_vars_file(char **file, char **aux, char **env);
+int					rewrite_file(char *path, char **aux);
 
 // Converts token list (lexer) into a simple arguments list
-/*	PARSER	*/
+/*-----------------------------		PARSER	   --------------------------------*/
 int					parser(t_cmd **commands, t_lex **lexer);
 int					create_simple_command(t_lex **head, t_cmd *cmd);
 int					fill_command(t_lex **head, t_io **redirect, t_cmd *cmd);
@@ -198,19 +208,22 @@ int					redirect_lstsize(t_io *lst);
 t_io				*redirect_lstlast(t_io *lst);
 
 // Receives clean arguments in a t_cmd* linked list and manages execution
-/*	EXECUTOR	*/
-int					execute_commands(t_cmd *commands, char **envp);
+/*-----------------------------		EXECUTOR	--------------------------------*/
+int					execute_commands(t_cmd *commands);
 
 // Handle signals
-/*	SIGNALS	*/
+/*-----------------------------  	SIGNALS   	--------------------------------*/
 void				init_signals(void);
 
 // General utility functions
-/*	UTILS	*/
-char				*find_home(char **envp);
+/*-------------------------------      UTILS     -------------------------------*/
+char				*find_home(char **env);
 char				**ft_splitn(char *str, char c, int qtt);
 int					count_spaces(char *str);
 int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strlen_chr(char *str, char c);
+void				ft_print_matrix(char **matrix, int i);
+char				**ft_dup_matrix(char **envp);
+void				ft_matrix_free(char **matrix);
 
 #endif
