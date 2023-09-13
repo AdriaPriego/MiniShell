@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 18:29:01 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 17:55:28 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,11 @@
 # define C_ONE_QUOTE 39
 # define C_TWO_QUOTE 34
 
-/* //Redirection type
-# define IN 0
-# define HERE_DOC 1
-# define OUT_TRUNC 2
-# define OUT_APPEND 3 */
-
 // General errors
 # define MSSG_INVALID_ARGS "Invalid arguments: Usage [./minishell]\n"
 # define MSSG_MEMORY_ERROR "Memory error, please free space and attempt again\n"
+# define MSSG_EXECUTOR_ERROR "Error during command execution\n"
+# define MSSG_CMD_NOT_FOUND "command not found"
 
 // Parser syntax errors
 # define SYNTAX_ERR 42
@@ -78,6 +74,14 @@
 # define SYNTAX_GREAT 3
 # define SYNTAX_LESS_LESS 4
 # define SYNTAX_GREAT_GREAT 5
+
+//Command errors
+# define CMD_NO_ACCESS 126
+# define CMD_NOT_FOUND 127
+
+//File modes
+# define FILE_IN 0
+# define FILE_OUT 1
 
 /*===============================	STRUCTURES	==============================*/
 
@@ -128,6 +132,18 @@ typedef struct s_cmd
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }					t_cmd;
+
+typedef struct s_pipe
+{
+	int		n_cmds;
+	int		fd_in;
+	int		fd_out;
+	int		fd[2];
+	int		dup_stdin;
+	int		dup_stdout;
+	pid_t	*pid;
+	char	*path;
+}	t_pipe; 
 
 /*===============================	FUNCTIONS	==============================*/
 
@@ -208,8 +224,25 @@ int					redirect_lstsize(t_io *lst);
 t_io				*redirect_lstlast(t_io *lst);
 
 // Receives clean arguments in a t_cmd* linked list and manages execution
-/*-----------------------------		EXECUTOR	--------------------------------*/
-int					execute_commands(t_cmd *commands);
+/*	EXECUTOR	*/
+int					execute_commands(t_cmd *commands, char **envp);
+void				new_pipe(t_cmd *commands, t_pipe *data, char **envp);
+void				wait_childs(t_pipe *data);
+int					search_path(char *cmd, char **envp, char **path);
+int					try_paths(char **full_path, char *cmd, char **path);
+int					try_local_path(char *cmd, char **path);
+int					try_absolute_path(char *cmd, char **path);
+int					check_access(char *file, int mode);
+void				check_files(t_pipe *data, t_io *temp);
+void				dup_custom_redirections(t_pipe *data, t_io *temp);
+void				manage_redirections(t_cmd *commands, t_pipe *data);
+int					init_data(t_pipe *data, t_cmd *commands);
+void				dup_original_stds(int *in, int *out);
+void				close_pipe(int in, int out);
+void				perror_exit(t_pipe *data, int exit_code, char *error);
+void				error_exit(t_pipe *data, int exit_code, char *name, char *error);
+int					perror_return(t_pipe *data, int exit_code, char *error);
+
 
 // Handle signals
 /*-----------------------------  	SIGNALS   	--------------------------------*/
