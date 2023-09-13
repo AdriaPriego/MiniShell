@@ -6,7 +6,7 @@
 #    By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/13 18:33:55 by fbosch           ###   ########.fr        #
+#    Updated: 2023/09/13 19:33:46 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,7 +88,7 @@ all : temp librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
-#s@$(MAKE) rdline --no-print-directory
+	@$(MAKE) rdline --no-print-directory
 
 $(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC) $(OBJ_HERE)
 	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_HERE) $(OBJ_EXEC) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@

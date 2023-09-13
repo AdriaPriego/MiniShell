@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 12:11:52 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 19:22:01 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ int	expansor(t_cmd *def, char **env)
 	int		i;
 	t_quote	quote;
 
+	if (!def)
+		return (0);
 	i = 0;
 	while (def->args[i])
 	{

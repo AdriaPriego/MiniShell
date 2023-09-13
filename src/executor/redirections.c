@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 01:12:21 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/13 18:26:08 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/13 19:01:21 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ void	dup_custom_redirections(t_pipe *data, t_io *temp)
 			perror_exit(data, EXIT_FAILURE, temp->file);
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
-		/* if (temp->type == HERE_DOC)   WILL HAVE TO CHECK
-			unlink(temp->type); */
+		if (temp->type == HERE_DOC)
+			unlink(temp->file);
 	}
 	else if (temp->type == OUT_TRUNC || temp->type == OUT_APPEND)
 	{

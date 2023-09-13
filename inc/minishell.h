@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 17:55:28 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/13 19:28:58 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,6 @@ int					create_simple_command(t_lex **head, t_cmd *cmd);
 int					fill_command(t_lex **head, t_io **redirect, t_cmd *cmd);
 int					add_redirection(t_io **redirect, t_lex **head);
 int					count_arguments(t_lex *lexer);
-void				print_commands(t_cmd *commands); // DEBUG ONLY AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 void				parser_error(int error);
 int					check_duplicate_tokens(t_lex *lexer);
 int					check_pipe_error(t_lex *lexer);
@@ -242,7 +241,6 @@ void				close_pipe(int in, int out);
 void				perror_exit(t_pipe *data, int exit_code, char *error);
 void				error_exit(t_pipe *data, int exit_code, char *name, char *error);
 int					perror_return(t_pipe *data, int exit_code, char *error);
-
 
 // Handle signals
 /*-----------------------------  	SIGNALS   	--------------------------------*/

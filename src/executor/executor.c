@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/13 18:20:31 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/13 19:12:59 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	execute_commands(t_cmd *commands, char **envp)
 	t_pipe	data;
 	int		i;
 
+	if (!commands)
+		return (0);
 	if (init_data(&data, commands) == 1)
 		return (1);
 	dup_original_stds(&data.dup_stdin, &data.dup_stdout);
