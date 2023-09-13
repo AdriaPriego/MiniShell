@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/12 11:50:33 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/13 02:05:04 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ void	new_pipe(t_cmd *commands, t_pipe *data, char **envp)
 	char	*path;
 
 	manage_redirections(commands, data);
-	close(data->fd[0]);
-	close(data->fd[1]);
 	exit_code = search_path(commands->args[0], envp, &path);
 	if (exit_code == CMD_NOT_FOUND)
 		error_exit(data, exit_code, commands->args[0], MSSG_CMD_NOT_FOUND);
@@ -54,21 +52,32 @@ int	execute_commands(t_cmd *commands, char **envp)
 		return (0);
 	if (init_data(&data, commands) == 1)
 		return (1);
-	if (pipe(data.fd) == -1)
-		return (perror_return(&data, EXIT_FAILURE, "Pipe"));
+	/* if (pipe(data.fd) == -1)
+		return (perror_return(&data, EXIT_FAILURE, "Pipe")); */
+	data.old_in = STDIN_FILENO;
 	i = 0;
 	while (commands)
 	{
+		if (pipe(data.fd) == -1)
+			return (perror_return(&data, EXIT_FAILURE, "Pipe"));
 		data.pid[i] = fork();
 		if (data.pid[i] == -1)
 			return (perror_return(&data, EXIT_FAILURE, "Fork"));
 		else if (data.pid[i] == 0)
+		{
+			dup2(data.old_in, STDIN_FILENO); //change the input according to the old one 
+          	if (commands->next != NULL)
+            	dup2(data.fd[1], STDOUT_FILENO);
+          	close(data.fd[0]);
+          	close(data.fd[1]);
 			new_pipe(commands, &data, envp);
+		}
+        data.old_in = data.fd[0];
+		close(data.fd[1]);
 		commands = commands->next;
 		i++;
 	}
 	close(data.fd[0]);
-	close(data.fd[1]);
 	wait_childs(&data);
 	return (0);
 }

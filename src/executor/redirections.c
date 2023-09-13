@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 01:12:21 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/12 11:46:59 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/13 01:02:35 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ void	manage_redirections(t_cmd *commands, t_pipe *data)
 {
 	t_io	*temp;
 
-	if (commands->next)
+	/* if (commands->next)
 		dup2(data->fd[1], STDOUT_FILENO);
 	if (commands->prev)
-		dup2(data->fd[0], STDIN_FILENO);
+		dup2(data->fd[0], STDIN_FILENO); */
 	temp = commands->redirect;
 	while (temp)
 	{

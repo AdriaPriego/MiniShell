@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/12 02:27:48 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/13 01:59:16 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ typedef struct s_pipe
 	int		fd_in;
 	int		fd_out;
 	int		fd[2];
+	int		old_in;
 	pid_t	*pid;
 	char	*path;
 }	t_pipe; 
