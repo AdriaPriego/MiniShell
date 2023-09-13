@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   entry.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/11 22:11:38 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/13 18:33:18 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 	lexer_lstclear(&lexer);
 	return (status);
 }
-int		g_exit_status = 0;
 
 void	generate_terminal(char **envp)
 {
+	//int		exit_status;
 	t_cmd	*commands;
 	char	*str;
 

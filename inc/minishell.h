@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 01:59:16 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/13 17:55:28 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@
 # include <errno.h>
 
 /*=================================	MACROS	==================================*/
-
-extern int	g_exit_status;
 
 // Colours
 # define GREENBASH "\033[1;38;2;180;235;31m"
@@ -141,7 +139,8 @@ typedef struct s_pipe
 	int		fd_in;
 	int		fd_out;
 	int		fd[2];
-	int		old_in;
+	int		dup_stdin;
+	int		dup_stdout;
 	pid_t	*pid;
 	char	*path;
 }	t_pipe; 
@@ -226,6 +225,8 @@ void				check_files(t_pipe *data, t_io *temp);
 void				dup_custom_redirections(t_pipe *data, t_io *temp);
 void				manage_redirections(t_cmd *commands, t_pipe *data);
 int					init_data(t_pipe *data, t_cmd *commands);
+void				dup_original_stds(int *in, int *out);
+void				close_pipe(int in, int out);
 void				perror_exit(t_pipe *data, int exit_code, char *error);
 void				error_exit(t_pipe *data, int exit_code, char *name, char *error);
 int					perror_return(t_pipe *data, int exit_code, char *error);
