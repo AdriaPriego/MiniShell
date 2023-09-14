@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 10:50:46 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/30 19:03:44 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/08 13:01:26 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ static void	sig_handler(int signum)
 void	init_signals(void)
 {
 	rl_catch_signals = 0;
-	signal(CTRL_C, sig_handler);
+	//signal(CTRL_C, sig_handler);
 	signal(CTRL_SLASH, sig_handler);
 }

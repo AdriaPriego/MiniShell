@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 22:38:29 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/13 18:26:41 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 19:28:25 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,50 +122,4 @@ int	parser(t_cmd **commands, t_lex **lexer)
 			return (1);
 	}
 	return (0);
-}
-
-void	print_commands(t_cmd *commands)
-{
-	int		i;
-	t_io	*temp;
-
-	printf("\n\n\n");
-	while (commands)
-	{
-		printf("Args[][]: ");
-		i = 0;
-		while (commands->args[i])
-		{
-			printf("\"%s\",", commands->args[i]);
-			i++;
-		}
-		if (commands->args[i] == NULL)
-			printf("NULL");
-		printf("\n");
-		printf("Redirections: ");
-		temp = commands->redirect;
-		while (temp)
-		{
-			if (temp->type == IN)
-				printf("(IN)");
-			else if (temp->type == OUT_TRUNC)
-				printf("(OUT_TRUNC)");
-			else if (temp->type == OUT_APPEND)
-				printf("(OUT_APPEND)");
-			else if (temp->type == HERE_DOC)
-				printf("(HERE_DOC)");
-			printf("->%s, ", temp->file);
-			temp = temp->next;
-		}
-		if (temp == NULL)
-			printf("NULL");
-		printf("\n");
-		printf("		|\n");
-		printf("		|\n");
-		printf("		V\n");
-		commands = commands->next;
-	}
-	if (commands == NULL)
-		printf("NULL");
-	printf("\n");
 }

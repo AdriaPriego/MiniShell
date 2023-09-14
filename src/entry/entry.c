@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   entry.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 18:20:50 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/13 19:20:13 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 	int		status;
 	t_lex	*lexer;
 
+	(void)env;
 	lexer = NULL;
 	*commands = NULL;
 	status = tokenizer(str, &lexer);
@@ -79,13 +80,13 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 		status = expansor_files(*commands, env);
 	if (status == 1)
 		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);
-	ft_exit((*commands)->args);
 	lexer_lstclear(&lexer);
 	return (status);
 }
 
 void	generate_terminal(char **env)
 {
+	//int		exit_status;
 	t_cmd	*commands;
 	char	*str;
 
@@ -95,7 +96,8 @@ void	generate_terminal(char **env)
 		add_history(str);
 		if (string_to_command(str, &commands, env) == 0 && commands != NULL)
 		{
-			execute_commands(commands);
+			if (execute_commands(commands, env) == 1)
+				ft_printf_fd(STDERR_FILENO, MSSG_EXECUTOR_ERROR);
 		}
 		parser_lstclear(&commands);
 		free(str);
