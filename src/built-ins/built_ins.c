@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 11:58:14 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/14 10:29:56 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,12 @@ void	ft_cd(char **comands, char **env)
 	else if (ft_strcmp(comands[1], "~") == 0)
 		chdir(find_home(env));
 	else if (chdir(comands[1]) != 0)
+	{
 		ft_printf_fd(2, "minishell: cd: %s: No such file or directory\n",
 			comands[1]);
+		exit(1);
+	}
+	exit(0);
 }
 
 void	ft_pwd(void)
@@ -36,6 +40,7 @@ void	ft_pwd(void)
 	str = getcwd(NULL, 0);
 	ft_printf("%s\n", str);
 	free(str);
+	exit(0);
 }
 
 void	ft_env(char **env)
@@ -48,6 +53,7 @@ void	ft_env(char **env)
 		ft_printf("%s\n", env[i]);
 		i++;
 	}
+	exit (0);
 }
 
 void	ft_echo(char **comand)
@@ -65,33 +71,34 @@ void	ft_echo(char **comand)
 		ft_print_matrix(comand, i);
 		ft_printf("\n");
 	}
+	exit (0);
 }
 
-int	ft_unset(char **comand, char **env)
+void	ft_unset(char **comand, char **env)
 {
-	int		i;
-	int		j;
-	char	*str;
+	int	i;
+	int	j;
 
-	i = 0;
-	while (env[i])
+	i = 1;
+	while (comand[i])
 	{
-		str = ft_strdup(env[i]);
-		if (!str)
-			return (1);
-		if (ft_strcmp(str, comand[1]) == 0)
+		if (valid_comand(comand[i]))
 		{
-			j = i;
-			free(env[j]);
-			while (env[j])
-			{
-				env[j] = env[j + 1];
-				j++;
-			}
+			ft_printf_fd(2, "minishell: unset: `%s': not a valid identifier\n",
+				comand[i]);
+			exit(1);
 		}
-		else
-			i++;
-		free(str);
+		j = 0;
+		while (env[j])
+		{
+			if (ft_strncmp(comand[i], env[j], ft_strlen_chr(env[j], '=')) == 0)
+			{
+				free(env[j]);
+				env[j] = NULL;
+			}
+			j++;
+		}
+		i++;
 	}
-	return (0);
+	exit (0);
 }

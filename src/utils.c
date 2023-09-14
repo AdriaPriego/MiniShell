@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 13:15:02 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 11:56:19 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/14 10:30:19 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,48 +26,21 @@ char	*find_home(char **env)
 	return (NULL);
 }
 
-char	**ft_splitn(char *str, char c, int qtt)
-{
-	char	**array;
-	int		i;
-	int		j;
-	int		k;
 
-	array = malloc((qtt + 1) * sizeof(char *));
-	i = 0;
-	k = 0;
-	while (i < qtt)
-	{
-		if (str[k] == c)
-			k++;
-		else
-		{
-			j = k;
-			while ((str[j] != c || i + 1 == qtt) && str[j] != '\0')
-				j++;
-			array[i] = ft_substr(str, k, j);
-			k = j;
-			i++;
-		}
-	}
-	array[i] = NULL;
-	return (array);
-}
-
-int	count_spaces(char *str)
+int	valid_comand(char *comand)
 {
 	int	i;
-	int	count;
 
 	i = 0;
-	count = 0;
-	while (str[i] != '\0' && str[i] == ' ')
+	if (ft_isdigit(comand[0]))
+		return (1);
+	while (comand[i])
 	{
-		if (str[i] == ' ')
-			count++;
+		if (ft_isalnum(comand[i]) == 0 && comand[i] != '_')
+			return (1);
 		i++;
 	}
-	return (count);
+	return (0);
 }
 
 int	ft_strcmp(const char *s1, const char *s2)
