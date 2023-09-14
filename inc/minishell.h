@@ -6,13 +6,14 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 13:42:45 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 21:31:50 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+extern int		g_exit_status;
 /*
 	> out							"Redirects {empty} to a file called out"
 	< out							"It redirects standard input to a file called 'out' if it exists"
@@ -85,7 +86,7 @@
 
 //Exit flags
 # define FT_EXIT 0
-# define FT_NOEXIT 1
+# define FT_RETURN 1
 
 /*===============================	STRUCTURES	==============================*/
 
@@ -237,8 +238,8 @@ int			try_local_path(char *cmd, char **path);
 int			try_absolute_path(char *cmd, char **path);
 int			check_access(char *file, int mode);
 void		check_files(t_pipe *data, t_io *temp);
-void		dup_custom_redirections(t_pipe *data, t_io *temp);
-void		manage_redirections(t_cmd *commands, t_pipe *data);
+int			dup_custom_redirections(t_pipe *data, t_io *temp, int out);
+int			manage_redirections(t_cmd *commands, t_pipe *data, int out);
 int			init_data(t_pipe *data, t_cmd *commands);
 void		dup_original_stds(int *in, int *out);
 void		close_pipe(int in, int out);

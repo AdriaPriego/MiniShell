@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 17:47:17 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 13:54:55 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 21:44:55 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,5 @@ void	ft_exit (char **args)
 		}
 	}
 	//ft_printf("exit\n");
-	exit (0);
+	exit (g_exit_status);
 }

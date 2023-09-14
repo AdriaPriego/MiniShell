@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 14:01:15 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 22:05:36 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 	lexer_lstclear(&lexer);
 	return (status);
 }
+int		g_exit_status = 0;
 
 void	generate_terminal(char **env)
 {
@@ -96,7 +97,7 @@ void	generate_terminal(char **env)
 		add_history(str);
 		if (string_to_command(str, &commands, env) == 0 && commands != NULL)
 		{
-			execute_commands(commands, &env);
+			g_exit_status = execute_commands(commands, &env);
 		}
 		parser_lstclear(&commands);
 		free(str);

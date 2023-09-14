@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/14 13:53:48 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 21:37:09 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	wait_childs(t_pipe *data)
 		i++;
 	}
 	free(data->pid);
-	/* if (WIFEXITED(status))
-		g_exit_status = (WEXITSTATUS(status)); */
+	if (WIFEXITED(status))
+		g_exit_status = (WEXITSTATUS(status));
 }
 
 int	is_builtin(t_cmd *commands)
@@ -82,7 +82,7 @@ void	new_pipe(t_cmd *commands, t_pipe *data, char ***envp)
 	int		exit_code;
 	char	*path;
 
-	manage_redirections(commands, data);
+	manage_redirections(commands, data, FT_EXIT);
 	if (is_builtin(commands))
 		execute_builtins(commands->args, envp, data, FT_EXIT);
 	exit_code = search_path(commands->args[0], *envp, &path);
@@ -98,15 +98,18 @@ int	execute_commands(t_cmd *commands, char ***envp)
 {
 	t_pipe	data;
 	int		i;
+	int		status;
 
 	if (init_data(&data, commands) == 1)
 		return (1);
 	dup_original_stds(&data.dup_stdin, &data.dup_stdout);
 	if (data.n_cmds == 1 && is_builtin(commands))
 	{
-		//free(data.pid);
-		manage_redirections(commands, &data);
-		return (execute_builtins(commands->args, envp, &data, FT_NOEXIT));
+		status = manage_redirections(commands, &data, FT_RETURN);
+		if (status != 0)
+			return (status);
+		free(data.pid);
+		return (execute_builtins(commands->args, envp, &data, FT_RETURN));
 	}
 	i = 0;
 	while (commands)
@@ -124,5 +127,5 @@ int	execute_commands(t_cmd *commands, char ***envp)
 		i++;
 	}
 	wait_childs(&data);
-	return (0);
+	return (g_exit_status);
 }
