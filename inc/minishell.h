@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 19:28:58 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 10:34:45 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,118 +143,117 @@ typedef struct s_pipe
 	int		dup_stdout;
 	pid_t	*pid;
 	char	*path;
-}	t_pipe; 
+}	t_pipe;
 
-/*===============================	FUNCTIONS	==============================*/
+/*==============================  FUNCTIONS  =============================*/
 
 // Holds minishell loop: MiniShell$>....
-/*-------------------------------	ENTRY	----------------------------------*/
-void				generate_terminal(char **env);
-int					string_to_command(char *str, t_cmd **commands, char **env);
-char				*generate_entry(char **env);
-char				*ft_joincolors(char *array);
+/*------------------------------	ENTRY	-------------------------------*/
+void		generate_terminal(char **env);
+int			string_to_command(char *str, t_cmd **commands, char **env);
+char		*generate_entry(char **env);
+char		*ft_joincolors(char *array);
 
 // Builtint shell commands
-/*-----------------------------	  BUILTINS	--------------------------------*/
-void				ft_export(char **comand, char **env);
-int					ft_unset(char **comand, char **env);
-void				ft_echo(char **comand);
-void				ft_pwd(void);
-void				ft_env(char **env);
-void				ft_cd(char **comand, char **env);
-void				ft_exit(char **args);
+/*-----------------------------	  BUILTINS	-------------------------------*/
+void		ft_export(char **comand, char **env);
+void		ft_unset(char **comand, char **env);
+void		ft_echo(char **comand);
+void		ft_pwd(void);
+void		ft_env(char **env);
+void		ft_cd(char **comand, char **env);
+void		ft_exit(char **args);
 
 /*-----------------------------	HEREDOC --------------------------------*/
-int					heredoc(t_cmd *commands);
+int			heredoc(t_cmd *commands);
 
 // Converts input string to tokens for minishell to interpret
-/*-----------------------------	 TOKENIZER	--------------------------------*/
-int					tokenizer(char *str, t_lex **lexer);
-int					create_word(char *str, int i, t_lex *new);
-int					create_token(char *str, int i, t_lex *lexer);
-int					ft_isspace(int c);
-int					ft_isquote(int c);
-int					ft_isreserved(int c);
-void				print_tokens(t_lex *lexer, char *str);
-t_lex				*lexer_lstnew(void);
-void				lexer_lstadd_back(t_lex **lst, t_lex *new);
-void				lexer_lstclear(t_lex **lst);
-int					lexer_lstsize(t_lex *lst);
-t_lex				*lexer_lstlast(t_lex *lst);
+/*-----------------------------	 TOKENIZER	----------------------------*/
+int			tokenizer(char *str, t_lex **lexer);
+int			create_word(char *str, int i, t_lex *new);
+int			create_token(char *str, int i, t_lex *lexer);
+int			ft_isspace(int c);
+int			ft_isquote(int c);
+int			ft_isreserved(int c);
+void		print_tokens(t_lex *lexer, char *str);
+t_lex		*lexer_lstnew(void);
+void		lexer_lstadd_back(t_lex **lst, t_lex *new);
+void		lexer_lstclear(t_lex **lst);
+int			lexer_lstsize(t_lex *lst);
+t_lex		*lexer_lstlast(t_lex *lst);
 
 // Reads from lexer structure and expands variables
-/*-----------------------------		EXPANSOR	--------------------------------*/
-int					expansor(t_cmd *def, char **env);
-char				*expand(char *str, char **env);
-int					ft_omit_var(char *var);
-int					calc_len_expanded(char *str, char **env);
-char				*obtain_var(char *str);
-void				init_quote(t_quote *quote);
-void				check_expand(char *word, t_quote *quote, char *str, char **env);
-void				find_quote(t_quote *quote, int i, char *str);
-int					expansor_files(t_cmd *comands, char **env);
-int					expansor_files_aux(t_cmd *comands, char **env, int i);
-int					expand_file(char *path, char **env);
-int					calc_len_file(char *path);
-int					fill_aux(char *path, char **file);
-int					expand_vars_file(char **file, char **aux, char **env);
-int					rewrite_file(char *path, char **aux);
+/*------------------------------  EXPANSOR  ------------------------------*/
+int			expansor(t_cmd *def, char **env);
+char		*expand(char *str, char **env);
+int			ft_omit_var(char *var);
+int			calc_len_expanded(char *str, char **env);
+char		*obtain_var(char *str);
+void		init_quote(t_quote *quote);
+void		check_expand(char *word, t_quote *quote, char *str, char **env);
+void		find_quote(t_quote *quote, int i, char *str);
+int			expansor_files(t_cmd *comands, char **env);
+int			expansor_files_aux(t_cmd *comands, char **env, int i);
+int			expand_file(char *path, char **env);
+int			calc_len_file(char *path);
+int			fill_aux(char *path, char **file);
+int			expand_vars_file(char **file, char **aux, char **env);
+int			rewrite_file(char *path, char **aux);
 
 // Converts token list (lexer) into a simple arguments list
-/*-----------------------------		PARSER	   --------------------------------*/
-int					parser(t_cmd **commands, t_lex **lexer);
-int					create_simple_command(t_lex **head, t_cmd *cmd);
-int					fill_command(t_lex **head, t_io **redirect, t_cmd *cmd);
-int					add_redirection(t_io **redirect, t_lex **head);
-int					count_arguments(t_lex *lexer);
-void				parser_error(int error);
-int					check_duplicate_tokens(t_lex *lexer);
-int					check_pipe_error(t_lex *lexer);
-int					check_syntax_error(t_lex *lexer);
-t_cmd				*parser_lstnew(void);
-void				parser_lstadd_back(t_cmd **lst, t_cmd *new);
-void				parser_lstclear(t_cmd **lst);
-int					parser_lstsize(t_cmd *lst);
-t_cmd				*parser_lstlast(t_cmd *lst);
-t_io				*redirect_lstnew(void);
-void				redirect_lstadd_back(t_io **lst, t_io *new);
-void				redirect_lstclear(t_io **lst);
-int					redirect_lstsize(t_io *lst);
-t_io				*redirect_lstlast(t_io *lst);
+/*---------------------------- 	PARSER	-------------------------------*/
+int			parser(t_cmd **commands, t_lex **lexer);
+int			create_simple_command(t_lex **head, t_cmd *cmd);
+int			fill_command(t_lex **head, t_io **redirect, t_cmd *cmd);
+int			add_redirection(t_io **redirect, t_lex **head);
+int			count_arguments(t_lex *lexer);
+void		parser_error(int error);
+int			check_duplicate_tokens(t_lex *lexer);
+int			check_pipe_error(t_lex *lexer);
+int			check_syntax_error(t_lex *lexer);
+t_cmd		*parser_lstnew(void);
+void		parser_lstadd_back(t_cmd **lst, t_cmd *new);
+void		parser_lstclear(t_cmd **lst);
+int			parser_lstsize(t_cmd *lst);
+t_cmd		*parser_lstlast(t_cmd *lst);
+t_io		*redirect_lstnew(void);
+void		redirect_lstadd_back(t_io **lst, t_io *new);
+void		redirect_lstclear(t_io **lst);
+int			redirect_lstsize(t_io *lst);
+t_io		*redirect_lstlast(t_io *lst);
 
 // Receives clean arguments in a t_cmd* linked list and manages execution
 /*	EXECUTOR	*/
-int					execute_commands(t_cmd *commands, char **envp);
-void				new_pipe(t_cmd *commands, t_pipe *data, char **envp);
-void				wait_childs(t_pipe *data);
-int					search_path(char *cmd, char **envp, char **path);
-int					try_paths(char **full_path, char *cmd, char **path);
-int					try_local_path(char *cmd, char **path);
-int					try_absolute_path(char *cmd, char **path);
-int					check_access(char *file, int mode);
-void				check_files(t_pipe *data, t_io *temp);
-void				dup_custom_redirections(t_pipe *data, t_io *temp);
-void				manage_redirections(t_cmd *commands, t_pipe *data);
-int					init_data(t_pipe *data, t_cmd *commands);
-void				dup_original_stds(int *in, int *out);
-void				close_pipe(int in, int out);
-void				perror_exit(t_pipe *data, int exit_code, char *error);
-void				error_exit(t_pipe *data, int exit_code, char *name, char *error);
-int					perror_return(t_pipe *data, int exit_code, char *error);
+int			execute_commands(t_cmd *commands, char **envp);
+void		new_pipe(t_cmd *commands, t_pipe *data, char **envp);
+void		wait_childs(t_pipe *data);
+int			search_path(char *cmd, char **envp, char **path);
+int			try_paths(char **full_path, char *cmd, char **path);
+int			try_local_path(char *cmd, char **path);
+int			try_absolute_path(char *cmd, char **path);
+int			check_access(char *file, int mode);
+void		check_files(t_pipe *data, t_io *temp);
+void		dup_custom_redirections(t_pipe *data, t_io *temp);
+void		manage_redirections(t_cmd *commands, t_pipe *data);
+int			init_data(t_pipe *data, t_cmd *commands);
+void		dup_original_stds(int *in, int *out);
+void		close_pipe(int in, int out);
+void		perror_exit(t_pipe *data, int exit_code, char *error);
+void		error_exit(t_pipe *data, int exit_code, char *name, char *error);
+int			perror_return(t_pipe *data, int exit_code, char *error);
 
 // Handle signals
-/*-----------------------------  	SIGNALS   	--------------------------------*/
-void				init_signals(void);
+/*---------------------------  	SIGNALS   	------------------------------*/
+void		init_signals(void);
 
 // General utility functions
-/*-------------------------------      UTILS     -------------------------------*/
-char				*find_home(char **env);
-char				**ft_splitn(char *str, char c, int qtt);
-int					count_spaces(char *str);
-int					ft_strcmp(const char *s1, const char *s2);
-int					ft_strlen_chr(char *str, char c);
-void				ft_print_matrix(char **matrix, int i);
-char				**ft_dup_matrix(char **envp);
-void				ft_matrix_free(char **matrix);
+/*--------------------------      UTILS     -------------------------------*/
+char		*find_home(char **env);
+int			valid_comand(char *comand);
+int			ft_strcmp(const char *s1, const char *s2);
+int			ft_strlen_chr(char *str, char c);
+void		ft_print_matrix(char **matrix, int i);
+char		**ft_dup_matrix(char **envp);
+void		ft_matrix_free(char **matrix);
 
 #endif
