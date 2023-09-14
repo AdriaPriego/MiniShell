@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/13 19:12:59 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 11:42:54 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	new_pipe(t_cmd *commands, t_pipe *data, char **envp)
 	int		exit_code;
 	char	*path;
 
+	init_signals_in_child();
 	manage_redirections(commands, data);
 	exit_code = search_path(commands->args[0], envp, &path);
 	if (exit_code == CMD_NOT_FOUND)

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 18:27:16 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 18:27:46 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:00:34 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,7 @@ int	fill_aux(char *path, char **file)
 int	expand_vars_file(char **file, char **aux, char **env)
 {
 	int		i;
-	t_quote	quote;
 
-	init_quote(&quote);
 	i = 0;
 	while (file[i])
 	{
@@ -85,7 +83,7 @@ int	expand_vars_file(char **file, char **aux, char **env)
 		if (!aux[i])
 			return (1);
 		aux[i][0] = '\0';
-		check_expand(file[i], &quote, aux[i], env);
+		check_expand(file[i], 0, aux[i], env);
 		i++;
 	}
 	aux[i] = NULL;

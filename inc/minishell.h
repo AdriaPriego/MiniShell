@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 10:34:45 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/14 15:59:51 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,13 +184,13 @@ t_lex		*lexer_lstlast(t_lex *lst);
 
 // Reads from lexer structure and expands variables
 /*------------------------------  EXPANSOR  ------------------------------*/
-int			expansor(t_cmd *def, char **env);
+int			expansor(t_cmd *def, char **env, int status);
 char		*expand(char *str, char **env);
 int			ft_omit_var(char *var);
 int			calc_len_expanded(char *str, char **env);
 char		*obtain_var(char *str);
 void		init_quote(t_quote *quote);
-void		check_expand(char *word, t_quote *quote, char *str, char **env);
+void		check_expand(char *word, int status, char *str, char **env);
 void		find_quote(t_quote *quote, int i, char *str);
 int			expansor_files(t_cmd *comands, char **env);
 int			expansor_files_aux(t_cmd *comands, char **env, int i);
@@ -245,6 +245,7 @@ int			perror_return(t_pipe *data, int exit_code, char *error);
 // Handle signals
 /*---------------------------  	SIGNALS   	------------------------------*/
 void		init_signals(void);
+void		init_signals_in_child(void);
 
 // General utility functions
 /*--------------------------      UTILS     -------------------------------*/

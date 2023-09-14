@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 15:03:59 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 12:07:15 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/14 15:59:44 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,17 @@ int	calc_len_expanded(char *str, char **env)
 		find_quote(&quote, i, str);
 		if (str[i] == '$' && quote.one == 0)
 		{
-			value = expand(&str[i], env);
-			len += ft_strlen(value);
-			i += ft_omit_var(&str[i]) - 1;
+			if (ft_strncmp(&str[i], "$?", 2) == 0)
+			{
+				len += 2;
+				i += 2;
+			}
+			else
+			{
+				value = expand(&str[i], env);
+				len += ft_strlen(value);
+				i += ft_omit_var(&str[i]) - 1;
+			}
 		}
 		else
 			len++;
@@ -61,6 +69,8 @@ int	ft_omit_var(char *var)
 	int	i;
 
 	i = 1;
+	if (var[i] == '?')
+		return (2);	
 	while (ft_isalnum(var[i]) || var[i] == '_')
 		i++;
 	return (i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 19:22:01 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 16:00:07 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,40 +61,51 @@ char	*expand(char *str, char **env)
 	return (NULL);
 }
 
-void	check_expand(char *word, t_quote *quote, char *str, char **env)
+void	check_expand(char *word, int status, char *str, char **env)
 {
 	int		i;
 	int		j;
 	char	*value;
+	t_quote	quote;
+	int flag;
 
 	i = 0;
 	j = 0;
+	init_quote(&quote);
 	while (word[i] != '\0')
 	{
-		find_quote(quote, i, word);
-		if (word[i] == '$' && quote->one == 0)
+		flag = 0;
+		find_quote(&quote, i, word);
+		if (word[i] == '$' && quote.one == 0)
 		{
-			value = expand(&word[i], env);
+			if (ft_strncmp(&str[i], "$?", 2) == 0)
+			{
+				value = ft_itoa(status);
+				flag = 1;
+			}
+			else
+				value = expand(&word[i], env);
 			if (value)
 			{
 				ft_strlcat(str, value, calc_len_expanded(word, env)
-					+ 1);
+				+ 1);
 				j = ft_strlen(str);
 			}
 			i += ft_omit_var(&word[i]) - 1;
+			if (flag == 1)
+				free(value);
 		}
-		else if (ft_isliteral(word[i], quote) == 1)
+		else if (ft_isliteral(word[i], &quote) == 1)
 			str[j++] = word[i];
 		i++;
 	}
 	str[j] = '\0';
 }
 
-int	expansor(t_cmd *def, char **env)
+int	expansor(t_cmd *def, char **env, int status)
 {
 	char	*str;
 	int		i;
-	t_quote	quote;
 
 	if (!def)
 		return (0);
@@ -106,9 +117,9 @@ int	expansor(t_cmd *def, char **env)
 			str = malloc(calc_len_expanded(def->args[i], env) + 1);
 			if (!str)
 				return (1);
-			ft_memset(str, '\0', calc_len_expanded(def->args[i], env) + 1);
-			init_quote(&quote);
-			check_expand(def->args[i], &quote, str, env);
+			ft_memset(str, '\0', calc_len_expanded(def->args[i], env)
+			 + 1);
+			check_expand(def->args[i], status, str, env);
 			if (ft_change_comand(def, i, str) == 1)
 				return (1);
 			i++;
