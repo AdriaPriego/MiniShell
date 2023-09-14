@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 01:12:21 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/13 19:01:21 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 12:17:34 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ void	check_files(t_pipe *data, t_io *temp)
 } */
 void	close_pipe(int in, int out)
 {
-	close(in);
-	close(out);
+	if (in != -1)
+		close(in);
+	if (out != -1)
+		close(out);
 }
 
 void	dup_custom_redirections(t_pipe *data, t_io *temp)

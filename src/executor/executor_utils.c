@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:02:01 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/13 18:33:35 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 12:18:11 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	dup_original_stds(int *in, int *out)
 int	init_data(t_pipe *data, t_cmd *commands)
 {
 	data->n_cmds = parser_lstsize(commands);
+	data->fd[0] = -1;
+	data->fd[1] = -1;
 	data->pid = malloc(sizeof(pid_t) * data->n_cmds);
 	if (!data->pid)
 		return (1);

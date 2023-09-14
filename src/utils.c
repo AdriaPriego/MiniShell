@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 13:15:02 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 10:30:19 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:42:11 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ char	*find_home(char **env)
 }
 
 
-int	valid_comand(char *comand)
+int	valid_command(char *command)
 {
 	int	i;
 
 	i = 0;
-	if (ft_isdigit(comand[0]))
+	if (ft_isdigit(command[0]))
 		return (1);
-	while (comand[i])
+	while (command[i])
 	{
-		if (ft_isalnum(comand[i]) == 0 && comand[i] != '_')
+		if (ft_isalnum(command[i]) == 0 && command[i] != '_')
 			return (1);
 		i++;
 	}
@@ -59,4 +59,27 @@ int	ft_strcmp(const char *s1, const char *s2)
 		i++;
 	}
 	return (0);
+}
+
+void	ft_print_export(char **matrix)
+{
+	int	i;
+
+	i = 0;
+	while (matrix[i])
+		ft_printf("declare -x %s\n", matrix[i++]);
+}
+
+int	contain_env(char **env, char *str)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (strncmp(env[i], str, ft_strlen_chr(env[i], '=')) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 10:34:45 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:42:45 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,10 @@
 # define FILE_IN 0
 # define FILE_OUT 1
 
+//Exit flags
+# define FT_EXIT 0
+# define FT_NOEXIT 1
+
 /*===============================	STRUCTURES	==============================*/
 
 typedef enum s_redirect_type
@@ -156,12 +160,12 @@ char		*ft_joincolors(char *array);
 
 // Builtint shell commands
 /*-----------------------------	  BUILTINS	-------------------------------*/
-void		ft_export(char **comand, char **env);
-void		ft_unset(char **comand, char **env);
-void		ft_echo(char **comand);
-void		ft_pwd(void);
-void		ft_env(char **env);
-void		ft_cd(char **comand, char **env);
+int			ft_export(char **command, char ***env);
+int			ft_unset(char **command, char **env);
+int			ft_echo(char **command);
+int			ft_pwd(void);
+int			ft_env(char **env);
+int			ft_cd(char **command, char **env);
 void		ft_exit(char **args);
 
 /*-----------------------------	HEREDOC --------------------------------*/
@@ -192,8 +196,8 @@ char		*obtain_var(char *str);
 void		init_quote(t_quote *quote);
 void		check_expand(char *word, t_quote *quote, char *str, char **env);
 void		find_quote(t_quote *quote, int i, char *str);
-int			expansor_files(t_cmd *comands, char **env);
-int			expansor_files_aux(t_cmd *comands, char **env, int i);
+int			expansor_files(t_cmd *commands, char **env);
+int			expansor_files_aux(t_cmd *commands, char **env, int i);
 int			expand_file(char *path, char **env);
 int			calc_len_file(char *path);
 int			fill_aux(char *path, char **file);
@@ -224,8 +228,8 @@ t_io		*redirect_lstlast(t_io *lst);
 
 // Receives clean arguments in a t_cmd* linked list and manages execution
 /*	EXECUTOR	*/
-int			execute_commands(t_cmd *commands, char **envp);
-void		new_pipe(t_cmd *commands, t_pipe *data, char **envp);
+int			execute_commands(t_cmd *commands, char ***envp);
+void		new_pipe(t_cmd *commands, t_pipe *data, char ***envp);
 void		wait_childs(t_pipe *data);
 int			search_path(char *cmd, char **envp, char **path);
 int			try_paths(char **full_path, char *cmd, char **path);
@@ -249,11 +253,12 @@ void		init_signals(void);
 // General utility functions
 /*--------------------------      UTILS     -------------------------------*/
 char		*find_home(char **env);
-int			valid_comand(char *comand);
+int			valid_command(char *command);
 int			ft_strcmp(const char *s1, const char *s2);
 int			ft_strlen_chr(char *str, char c);
 void		ft_print_matrix(char **matrix, int i);
 char		**ft_dup_matrix(char **envp);
 void		ft_matrix_free(char **matrix);
-
+void		ft_print_export(char **matrix);
+int			contain_env(char **env, char *str);
 #endif

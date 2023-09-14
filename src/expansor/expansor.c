@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 19:22:01 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 12:31:27 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ int	ft_isliteral(char c, t_quote *quote)
 	return (0);
 }
 
-int	ft_change_comand(t_cmd	*comand, int i, char *str)
+int	ft_change_command(t_cmd	*command, int i, char *str)
 {
-	free(comand->args[i]);
-	comand->args[i] = ft_strdup(str);
-	if (!comand->args[i])
+	free(command->args[i]);
+	command->args[i] = ft_strdup(str);
+	if (!command->args[i])
 		return (1);
-	comand = comand->next;
+	command = command->next;
 	free(str);
 	str = NULL;
 	return (0);
@@ -109,7 +109,7 @@ int	expansor(t_cmd *def, char **env)
 			ft_memset(str, '\0', calc_len_expanded(def->args[i], env) + 1);
 			init_quote(&quote);
 			check_expand(def->args[i], &quote, str, env);
-			if (ft_change_comand(def, i, str) == 1)
+			if (ft_change_command(def, i, str) == 1)
 				return (1);
 			i++;
 		}

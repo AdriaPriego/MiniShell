@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 19:20:13 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 14:01:15 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*generate_entry(char **env)
 	char	*str;
 
 	aux = getcwd(NULL, 0);
-	if (ft_strcmp(find_home(env), aux) == 0)
+	if (find_home(env) != NULL && ft_strcmp(find_home(env), aux) == 0)
 		entry = ft_joincolors("~");
 	else if (ft_strcmp(aux, "/") == 0)
 		entry = ft_joincolors(aux);
@@ -91,19 +91,17 @@ void	generate_terminal(char **env)
 	char	*str;
 
 	str = generate_entry(env);
-	while (str && (ft_strcmp(str, "exit") != 0 || ft_strlen(str) == 0))
+	while (str)
 	{
 		add_history(str);
 		if (string_to_command(str, &commands, env) == 0 && commands != NULL)
 		{
-			if (execute_commands(commands, env) == 1)
-				ft_printf_fd(STDERR_FILENO, MSSG_EXECUTOR_ERROR);
+			execute_commands(commands, &env);
 		}
 		parser_lstclear(&commands);
 		free(str);
 		str = generate_entry(env);
 	}
-	if (!str || ft_strcmp(str, "exit") == 0)
+	if (!str)
 		ft_printf("exit\n");
-	free(str);
 }

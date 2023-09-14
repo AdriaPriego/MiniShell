@@ -3,47 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 10:29:56 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/14 12:42:49 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	ft_cd(char **comands, char **env)
+int	ft_cd(char **commands, char **env)
 {
-	if (!comands[1])
+	if (!commands[1])
 		chdir(find_home(env));
-	else if (ft_strcmp(comands[1], "..") == 0)
+	else if (ft_strcmp(commands[1], "..") == 0)
 		chdir("..");
-	else if (ft_strcmp(comands[1], ".") == 0)
+	else if (ft_strcmp(commands[1], ".") == 0)
 		chdir(".");
-	else if (ft_strcmp(comands[1], "/") == 0)
+	else if (ft_strcmp(commands[1], "/") == 0)
 		chdir("/");
-	else if (ft_strcmp(comands[1], "~") == 0)
+	else if (ft_strcmp(commands[1], "~") == 0)
 		chdir(find_home(env));
-	else if (chdir(comands[1]) != 0)
+	else if (chdir(commands[1]) != 0)
 	{
 		ft_printf_fd(2, "minishell: cd: %s: No such file or directory\n",
-			comands[1]);
-		exit(1);
+			commands[1]);
+		return (1);
 	}
-	exit(0);
+	return (0);
 }
 
-void	ft_pwd(void)
+int	ft_pwd(void)
 {
 	char	*str;
 
 	str = getcwd(NULL, 0);
 	ft_printf("%s\n", str);
 	free(str);
-	exit(0);
+	return (0);
 }
 
-void	ft_env(char **env)
+int	ft_env(char **env)
 {
 	int	i;
 
@@ -53,52 +53,59 @@ void	ft_env(char **env)
 		ft_printf("%s\n", env[i]);
 		i++;
 	}
-	exit (0);
+	return (0);
 }
 
-void	ft_echo(char **comand)
+int	ft_echo(char **command)
 {
 	int	i;
 
-	if (ft_strcmp(comand[1], "-n") == 0)
+	if (!command[1])
+		ft_printf("\n");
+	else if (ft_strcmp(command[1], "-n") == 0)
 	{
 		i = 2;
-		ft_print_matrix(comand, i);
+		ft_print_matrix(command, i);
 	}
 	else
 	{
 		i = 1;
-		ft_print_matrix(comand, i);
+		ft_print_matrix(command, i);
 		ft_printf("\n");
 	}
-	exit (0);
+	return (0);
 }
 
-void	ft_unset(char **comand, char **env)
+int	ft_unset(char **command, char **env)
 {
 	int	i;
 	int	j;
 
 	i = 1;
-	while (comand[i])
+	while (command[i])
 	{
-		if (valid_comand(comand[i]))
+		if (valid_command(command[i]))
 		{
 			ft_printf_fd(2, "minishell: unset: `%s': not a valid identifier\n",
-				comand[i]);
-			exit(1);
+				command[i]);
+			return (1);
 		}
 		j = 0;
 		while (env[j])
 		{
-			if (ft_strncmp(comand[i], env[j], ft_strlen_chr(env[j], '=')) == 0)
+			if (ft_strncmp(command[i], env[j], ft_strlen_chr(env[j], '=')) == 0)
 			{
 				free(env[j]);
-				env[j] = NULL;
+				while (env[j])
+				{
+					env[j] = env[j + 1];
+					j++;
+				}
 			}
-			j++;
+			if (env[j])
+				j++;
 		}
 		i++;
 	}
-	exit (0);
+	return (0);
 }

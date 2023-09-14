@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 21:45:52 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/11 17:49:27 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/14 12:39:32 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	search_path(char *cmd, char **envp, char **path)
 	int		exit_status;
 
 	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 4) == NULL)
+	while (ft_strnstr(envp[i], "PATH", 4) == NULL && envp[i])
 		i++;
 	full_path = ft_split(envp[i] + 5, ':');
 	if (!full_path)

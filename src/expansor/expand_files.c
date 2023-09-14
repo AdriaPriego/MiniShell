@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:35:53 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 18:27:32 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/14 12:31:42 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ int	expand_file(char *path, char **env)
 	return (0);
 }
 
-int	expansor_files(t_cmd *comands, char **env)
+int	expansor_files(t_cmd *commands, char **env)
 {
 	t_io	*aux;
 
-	while (comands)
+	while (commands)
 	{
-		aux = comands->redirect;
+		aux = commands->redirect;
 		while (aux)
 		{
 			if (aux->type == HERE_DOC)
@@ -53,7 +53,7 @@ int	expansor_files(t_cmd *comands, char **env)
 			}
 			aux = aux->next;
 		}
-		comands = comands->next;
+		commands = commands->next;
 	}
 	return (0);
 }
