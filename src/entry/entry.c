@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 22:05:36 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 12:22:18 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*generate_entry(char **env)
 	return (str);
 }
 
-int	string_to_command(char *str, t_cmd **commands, char **env)
+int	string_to_command(char *str, t_cmd **commands, char **env, int *exit_s)
 {
 	int		status;
 	t_lex	*lexer;
@@ -71,7 +71,7 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 	*commands = NULL;
 	status = tokenizer(str, &lexer);
 	if (status == 0)
-		status = parser(commands, &lexer);
+		status = parser(commands, &lexer, exit_s);
 	if (status == 0)
 		status = expansor(*commands, env);
 	if (status == 0)
@@ -83,26 +83,27 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 	lexer_lstclear(&lexer);
 	return (status);
 }
-int		g_exit_status = 0;
 
 void	generate_terminal(char **env)
 {
-	//int		exit_status;
-	t_cmd	*commands;
+	int		exit_s;
+	t_cmd	*cmd;
 	char	*str;
 
+	exit_s = 0;
 	str = generate_entry(env);
 	while (str)
 	{
 		add_history(str);
-		if (string_to_command(str, &commands, env) == 0 && commands != NULL)
+		if (string_to_command(str, &cmd, env, &exit_s) == 0 && cmd != NULL)
 		{
-			g_exit_status = execute_commands(commands, &env);
+			if (execute_commands(cmd, &env, &exit_s) == 1)
+				ft_printf_fd(STDERR_FILENO, MSSG_EXECUTOR_ERROR);
 		}
-		parser_lstclear(&commands);
+		parser_lstclear(&cmd);
 		free(str);
 		str = generate_entry(env);
 	}
-	if (!str)
-		ft_printf("exit\n");
+	ft_matrix_free(env);
+	exit (exit_s);
 }

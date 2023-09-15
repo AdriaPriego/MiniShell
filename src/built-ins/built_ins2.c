@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 17:47:17 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 03:16:07 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 11:41:54 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	ft_export(char **args, char ***env)
 	return (0);
 }
 
-void	ft_exit (char **args)
+void	ft_exit (char **args, int *exit_s)
 {
 	if (ft_array_len(args) > 2)
 	{
@@ -101,5 +101,5 @@ void	ft_exit (char **args)
 		}
 	}
 	//ft_printf("exit\n");
-	exit (g_exit_status);
+	exit (*exit_s);
 }

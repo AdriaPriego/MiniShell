@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 03:11:15 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 11:23:41 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,5 @@ int	main(int ac, char **av, char **envp)
 	}
 	init_signals();
 	generate_terminal(env);
-	ft_matrix_free(env);
-	exit (g_exit_status);
-	return (g_exit_status);
+	return (0);
 }

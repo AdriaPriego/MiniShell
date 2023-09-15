@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+         #
+#    By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/15 03:16:34 by fbosch           ###   ########.fr        #
+#    Updated: 2023/09/15 12:48:33 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,8 @@ FILES_GEN	=	main.c utils.c utils2.c
 FILES_EXPAN	=	expansor.c expansor_utils.c expand_files.c expand_files_utils.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 FILES_PARSE	=	parser.c parser_syntax.c cmd_lists.c redirect_lists.c
-FILES_EXEC	=	executor.c executor_utils.c find_path.c redirections.c
+FILES_EXEC	=	executor.c executor_utils.c find_path.c redirections.c\
+				executor_utils2.c
 FILES_HERE	=	heredoc.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/
