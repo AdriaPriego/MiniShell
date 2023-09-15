@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 13:15:11 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 13:18:46 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ t_lex	*lexer_lstlast(t_lex *lst);
 
 // Reads from lexer structure and expands variables
 /*------------------------------  EXPANSOR  ------------------------------*/
+
 int		expansor(t_cmd *def, char **env);
 char	*expand(char *str, char **env);
 int		ft_omit_var(char *var);
@@ -185,6 +186,9 @@ int		calc_len_file(char *path);
 int		fill_aux(char *path, char **file);
 int		expand_vars_file(char **file, char **aux, char **env);
 int		rewrite_file(char *path, char **aux);
+int		calc_len_value_expan(char *str, char **env, int status, int *len);
+void	expand_var(char *word, char *value, char *str, int len);
+void	check_expand_file(char *word, int exit, char *str, char **env);
 
 // Converts token list (lexer) into a simple arguments list
 /*---------------------------- 	PARSER	-------------------------------*/
@@ -234,6 +238,7 @@ int		perror_return(t_pipe *data, int exit_code, char *error);
 
 // Handle signals
 /*---------------------------  	SIGNALS   	------------------------------*/
+
 void	init_signals(void);
 
 // General utility functions
@@ -247,4 +252,6 @@ char	**ft_dup_matrix(char **envp);
 void	ft_matrix_free(char **matrix);
 void	ft_print_export(char **matrix);
 int		contain_env(char **env, char *str);
+int		ft_strcmp_env(char *env, char *str);
+
 #endif

@@ -59,26 +59,3 @@ int	ft_strcmp(const char *s1, const char *s2)
 	}
 	return (0);
 }
-
-void	ft_print_export(char **matrix)
-{
-	int	i;
-
-	i = 0;
-	while (matrix[i])
-		ft_printf("declare -x %s\n", matrix[i++]);
-}
-
-int	contain_env(char **env, char *str)
-{
-	int	i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (strncmp(env[i], str, ft_strlen_chr(env[i], '=')) == 0)
-			return (0);
-		i++;
-	}
-	return (1);
-}

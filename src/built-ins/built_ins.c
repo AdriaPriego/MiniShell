@@ -95,7 +95,7 @@ int	ft_unset(char **command, char **env)
 		j = 0;
 		while (env[j])
 		{
-			if (ft_strncmp(command[i], env[j], ft_strlen_chr(env[j], '=')) == 0)
+			if (ft_strcmp_env(env[j], comand[i]) == 0)
 			{
 				free(env[j]);
 				while (env[j])
