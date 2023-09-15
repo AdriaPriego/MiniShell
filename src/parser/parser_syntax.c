@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:14:54 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/05 00:29:30 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 03:14:31 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	parser_error(int error)
 		ft_printf_fd(STDERR_FILENO, MSSG_ERR_GREAT);
 	else if (error == SYNTAX_GREAT_GREAT)
 		ft_printf_fd(STDERR_FILENO, MSSG_ERR_GREAT_GREAT);
+	g_exit_status = 2; //sdsaddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 }
 
 int	check_duplicate_tokens(t_lex *lexer)

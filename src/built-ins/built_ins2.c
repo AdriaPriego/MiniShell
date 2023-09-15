@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 17:47:17 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 21:44:55 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 03:16:07 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,6 @@ int	ft_export(char **args, char ***env)
 
 void	ft_exit (char **args)
 {
-	int	i;
-
-	i = 0;
 	if (ft_array_len(args) > 2)
 	{
 		ft_printf_fd(STDERR_FILENO, "minishell: exit: too many arguments\n");
