@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 13:15:02 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 12:25:55 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 14:20:10 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,43 @@ int	ft_strcmp(const char *s1, const char *s2)
 		i++;
 	}
 	return (0);
+}
+
+void	ft_print_export(char **matrix)
+{
+	int	i;
+
+	i = 0;
+	while (matrix[i])
+		ft_printf("declare -x %s\n", matrix[i++]);
+}
+
+int	contain_env(char **env, char *str)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (strncmp(env[i], str, ft_strlen_chr(env[i], '=')) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	ft_strcmp_env(char *env, char *str)
+{
+	int	i;
+
+	i = 0;
+	while (env[i] != '=' && str[i] != '\0')
+	{
+		if (env[i] != str[i])
+			return (env[i] - str[i]);
+		i++;
+	}
+	if (env[i] == '=' && str[i] == '\0')
+		return (0);
+	return (env[i] - str[i]);
 }

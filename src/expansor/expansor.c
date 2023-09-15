@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 13:38:24 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 14:28:44 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	expansor(t_cmd *def, char **env, int status)
 			ft_memset(str, '\0', calc_len_expan(def->args[i], env, status)
 				+ 1);
 			check_expand(def->args[i], status, str, env);
-			if (ft_change_comand(def, i, str) == 1)
+			if (ft_change_command(def, i++, str) == 1)
 				return (1);
 		}
 		else

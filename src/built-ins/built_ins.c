@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 14:00:55 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 14:20:39 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	ft_unset(char **command, char **env)
 		j = 0;
 		while (env[j])
 		{
-			if (ft_strcmp_env(env[j], comand[i]) == 0)
+			if (ft_strcmp_env(env[j], command[i]) == 0)
 			{
 				free(env[j]);
 				while (env[j])

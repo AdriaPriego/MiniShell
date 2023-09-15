@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:35:53 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 12:31:42 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 14:24:50 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	expand_file(char *path, char **env, int exit)
 	return (0);
 }
 
-int	expansor_files(t_cmd *comands, char **env, int status)
+int	expansor_files(t_cmd *commands, char **env, int status)
 {
 	t_io	*aux;
 
