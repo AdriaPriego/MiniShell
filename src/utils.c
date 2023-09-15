@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 13:15:02 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 14:20:10 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 17:21:38 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,20 +81,4 @@ int	contain_env(char **env, char *str)
 		i++;
 	}
 	return (1);
-}
-
-int	ft_strcmp_env(char *env, char *str)
-{
-	int	i;
-
-	i = 0;
-	while (env[i] != '=' && str[i] != '\0')
-	{
-		if (env[i] != str[i])
-			return (env[i] - str[i]);
-		i++;
-	}
-	if (env[i] == '=' && str[i] == '\0')
-		return (0);
-	return (env[i] - str[i]);
 }

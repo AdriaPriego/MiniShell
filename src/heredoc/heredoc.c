@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:09:24 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 12:54:27 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/15 17:41:47 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	create_heredoc(char *delimiter, char *path)
 
 	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	str = readline("> ");
-	while (ft_strcmp(delimiter, str) != 0)
+	while (str && ft_strcmp(delimiter, str) != 0)
 	{
 		str = ft_strjoin_line(str, "\n");
 		ft_putstr_fd(str, fd);
@@ -28,6 +28,7 @@ void	create_heredoc(char *delimiter, char *path)
 	}
 	close(fd);
 	free(str);
+	init_signals(DEFAULT);
 }
 
 void	do_heredoc(int i, t_io *aux)

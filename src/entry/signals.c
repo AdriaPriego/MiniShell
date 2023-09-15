@@ -3,36 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 10:50:46 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 12:18:22 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/15 17:42:09 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	sig_handler_in_child(int signum)
-{
-	ft_printf("AAAAAA");
-	if (signum == CTRL_C)
-	{
-		ft_printf("\n");
-		rl_on_new_line();
-		rl_redisplay();
-	}
-	else if (signum == CTRL_SLASH)
-		ft_printf("Quit: 3\n");
-	exit(0);
-}
-
-void	init_signals_in_child(void)
-{
-	signal(CTRL_C, sig_handler_in_child);
-	signal(CTRL_SLASH, sig_handler_in_child);
-}
-
-static void	sig_handler(int signum)
+static void	sig_handler_def(int signum)
 {
 	if (signum == CTRL_C)
 	{
@@ -42,9 +22,22 @@ static void	sig_handler(int signum)
 	}
 }
 
-void	init_signals(void)
+static void	sig_handler_childs(int signum)
 {
-	rl_catch_signals = 0;
-	signal(CTRL_C, sig_handler);
-	signal(CTRL_SLASH, sig_handler);
+	if (signum == CTRL_C)
+	{
+		ft_printf("\n");
+		rl_replace_line("", 1);
+		rl_on_new_line();
+	}
+}
+
+int	init_signals(int mode)
+{
+	if (mode == DEFAULT)
+		signal(CTRL_C, sig_handler_def);
+	else if (mode == CHILDS)
+		signal(CTRL_C, sig_handler_childs);
+	signal(CTRL_SLASH, sig_handler_def);
+	return (1);
 }

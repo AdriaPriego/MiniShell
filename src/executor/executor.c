@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/14 11:42:54 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/15 17:13:50 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,16 @@ void	wait_childs(t_pipe *data, int *exit_s)
 	free(data->pid);
 	if (WIFEXITED(status))
 		*exit_s = (WEXITSTATUS(status));
-	else
-		*exit_s = 1;
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			*exit_s = 130;
+		else if (WTERMSIG(status) == SIGQUIT)
+		{
+			*exit_s = 131;
+			ft_printf("Quit: 3\n");
+		}
+	}
 }
 
 void	new_pipe(t_cmd *commands, t_pipe *data, char ***envp, int *exit_s)
@@ -73,7 +81,7 @@ int	execute_commands(t_cmd *commands, char ***envp, int *exit_s)
 	dup_original_stds(&data.dup_stdin, &data.dup_stdout);
 	if (data.n_cmds == 1 && is_builtin(commands))
 		return (exec_one_builtin(commands, &data, envp, exit_s));
-	i = 0;
+	(1 && (i = 0) && init_signals(CHILDS));
 	while (commands)
 	{
 		if (pipe(data.fd) == -1)

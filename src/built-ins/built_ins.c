@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 14:20:39 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 17:18:51 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,20 +93,7 @@ int	ft_unset(char **command, char **env)
 			return (1);
 		}
 		j = 0;
-		while (env[j])
-		{
-			if (ft_strcmp_env(env[j], command[i]) == 0)
-			{
-				free(env[j]);
-				while (env[j])
-				{
-					env[j] = env[j + 1];
-					j++;
-				}
-			}
-			if (env[j])
-				j++;
-		}
+		ft_generate_new_env(command, env, j, i);
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 13:35:16 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 13:46:57 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 17:20:44 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,4 @@ char	**ft_dup_matrix(char **envp)
 	}
 	dup[i] = NULL;
 	return (dup);
-}
-
-void	ft_matrix_free(char **matrix)
-{
-	int	i;
-
-	i = 0;
-	while (matrix[i])
-	{
-		free(matrix[i]);
-		i++;
-	}
-	free(matrix);
 }

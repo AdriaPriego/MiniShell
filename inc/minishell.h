@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 14:24:31 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 17:42:15 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <libft.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <signal.h>
 # include <sys/stat.h>
 # include <readline.h>
 # include <history.h>
@@ -33,6 +34,10 @@
 // Signals
 # define CTRL_C SIGINT
 # define CTRL_SLASH SIGQUIT
+
+// Mode
+# define DEFAULT 0
+# define CHILDS 1
 
 // ASCII characters
 # define C_VERTICAL_BAR 124
@@ -131,6 +136,12 @@ typedef struct s_pipe
 	char	*path;
 }	t_pipe;
 
+typedef struct s_pid
+{
+	pid_t			pid;
+	struct s_pid	*next;
+}	t_pid;
+
 /*==============================  FUNCTIONS  =============================*/
 
 // Holds minishell loop: MiniShell$>....
@@ -149,6 +160,7 @@ int		ft_pwd(void);
 int		ft_env(char **env);
 int		ft_cd(char **command, char **env);
 void	ft_exit(char **args, int *exit_s);
+void	ft_generate_new_env(char **command, char **env, int j, int i);
 
 /*-----------------------------	HEREDOC --------------------------------*/
 int		heredoc(t_cmd *commands);
@@ -239,7 +251,7 @@ int		perror_return(t_pipe *data, int exit_code, char *error);
 // Handle signals
 /*---------------------------  	SIGNALS   	------------------------------*/
 
-void	init_signals(void);
+int		init_signals(int mode);
 
 // General utility functions
 /*--------------------------      UTILS     -------------------------------*/

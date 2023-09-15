@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 17:47:17 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 10:34:12 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:29:16 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	**ft_add_env(char *str, char **env)
 		return (NULL);
 	while (env[i])
 	{
-		if (strncmp(env[i], str, ft_strlen_chr(env[i], '=')) == 0)
+		if (ft_strcmp_env(env[i], str) == 0)
 		{
 			tmp[i] = ft_strdup(str);
 			sust_flag = 1;
@@ -69,7 +69,8 @@ int	ft_export(char **args, char ***env)
 			else
 			{
 				ft_printf_fd(STDERR_FILENO,
-					"minishell: export: `%s': not a valid identifier\n", args[i]);
+					"minishell: export: `%s': not a valid identifier\n",
+					args[i]);
 				return (1);
 			}
 			i++;
@@ -78,7 +79,7 @@ int	ft_export(char **args, char ***env)
 	return (0);
 }
 
-void	ft_exit (char **args, int *exit_s)
+void	ft_exit(char **args, int *exit_s)
 {
 	if (ft_array_len(args) > 2)
 	{
@@ -89,17 +90,17 @@ void	ft_exit (char **args, int *exit_s)
 	{
 		if (ft_test_int(args[1]) != 0)
 		{
-			//ft_printf("exit\n");
+			ft_printf("exit\n");
 			ft_printf_fd(STDERR_FILENO,
 				"minishell: exit: %s: numeric argument required\n", args[1]);
 			exit (255);
 		}
 		else
 		{
-			//ft_printf("exit\n");
+			ft_printf("exit\n");
 			exit (ft_atoi(args[1]));
 		}
 	}
-	//ft_printf("exit\n");
+	ft_printf("exit\n");
 	exit (*exit_s);
 }

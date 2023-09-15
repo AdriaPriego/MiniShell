@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 14:28:31 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 18:25:21 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,24 @@ char	*generate_entry(char **env)
 	char	*str;
 
 	aux = getcwd(NULL, 0);
-	if (find_home(env) != NULL && ft_strcmp(find_home(env), aux) == 0)
-		entry = ft_joincolors("~");
-	else if (ft_strcmp(aux, "/") == 0)
-		entry = ft_joincolors(aux);
+	if (!aux)
+		entry = ft_strdup("Oooops where is home :( :");
 	else
 	{
-		split = ft_strrchr(aux, '/');
-		entry = ft_joincolors(split + 1);
+		if (find_home(env) != NULL && ft_strcmp(find_home(env), aux) == 0)
+			entry = ft_joincolors("~");
+		else if (ft_strcmp(aux, "/") == 0)
+			entry = ft_joincolors(aux);
+		else
+		{
+			split = ft_strrchr(aux, '/');
+			entry = ft_joincolors(split + 1);
+		}
+		if (!entry)
+			return (free(aux), NULL);
 	}
-	if (!entry)
-	{
-		free(aux);
-		return (NULL);
-	}
-	//str = readline(entry);
-	str = readline("minishell:");
-	free(aux);
-	free(entry);
-	return (str);
+	str = readline(entry);
+	return (free(aux), free(entry), str);
 }
 
 int	string_to_command(char *str, t_cmd **commands, char **env, int *exit_s)
@@ -100,6 +99,7 @@ void	generate_terminal(char **env)
 		{
 			if (execute_commands(cmd, &env, &exit_s) == 1)
 				ft_printf_fd(STDERR_FILENO, MSSG_EXECUTOR_ERROR);
+			init_signals(DEFAULT);
 		}
 		parser_lstclear(&cmd);
 		free(str);
