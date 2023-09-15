@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   entry.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/13 19:20:13 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 12:55:13 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,11 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 	if (status == 0)
 		status = parser(commands, &lexer);
 	if (status == 0)
-		status = expansor(*commands, env);
+		status = expansor(*commands, env, 111111115);
 	if (status == 0)
 		status = heredoc(*commands);
 	if (status == 0)
-		status = expansor_files(*commands, env);
+		status = expansor_files(*commands, env, 111111115);
 	if (status == 1)
 		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);
 	lexer_lstclear(&lexer);

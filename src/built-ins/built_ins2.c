@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 17:47:17 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 10:45:20 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/15 10:34:12 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ void	ft_export(char **args, char **env)
 			else
 			{
 				ft_printf_fd(STDERR_FILENO,
-					"minishell: export: `%s': not a valid identifier\n", args[i]);
+					"minishell: export: `%s': not a valid identifier\n",
+					args[i]);
 				exit(1);
 			}
 			i++;

@@ -1,35 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_numlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 12:20:02 by apriego-         ###   ########.fr       */
+/*   Created: 2023/09/15 11:37:23 by apriego-          #+#    #+#             */
+/*   Updated: 2023/09/15 11:45:56 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
-
-int	main(int ac, char **av, char **envp)
+int	ft_numlen(int n)
 {
-	char	**env;
+	int	qtt10;
+	int	ext;
+	int	len;
 
-	(void)av;
-	if (ac != 1)
+	ext = 0;
+	len = 0;
+	qtt10 = 1;
+	while (qtt10 <= n && ext == 0)
 	{
-		ft_printf_fd(STDERR_FILENO, MSSG_INVALID_ARGS);
-		return (1);
+		if (qtt10 < 1000000000)
+		{
+			qtt10 *= 10;
+			len++;
+		}
+		else
+		{
+			ext = 1;
+			len++;
+		}
 	}
-	env = ft_dup_matrix(envp);
-	if (!env)
-	{
-		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);
-		return (0);
-	}
-	init_signals();
-	generate_terminal(env);
-	ft_matrix_free(env);
-	return (0);
+	if (n == 0)
+		len = 1;
+	return (len);
 }
