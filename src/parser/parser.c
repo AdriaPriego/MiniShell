@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 22:38:29 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/13 19:28:25 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 11:55:03 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,14 +102,14 @@ int	create_simple_command(t_lex **head, t_cmd *cmd)
 	return (0);
 }
 
-int	parser(t_cmd **commands, t_lex **lexer)
+int	parser(t_cmd **commands, t_lex **lexer, int *exit_s)
 {
 	t_cmd	*new;
 	t_lex	*head;
 
 	if (!lexer)
 		return (0);
-	if (check_syntax_error(*lexer) == SYNTAX_ERR)
+	if (check_syntax_error(*lexer, exit_s) == SYNTAX_ERR)
 		return (lexer_lstclear(lexer), SYNTAX_ERR);
 	head = *lexer;
 	while (head)

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 14:04:03 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/15 13:38:24 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ int	ft_isliteral(char c, t_quote *quote)
 	return (0);
 }
 
-int	ft_change_comand(t_cmd	*comand, int i, char *str)
+int	ft_change_command(t_cmd	*command, int i, char *str)
 {
-	free(comand->args[i]);
-	comand->args[i] = ft_strdup(str);
-	if (!comand->args[i])
+	free(command->args[i]);
+	command->args[i] = ft_strdup(str);
+	if (!command->args[i])
 		return (1);
-	comand = comand->next;
+	command = command->next;
 	free(str);
 	str = NULL;
 	return (0);
@@ -90,10 +90,8 @@ int	expansor(t_cmd *def, char **env, int status)
 	char	*str;
 	int		i;
 
-	if (!def)
-		return (0);
 	i = 0;
-	while (def->args[i])
+	while (def)
 	{
 		if (def->args[i] != NULL)
 		{
@@ -105,10 +103,12 @@ int	expansor(t_cmd *def, char **env, int status)
 			check_expand(def->args[i], status, str, env);
 			if (ft_change_comand(def, i, str) == 1)
 				return (1);
-			i++;
 		}
 		else
+		{
 			def = def->next;
+			i = 0;
+		}
 	}
 	return (0);
 }

@@ -37,7 +37,8 @@ FILES_GEN	=	main.c utils.c utils2.c
 FILES_EXPAN	=	expansor.c expansor_utils.c expansor_utils2.c expand_files.c expand_files_utils.c 
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 FILES_PARSE	=	parser.c parser_syntax.c cmd_lists.c redirect_lists.c
-FILES_EXEC	=	executor.c executor_utils.c find_path.c redirections.c
+FILES_EXEC	=	executor.c executor_utils.c find_path.c redirections.c\
+				executor_utils2.c
 FILES_HERE	=	heredoc.c
 HEADER		=	./inc/minishell.h
 LIBFT_ROOT	:=	libft/

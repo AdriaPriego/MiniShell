@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_syntax.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:14:54 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/05 00:29:30 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 12:23:09 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,18 @@ int	check_pipe_error(t_lex *lexer)
 	return (0);
 }
 
-int	check_syntax_error(t_lex *lexer)
+int	check_syntax_error(t_lex *lexer, int *exit_s)
 {
 	while (lexer)
 	{
 		if (lexer->token != NONE)
 		{
-			if (check_duplicate_tokens(lexer) == 1)
+			if (check_duplicate_tokens(lexer) == 1
+				|| check_pipe_error(lexer) == 1)
+			{
+				*exit_s = 2;
 				return (SYNTAX_ERR);
-			if (check_pipe_error(lexer) == 1)
-				return (SYNTAX_ERR);
+			}
 		}
 		lexer = lexer->next;
 	}

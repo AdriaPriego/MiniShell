@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 13:15:02 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 13:01:59 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/15 12:25:55 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ char	*find_home(char **env)
 	return (NULL);
 }
 
-int	valid_comand(char *comand)
+int	valid_command(char *command)
 {
 	int	i;
 
 	i = 0;
-	if (ft_isdigit(comand[0]))
+	if (ft_isdigit(command[0]))
 		return (1);
-	while (comand[i])
+	while (command[i])
 	{
-		if (ft_isalnum(comand[i]) == 0 && comand[i] != '_')
+		if (ft_isalnum(command[i]) == 0 && command[i] != '_')
 			return (1);
 		i++;
 	}
@@ -58,20 +58,4 @@ int	ft_strcmp(const char *s1, const char *s2)
 		i++;
 	}
 	return (0);
-}
-
-int	ft_strcmp_env(char *env, char *str)
-{
-	int	i;
-
-	i = 0;
-	while (env[i] != '=' && str[i] != '\0')
-	{
-		if (env[i] != str[i])
-			return (env[i] - str[i]);
-		i++;
-	}
-	if (env[i] == '=' && str[i] == '\0')
-		return (0);
-	return (env[i] - str[i]);
 }

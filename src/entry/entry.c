@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 12:55:13 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/15 13:45:33 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*generate_entry(char **env)
 	char	*str;
 
 	aux = getcwd(NULL, 0);
-	if (ft_strcmp(find_home(env), aux) == 0)
+	if (find_home(env) != NULL && ft_strcmp(find_home(env), aux) == 0)
 		entry = ft_joincolors("~");
 	else if (ft_strcmp(aux, "/") == 0)
 		entry = ft_joincolors(aux);
@@ -55,13 +55,14 @@ char	*generate_entry(char **env)
 		free(aux);
 		return (NULL);
 	}
-	str = readline(entry);
+	//str = readline(entry);
+	str = readline("minishell:");
 	free(aux);
 	free(entry);
 	return (str);
 }
 
-int	string_to_command(char *str, t_cmd **commands, char **env)
+int	string_to_command(char *str, t_cmd **commands, char **env, int *exit_s)
 {
 	int		status;
 	t_lex	*lexer;
@@ -71,7 +72,7 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 	*commands = NULL;
 	status = tokenizer(str, &lexer);
 	if (status == 0)
-		status = parser(commands, &lexer);
+		status = parser(commands, &lexer, exit_s);
 	if (status == 0)
 		status = expansor(*commands, env, 111111115);
 	if (status == 0)
@@ -86,24 +87,24 @@ int	string_to_command(char *str, t_cmd **commands, char **env)
 
 void	generate_terminal(char **env)
 {
-	//int		exit_status;
-	t_cmd	*commands;
+	int		exit_s;
+	t_cmd	*cmd;
 	char	*str;
 
+	exit_s = 0;
 	str = generate_entry(env);
-	while (str && (ft_strcmp(str, "exit") != 0 || ft_strlen(str) == 0))
+	while (str)
 	{
 		add_history(str);
-		if (string_to_command(str, &commands, env) == 0 && commands != NULL)
+		if (string_to_command(str, &cmd, env, &exit_s) == 0 && cmd != NULL)
 		{
-			if (execute_commands(commands, env) == 1)
+			if (execute_commands(cmd, &env, &exit_s) == 1)
 				ft_printf_fd(STDERR_FILENO, MSSG_EXECUTOR_ERROR);
 		}
-		parser_lstclear(&commands);
+		parser_lstclear(&cmd);
 		free(str);
 		str = generate_entry(env);
 	}
-	if (!str || ft_strcmp(str, "exit") == 0)
-		ft_printf("exit\n");
-	free(str);
+	ft_matrix_free(env);
+	exit (exit_s);
 }

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 12:20:02 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/15 11:23:41 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,5 @@ int	main(int ac, char **av, char **envp)
 	}
 	init_signals();
 	generate_terminal(env);
-	ft_matrix_free(env);
 	return (0);
 }
