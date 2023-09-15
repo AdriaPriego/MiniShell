@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 13:10:15 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 21:40:36 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 13:38:24 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,8 @@ int	expansor(t_cmd *def, char **env)
 	int		i;
 	t_quote	quote;
 
-	if (!def)
-		return (0);
 	i = 0;
-	while (def->args[i])
+	while (def)
 	{
 		if (def->args[i] != NULL)
 		{
@@ -109,12 +107,14 @@ int	expansor(t_cmd *def, char **env)
 			ft_memset(str, '\0', calc_len_expanded(def->args[i], env) + 1);
 			init_quote(&quote);
 			check_expand(def->args[i], &quote, str, env);
-			if (ft_change_command(def, i, str) == 1)
+			if (ft_change_command(def, i++, str) == 1)
 				return (1);
-			i++;
 		}
 		else
+		{
 			def = def->next;
+			i = 0;
+		}
 	}
 	return (0);
 }

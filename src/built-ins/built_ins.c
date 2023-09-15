@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 12:42:49 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 14:00:55 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	ft_cd(char **commands, char **env)
 {
 	if (!commands[1])
 		chdir(find_home(env));
+	else if (!*commands[1])
+		return (0);
 	else if (ft_strcmp(commands[1], "..") == 0)
 		chdir("..");
 	else if (ft_strcmp(commands[1], ".") == 0)
@@ -26,8 +28,8 @@ int	ft_cd(char **commands, char **env)
 		chdir(find_home(env));
 	else if (chdir(commands[1]) != 0)
 	{
-		ft_printf_fd(2, "minishell: cd: %s: No such file or directory\n",
-			commands[1]);
+		ft_printf_fd(STDERR_FILENO, "minishell: cd: %s: ", commands[1]);
+		perror(NULL);
 		return (1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 12:22:18 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 13:45:33 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ char	*generate_entry(char **env)
 		free(aux);
 		return (NULL);
 	}
-	str = readline(entry);
+	//str = readline(entry);
+	str = readline("minishell:");
 	free(aux);
 	free(entry);
 	return (str);

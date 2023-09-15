@@ -6,11 +6,21 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 01:12:21 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/15 12:26:34 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 13:20:33 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	unlink_heredocs(t_io *redirection)
+{
+	while (redirection)
+	{
+		if (redirection->type == HERE_DOC)
+			unlink(redirection->file);
+		redirection = redirection->next;
+	}
+}
 
 void	close_pipe(int in, int out)
 {
@@ -26,9 +36,9 @@ int	dup_custom_redirections(t_pipe *data, t_io *temp, int out)
 	{
 		data->fd_in = open(temp->file, O_RDONLY);
 		if (data->fd_in < 0 && out == FT_EXIT)
-			perror_exit(data, EXIT_FAILURE, temp->file);
+			return (1);
 		else if (data->fd_in < 0 && out == FT_RETURN)
-			return (perror_return(data, 1, temp->file));
+			return (1);
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
 	}
@@ -40,9 +50,9 @@ int	dup_custom_redirections(t_pipe *data, t_io *temp, int out)
 			data->fd_out = open(temp->file, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
 		if (data->fd_out < 0 && out == FT_EXIT)
-			perror_exit(data, EXIT_FAILURE, temp->file);
+			return (1);
 		if (data->fd_out < 0 && out == FT_RETURN)
-			return (perror_return(data, 1, temp->file));
+			return (1);
 		dup2(data->fd_out, STDOUT_FILENO);
 		close(data->fd_out);
 	}
@@ -59,9 +69,16 @@ int	manage_redirections(t_cmd *commands, t_pipe *data, int out)
 	temp = commands->redirect;
 	while (temp)
 	{
-		if (dup_custom_redirections(data, temp, out) == 1 && out == FT_RETURN)
-			return (1);
+		if (dup_custom_redirections(data, temp, out) == 1)
+		{
+			unlink_heredocs(commands->redirect);
+			if (out == FT_RETURN)
+				return (perror_return(data, 1, temp->file));
+			else
+				perror_exit(data, EXIT_FAILURE, temp->file);
+		}
 		temp = temp->next;
 	}
+	unlink_heredocs(commands->redirect);
 	return (0);
 }
