@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 18:17:51 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/03 18:51:30 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/15 11:46:22 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,6 @@ size_t	ft_len_line(const char *s);
 char	**ft_free_matrix(char const **matrix, int j);
 void	ft_free_malloc_array(char **arr, int i);
 int		ft_array_len(char **arr);
+int		ft_numlen(int n);
 
 #endif

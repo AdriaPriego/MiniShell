@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/14 10:29:56 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/15 13:02:41 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	ft_unset(char **comand, char **env)
 		j = 0;
 		while (env[j])
 		{
-			if (ft_strncmp(comand[i], env[j], ft_strlen_chr(env[j], '=')) == 0)
+			if (ft_strcmp_env(env[j], comand[i]) == 0)
 			{
 				free(env[j]);
 				env[j] = NULL;
