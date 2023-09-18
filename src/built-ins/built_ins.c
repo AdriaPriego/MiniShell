@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 17:18:51 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/18 13:09:12 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,22 @@ int	ft_echo(char **command)
 {
 	int	i;
 
+	i = 1;
 	if (!command[1])
 		ft_printf("\n");
-	else if (ft_strcmp(command[1], "-n") == 0)
+	else if (ft_test_options_echo(command, &i))
 	{
-		i = 2;
 		ft_print_matrix(command, i);
 	}
 	else
 	{
-		i = 1;
 		ft_print_matrix(command, i);
 		ft_printf("\n");
 	}
 	return (0);
 }
 
-int	ft_unset(char **command, char **env)
+int	ft_unset(char **command, t_env *env)
 {
 	int	i;
 	int	j;
@@ -93,7 +92,7 @@ int	ft_unset(char **command, char **env)
 			return (1);
 		}
 		j = 0;
-		ft_generate_new_env(command, env, j, i);
+		ft_generate_new_env(command, env->env, j, i);
 		i++;
 	}
 	return (0);

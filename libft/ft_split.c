@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:25:37 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/04 02:19:28 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/18 11:05:15 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	ft_countlenspit(char const *s2, char c, int i)
 	return (len);
 }
 
-char	**ft_free_matrix(char const **matrix, int j)
+static char	**ft_free_matrix(char const **matrix, int j)
 {
 	while (j > 0)
 	{

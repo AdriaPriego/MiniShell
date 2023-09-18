@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   entry.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 18:25:21 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/18 18:15:57 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ char	*ft_joincolors(char *array)
 		return (NULL);
 	aux[0] = ft_strjoin(GREENBASH, array);
 	if (!aux)
-		return ((char *)ft_free_matrix((const char **)aux, ft_array_len(aux)));
+		return ((char *)ft_free_matrix(aux, ft_array_len(aux)));
 	aux[1] = ft_strjoin(aux[0], "$>");
 	if (!aux)
-		return ((char *)ft_free_matrix((const char **)aux, ft_array_len(aux)));
+		return ((char *)ft_free_matrix(aux, ft_array_len(aux)));
 	str = ft_strjoin(aux[1], NO_COL);
 	if (!str)
-		return ((char *)ft_free_matrix((const char **)aux, ft_array_len(aux)));
-	ft_free_matrix((const char **)aux, 2);
+		return ((char *)ft_free_matrix(aux, ft_array_len(aux)));
+	ft_free_matrix(aux, 2);
 	return (str);
 }
 
-char	*generate_entry(char **env)
+char	*generate_entry(t_env *env)
 {
 	char	*entry;
 	char	*aux;
@@ -45,7 +45,7 @@ char	*generate_entry(char **env)
 		entry = ft_strdup("Oooops where is home :( :");
 	else
 	{
-		if (find_home(env) != NULL && ft_strcmp(find_home(env), aux) == 0)
+		if (find_home(env->env) != NULL && ft_strcmp(find_home(env->env), aux) == 0)
 			entry = ft_joincolors("~");
 		else if (ft_strcmp(aux, "/") == 0)
 			entry = ft_joincolors(aux);
@@ -57,34 +57,33 @@ char	*generate_entry(char **env)
 		if (!entry)
 			return (free(aux), NULL);
 	}
-	str = readline(entry);
+	str = readline("Minishell: ");
 	return (free(aux), free(entry), str);
 }
 
-int	string_to_command(char *str, t_cmd **commands, char **env, int *exit_s)
+int	string_to_command(char *str, t_cmd **commands, t_env *env, int *exit_s)
 {
 	int		status;
 	t_lex	*lexer;
 
-	(void)env;
 	lexer = NULL;
 	*commands = NULL;
 	status = tokenizer(str, &lexer);
 	if (status == 0)
 		status = parser(commands, &lexer, exit_s);
 	if (status == 0)
-		status = expansor(*commands, env, *exit_s);
+		status = expansor(*commands, env->env, *exit_s);
 	if (status == 0)
 		status = heredoc(*commands);
 	if (status == 0)
-		status = expansor_files(*commands, env, *exit_s);
+		status = expansor_files(*commands, env->env, *exit_s);
 	if (status == 1)
 		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);
 	lexer_lstclear(&lexer);
 	return (status);
 }
 
-void	generate_terminal(char **env)
+void	generate_terminal(t_env *env)
 {
 	int		exit_s;
 	t_cmd	*cmd;
@@ -97,7 +96,8 @@ void	generate_terminal(char **env)
 		add_history(str);
 		if (string_to_command(str, &cmd, env, &exit_s) == 0 && cmd != NULL)
 		{
-			if (execute_commands(cmd, &env, &exit_s) == 1)
+			init_signals(CHILDS);
+			if (execute_commands(cmd, env, &exit_s) == 1)
 				ft_printf_fd(STDERR_FILENO, MSSG_EXECUTOR_ERROR);
 			init_signals(DEFAULT);
 		}
@@ -105,6 +105,7 @@ void	generate_terminal(char **env)
 		free(str);
 		str = generate_entry(env);
 	}
-	ft_matrix_free(env);
+	ft_matrix_free(env->env);
+	ft_matrix_free(env->export);
 	exit (exit_s);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 22:38:29 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/15 11:55:03 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/18 12:13:29 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	fill_command(t_lex **head, t_io **redirect, t_cmd *cmd)
 			cmd->args[i] = ft_strdup((*head)->word);
 			if (!cmd->args[i])
 			{
-				cmd->args = ft_free_matrix((char const **)cmd->args, i);
+				cmd->args = ft_free_matrix(cmd->args, i);
 				return (1);
 			}
 			i++;

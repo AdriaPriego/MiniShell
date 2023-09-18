@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/15 17:13:50 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/18 14:33:31 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	wait_childs(t_pipe *data, int *exit_s)
 	}
 }
 
-void	new_pipe(t_cmd *commands, t_pipe *data, char ***envp, int *exit_s)
+void	new_pipe(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s)
 {
 	int		exit_code;
 	char	*path;
@@ -48,16 +48,16 @@ void	new_pipe(t_cmd *commands, t_pipe *data, char ***envp, int *exit_s)
 	manage_redirections(commands, data, FT_EXIT);
 	if (is_builtin(commands))
 		execute_builtins(commands->args, envp, exit_s, FT_EXIT);
-	exit_code = search_path(commands->args[0], *envp, &path);
+	exit_code = search_path(commands->args[0], envp->env, &path);
 	if (exit_code == CMD_NOT_FOUND)
 		error_exit(data, exit_code, commands->args[0], MSSG_CMD_NOT_FOUND);
 	else if (exit_code != 0)
 		perror_exit(data, exit_code, commands->args[0]);
-	execve(path, commands->args, *envp);
+	execve(path, commands->args, envp->env);
 	perror_exit(data, EXIT_FAILURE, "Execve");
 }
 
-int	exec_one_builtin(t_cmd *commands, t_pipe *data, char ***envp, int *exit_s)
+int	exec_one_builtin(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s)
 {
 	if (manage_redirections(commands, data, FT_RETURN) == 1)
 	{
@@ -71,7 +71,7 @@ int	exec_one_builtin(t_cmd *commands, t_pipe *data, char ***envp, int *exit_s)
 	return (0);
 }
 
-int	execute_commands(t_cmd *commands, char ***envp, int *exit_s)
+int	execute_commands(t_cmd *commands, t_env *envp, int *exit_s)
 {
 	t_pipe	data;
 	int		i;
@@ -81,7 +81,7 @@ int	execute_commands(t_cmd *commands, char ***envp, int *exit_s)
 	dup_original_stds(&data.dup_stdin, &data.dup_stdout);
 	if (data.n_cmds == 1 && is_builtin(commands))
 		return (exec_one_builtin(commands, &data, envp, exit_s));
-	(1 && (i = 0) && init_signals(CHILDS));
+	(1 && (i = 0));
 	while (commands)
 	{
 		if (pipe(data.fd) == -1)
@@ -90,7 +90,10 @@ int	execute_commands(t_cmd *commands, char ***envp, int *exit_s)
 		if (data.pid[i] == -1)
 			return (perror_return(&data, EXIT_FAILURE, "Fork"));
 		else if (data.pid[i] == 0)
+		{
+			init_signals(CHILDS);
 			new_pipe(commands, &data, envp, exit_s);
+		}
 		dup2(data.fd[0], STDIN_FILENO);
 		close_pipe(data.fd[0], data.fd[1]);
 		commands = commands->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 17:42:15 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/18 18:15:18 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@
 # define MSSG_MEMORY_ERROR "Memory error, please free space and attempt again\n"
 # define MSSG_EXECUTOR_ERROR "Error during command execution\n"
 # define MSSG_CMD_NOT_FOUND "command not found"
+# define MSSG_EXPORT_ERR "minishell: export: `%s': not a valid identifier\n"
 
 // Parser syntax errors
 # define SYNTAX_ERR 42
@@ -136,31 +137,33 @@ typedef struct s_pipe
 	char	*path;
 }	t_pipe;
 
-typedef struct s_pid
+typedef struct s_env
 {
-	pid_t			pid;
-	struct s_pid	*next;
-}	t_pid;
+	char **env;
+	char **export;
+}	t_env;
 
 /*==============================  FUNCTIONS  =============================*/
 
 // Holds minishell loop: MiniShell$>....
 /*------------------------------	ENTRY	-------------------------------*/
-void	generate_terminal(char **env);
-int		string_to_command(char *str, t_cmd **cmd, char **env, int *exit_s);
-char	*generate_entry(char **env);
+void	generate_terminal(t_env *env);
+int		string_to_command(char *str, t_cmd **cmd, t_env *env, int *exit_s);
+char	*generate_entry(t_env *env);
 char	*ft_joincolors(char *array);
 
 // Builtint shell commands
 /*-----------------------------	  BUILTINS	-------------------------------*/
-int		ft_export(char **command, char ***env);
-int		ft_unset(char **command, char **env);
+int		ft_export(char **command, t_env *env);
+int		ft_unset(char **command, t_env *env);
 int		ft_echo(char **command);
 int		ft_pwd(void);
 int		ft_env(char **env);
 int		ft_cd(char **command, char **env);
 void	ft_exit(char **args, int *exit_s);
 void	ft_generate_new_env(char **command, char **env, int j, int i);
+int		ft_test_options_echo(char **command, int *i);
+int		check_format_export(char *str);
 
 /*-----------------------------	HEREDOC --------------------------------*/
 int		heredoc(t_cmd *commands);
@@ -201,6 +204,7 @@ int		rewrite_file(char *path, char **aux);
 int		calc_len_value_expan(char *str, char **env, int status, int *len);
 void	expand_var(char *word, char *value, char *str, int len);
 void	check_expand_file(char *word, int exit, char *str, char **env);
+int		calc_len_expan_file(char *str, char **env, int status);
 
 // Converts token list (lexer) into a simple arguments list
 /*---------------------------- 	PARSER	-------------------------------*/
@@ -225,12 +229,12 @@ int		redirect_lstsize(t_io *lst);
 t_io	*redirect_lstlast(t_io *lst);
 
 // Receives clean arguments in a t_cmd* linked list and manages execution
-/*	EXECUTOR	*/
-int		execute_commands(t_cmd *commands, char ***envp, int *exit_s);
-void	new_pipe(t_cmd *commands, t_pipe *data, char ***envp, int *exit_s);
-int		exec_one_builtin(t_cmd *cmd, t_pipe *data, char ***envp, int *exit_s);
+/*/*---------------------------	EXECUTOR ---------------------------*/
+int		execute_commands(t_cmd *commands, t_env *envp, int *exit_s);
+void	new_pipe(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s);
+int		exec_one_builtin(t_cmd *cmd, t_pipe *data, t_env *envp, int *exit_s);
 void	wait_childs(t_pipe *data, int *exit_s);
-void	execute_builtins(char **args, char ***envp, int *exit, int exit_flag);
+void	execute_builtins(char **args, t_env *envp, int *exit, int exit_flag);
 int		is_builtin(t_cmd *commands);
 int		search_path(char *cmd, char **envp, char **path);
 int		try_paths(char **full_path, char *cmd, char **path);
@@ -260,10 +264,13 @@ int		valid_command(char *command);
 int		ft_strcmp(const char *s1, const char *s2);
 int		ft_strlen_chr(char *str, char c);
 void	ft_print_matrix(char **matrix, int i);
-char	**ft_dup_matrix(char **envp);
+t_env	*ft_dup_matrix_env(char **envp);
 void	ft_matrix_free(char **matrix);
 void	ft_print_export(char **matrix);
 int		contain_env(char **env, char *str);
 int		ft_strcmp_env(char *env, char *str);
+char	**ft_free_matrix(char **matrix, int j);
+char	*ft_strdup_export(char *envp);
+int		ft_strcmp_export(char *export, char *str);
 
 #endif

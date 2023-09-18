@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_to_lower.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/14 13:16:48 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/18 18:08:40 by apriego-         ###   ########.fr       */
+/*   Created: 2023/09/18 13:21:41 by apriego-          #+#    #+#             */
+/*   Updated: 2023/09/18 13:32:52 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
-
-int	main(int ac, char **av, char **envp)
+char	*ft_to_lower(char *str)
 {
-	t_env	*enve;
+	int	i;
 
-	(void)av;
-	if (ac != 1)
+	i = 0;
+	while (str[i])
 	{
-		ft_printf_fd(STDERR_FILENO, MSSG_INVALID_ARGS);
-		return (1);
+		if (str[i] >= 'A' && str[i] <= 'Z' )
+			str[i] += 32;
+		i++;
 	}
-	enve = ft_dup_matrix_env(envp);
-	if (!enve)
-	{
-		ft_printf_fd(STDERR_FILENO, MSSG_MEMORY_ERROR);
-		return (0);
-	}
-	rl_catch_signals = 0;
-	init_signals(DEFAULT);
-	generate_terminal(enve);
-	return (0);
+	return (str);
 }

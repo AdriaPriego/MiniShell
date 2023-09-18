@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 13:35:16 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 17:20:44 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/18 13:17:34 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,32 @@ char	*ft_strdup_chr(char *str, char c)
 	return (dup);
 }
 
-char	**ft_dup_matrix(char **envp)
+t_env	*ft_dup_matrix_env(char **envp)
 {
-	char	**dup;
+	t_env	*dup;
 	int		i;
 
 	i = 0;
-	dup = malloc((ft_array_len(envp) + 1) * sizeof(char *));
+	dup = malloc(sizeof(t_env));
 	if (!dup)
 		return (NULL);
+	dup->env = malloc((ft_array_len(envp) + 1) * sizeof(char *));
+	if (!dup->env)
+		return (free(dup), NULL);
+	dup->export = malloc((ft_array_len(envp) + 1) * sizeof(char *));
+	if (!dup->export)
+		return (free(dup->env), free(dup), NULL);
 	while (envp[i])
 	{
-		dup[i] = ft_strdup(envp[i]);
-		if (!dup[i])
-			return (ft_free_matrix((const char **)dup, i));
+		dup->env[i] = ft_strdup(envp[i]);
+		if (!dup->env[i])
+			return (ft_free_matrix(dup->env, i), free(dup), NULL);
+		dup->export[i] = ft_strdup_export(envp[i]);
+		if (!dup->export[i])
+			return (ft_free_matrix(dup->env, i), ft_free_matrix(dup->export, i), free(dup), NULL);
 		i++;
 	}
-	dup[i] = NULL;
+	dup->env[i] = NULL;
+	dup->export[i] = NULL;
 	return (dup);
 }

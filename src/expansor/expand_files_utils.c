@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 18:27:16 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 13:21:05 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/18 13:44:07 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,13 @@ int	expand_vars_file(char **file, char **aux, char **env, int status)
 	i = 0;
 	while (file[i])
 	{
-		aux[i] = malloc(calc_len_expan(file[i], env, status) + 1);
+		aux[i] = malloc(calc_len_expan_file(file[i], env, status) + 1);
 		if (!aux[i])
 		{
-			ft_free_matrix((const char **)aux, i);
+			ft_free_matrix(aux, i);
 			return (1);
 		}
-		ft_bzero(aux[i], calc_len_expan(file[i], env, status) + 1);
+		ft_bzero(aux[i], calc_len_expan_file(file[i], env, status) + 1);
 		check_expand_file(file[i], status, aux[i], env);
 		i++;
 	}
