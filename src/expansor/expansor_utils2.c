@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 11:55:38 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 12:42:04 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:40:37 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ int	calc_len_value_expan(char *str, char **env, int status, int *len)
 	char	*value;
 
 	i = 0;
-	if (ft_strncmp(str, "$?", 2) == 0)
+	if (str[0] == '~')
+	{
+		value = find_home(env);
+		(*len) += ft_strlen(value);
+		i += 1;
+	}
+	else if (ft_strncmp(str, "$?", 2) == 0)
 	{
 		(*len) += ft_numlen(status);
 		i += 1;

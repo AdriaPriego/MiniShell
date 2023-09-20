@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 17:20:35 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/18 17:42:54 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 11:13:29 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	**ft_free_matrix(char **matrix, int j)
 	return (NULL);
 }
 
-char *ft_strdup_export(char *envp)
+char	*ft_strdup_export(char *envp)
 {
 	int		i;
 	char	*dup;
@@ -71,13 +71,21 @@ char *ft_strdup_export(char *envp)
 		dup[i] = envp[i];
 		dup[++i] = C_TWO_QUOTE;
 		while (envp[i] != '\0')
-		{
-			dup[i + 1] = envp[i];
-			i++;
-		}
+			(1 && (dup[i + 1] = envp[i]) && i++);
 		dup[i + 1] = C_TWO_QUOTE;
 		dup[i + 2] = '\0';
 	}
+	else
+		dup[i] = '\0';
 	return (dup);
 }
 
+int	ft_strcmp_nocase(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] != '\0' && ft_tolower(s1[i]) == ft_tolower(s2[i]))
+		i++;
+	return (ft_tolower(s1[i]) - ft_tolower(s2[i]));
+}

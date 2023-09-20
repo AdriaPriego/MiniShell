@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 15:03:59 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/15 12:38:24 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 11:13:05 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	calc_len_expan(char *str, char **env, int status)
 	while (str[i] != '\0')
 	{
 		find_quote(&quote, i, str);
-		if (str[i] == '$' && quote.one == 0)
+		if ((str[i] == '$' || str[i] == '~') && quote.one == 0)
 			i += calc_len_value_expan(&str[i], env, status, &len);
 		else
 			len++;
@@ -73,7 +73,7 @@ char	*obtain_var(char *str)
 	var = malloc(ft_strlen_chr(str, '$') + 1);
 	if (!var)
 		return (NULL);
-	while (ft_isalnum(str[i]) == 1)
+	while (ft_isalnum(str[i]) == 1 || str[i] == '_')
 	{
 		var[i] = str[i];
 		i++;

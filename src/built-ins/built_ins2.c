@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 17:47:17 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/18 18:45:38 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 11:01:16 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ t_env	*ft_add_env_export(char *str, t_env *env)
 	return (env);
 }
 
-
 int	ft_export(char **args, t_env *env)
 {
 	int	i;
@@ -94,7 +93,7 @@ int	ft_export(char **args, t_env *env)
 			if (check_format_export(args[i]) == 0)
 				env = ft_add_env_export(args[i], env);
 			else if (check_format_export(args[i]) == 2)
-				ft_add_export(args[i], env->export);
+				env->export = ft_add_export(args[i], env->export);
 			else
 			{
 				ft_printf_fd(STDERR_FILENO, MSSG_EXPORT_ERR, args[i]);
@@ -108,26 +107,28 @@ int	ft_export(char **args, t_env *env)
 
 void	ft_exit(char **args, int *exit_s)
 {
-	if (ft_array_len(args) > 2)
-	{
-		ft_printf_fd(STDERR_FILENO, "minishell: exit: too many arguments\n");
-		exit (1);
-	}
 	if (args[1])
 	{
 		if (ft_test_int(args[1]) != 0)
 		{
-			//ft_printf("exit\n");
-			ft_printf_fd(STDERR_FILENO,
+			// ft_printf("exit\n");
+			ft_printf_fd(STDERR_FILENO, 
 				"minishell: exit: %s: numeric argument required\n", args[1]);
-			exit (255);
+			exit(255);
 		}
 		else
 		{
-			//ft_printf("exit\n");
-			exit (ft_atoi(args[1]));
+			if (ft_array_len(args) > 2)
+			{
+				ft_printf_fd(STDERR_FILENO,
+					"minishell: exit: too many arguments\n");
+				*exit_s = 1;
+				return ;
+			}
+			// ft_printf("exit\n");
+			exit(ft_atoi(args[1]));
 		}
 	}
-	//ft_printf("exit\n");
-	exit (*exit_s);
+	// ft_printf("exit\n");
+	exit(*exit_s);
 }

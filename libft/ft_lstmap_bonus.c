@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 23:55:55 by apriego-          #+#    #+#             */
-/*   Updated: 2023/08/25 15:51:12 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/20 10:58:33 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	while (lst)
 	{
 		auxdef->content = f(lst->content);
-		if (!auxdef)
-			ft_lstclear(&lst, del);
 		lst = lst->next;
 		if (lst)
 		{
 			auxdef->next = malloc(sizeof(t_list));
+			if (!auxdef->next)
+				ft_lstclear(&def, del);
 			auxdef = auxdef->next;
 		}
 		else

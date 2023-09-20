@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/18 18:15:18 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 13:39:22 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@
 # define MSSG_EXECUTOR_ERROR "Error during command execution\n"
 # define MSSG_CMD_NOT_FOUND "command not found"
 # define MSSG_EXPORT_ERR "minishell: export: `%s': not a valid identifier\n"
+# define MSSG_SHLVL_ERR "minishell: warning: shell level (%d) too high, resetting to 1\n"
 
 // Parser syntax errors
 # define SYNTAX_ERR 42
@@ -159,11 +160,14 @@ int		ft_unset(char **command, t_env *env);
 int		ft_echo(char **command);
 int		ft_pwd(void);
 int		ft_env(char **env);
-int		ft_cd(char **command, char **env);
+int		ft_cd(char **command, char ***env);
 void	ft_exit(char **args, int *exit_s);
 void	ft_generate_new_env(char **command, char **env, int j, int i);
 int		ft_test_options_echo(char **command, int *i);
 int		check_format_export(char *str);
+char	**ft_add_env(char *str, char **env);
+char	**ft_add_export(char *str, char **export);
+t_env	*ft_add_env_export(char *str, t_env *env);
 
 /*-----------------------------	HEREDOC --------------------------------*/
 int		heredoc(t_cmd *commands);
@@ -272,5 +276,6 @@ int		ft_strcmp_env(char *env, char *str);
 char	**ft_free_matrix(char **matrix, int j);
 char	*ft_strdup_export(char *envp);
 int		ft_strcmp_export(char *export, char *str);
+int		ft_strcmp_nocase(char *s1, char *s2);
 
 #endif
