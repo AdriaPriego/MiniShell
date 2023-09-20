@@ -6,11 +6,25 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 21:45:52 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/14 12:39:32 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/20 21:43:00 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_isdir(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '/')
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 int	try_paths(char **full_path, char *cmd, char **path)
 {
@@ -86,6 +100,8 @@ int	search_path(char *cmd, char **envp, char **path)
 	int		i;
 	int		exit_status;
 
+	if (!*cmd)
+		return (CMD_NOT_FOUND);
 	i = 0;
 	while (ft_strnstr(envp[i], "PATH", 4) == NULL && envp[i])
 		i++;
@@ -97,6 +113,12 @@ int	search_path(char *cmd, char **envp, char **path)
 		exit_status = try_local_path(cmd, path);
 	if (exit_status == CMD_NOT_FOUND)
 		exit_status = try_absolute_path(cmd, path);
+	if (exit_status == CMD_NOT_FOUND && ft_isdir(cmd))
+	{
+		exit_status = NO_SUCH_FILE;
+		if (access(cmd, F_OK) == 0)
+			exit_status = IS_A_DIR;
+	}
 	ft_free_malloc_array(full_path, ft_array_len(full_path));
 	return (exit_status);
 }

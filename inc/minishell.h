@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/20 13:39:22 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 21:40:38 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@
 # define MSSG_MEMORY_ERROR "Memory error, please free space and attempt again\n"
 # define MSSG_EXECUTOR_ERROR "Error during command execution\n"
 # define MSSG_CMD_NOT_FOUND "command not found"
+# define MSGG_NO_SUCH_FILE "No such file or directory"
+# define MSGG_IS_A_DIR "is a directory"
 # define MSSG_EXPORT_ERR "minishell: export: `%s': not a valid identifier\n"
 # define MSSG_SHLVL_ERR "minishell: warning: shell level (%d) too high, resetting to 1\n"
 
@@ -67,6 +69,8 @@
 //Command errors
 # define CMD_NO_ACCESS 126
 # define CMD_NOT_FOUND 127
+# define IS_A_DIR 400
+# define NO_SUCH_FILE 401
 
 //File modes
 # define FILE_IN 0
@@ -235,7 +239,7 @@ t_io	*redirect_lstlast(t_io *lst);
 // Receives clean arguments in a t_cmd* linked list and manages execution
 /*/*---------------------------	EXECUTOR ---------------------------*/
 int		execute_commands(t_cmd *commands, t_env *envp, int *exit_s);
-void	new_pipe(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s);
+void	new_command(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s);
 int		exec_one_builtin(t_cmd *cmd, t_pipe *data, t_env *envp, int *exit_s);
 void	wait_childs(t_pipe *data, int *exit_s);
 void	execute_builtins(char **args, t_env *envp, int *exit, int exit_flag);

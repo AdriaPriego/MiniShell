@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/20 15:31:55 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 18:07:59 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,25 @@ int ft_chdir(char *direct, char ***env)
 	char	*tmp;
 
 	oldpwd = obtain_pwd(*env);
-	//ft_printf("AAAAAAAAAAAAAA");
 	if (chdir(direct) == -1)
 	{
 		ft_printf_fd(STDERR_FILENO, "minishell: cd: %s: ", direct);
-		perror(NULL);
-		return (1);
+		return (perror(NULL), 1);
 	}
 	pwd = getcwd(NULL, 0);
-	tmp = ft_strjoin("OLDPWD=", oldpwd);
-	*env = ft_add_env(tmp, *env);
-	free(tmp);
-	tmp = ft_strjoin("PWD=", pwd);
-	*env = ft_add_env(tmp, *env);
-	free(tmp);
-	free(pwd);
+	if (oldpwd)
+	{
+		tmp = ft_strjoin("OLDPWD=", oldpwd);
+		*env = ft_add_env(tmp, *env);
+		free(tmp);
+	}
+	if (pwd)
+	{
+		tmp = ft_strjoin("PWD=", pwd);
+		*env = ft_add_env(tmp, *env);
+		free(tmp);
+		free(pwd);
+	}
 	return (0);
 }
 

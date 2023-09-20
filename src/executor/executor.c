@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/18 14:33:31 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 21:41:59 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	wait_childs(t_pipe *data, int *exit_s)
 	}
 }
 
-void	new_pipe(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s)
+void	new_command(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s)
 {
 	int		exit_code;
 	char	*path;
@@ -50,11 +50,15 @@ void	new_pipe(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s)
 		execute_builtins(commands->args, envp, exit_s, FT_EXIT);
 	exit_code = search_path(commands->args[0], envp->env, &path);
 	if (exit_code == CMD_NOT_FOUND)
-		error_exit(data, exit_code, commands->args[0], MSSG_CMD_NOT_FOUND);
+		error_exit(data, CMD_NOT_FOUND, commands->args[0], MSSG_CMD_NOT_FOUND);
+	else if (exit_code == NO_SUCH_FILE)
+		error_exit(data, CMD_NOT_FOUND, commands->args[0], MSGG_NO_SUCH_FILE);
+	else if (exit_code == IS_A_DIR)
+		error_exit(data, CMD_NO_ACCESS, commands->args[0], MSGG_IS_A_DIR);
 	else if (exit_code != 0)
 		perror_exit(data, exit_code, commands->args[0]);
-	execve(path, commands->args, envp->env);
-	perror_exit(data, EXIT_FAILURE, "Execve");
+	if (execve(path, commands->args, envp->env) == -1)
+		perror_exit(data, EXIT_FAILURE, "Execve");
 }
 
 int	exec_one_builtin(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s)
@@ -92,7 +96,7 @@ int	execute_commands(t_cmd *commands, t_env *envp, int *exit_s)
 		else if (data.pid[i] == 0)
 		{
 			init_signals(CHILDS);
-			new_pipe(commands, &data, envp, exit_s);
+			new_command(commands, &data, envp, exit_s);
 		}
 		dup2(data.fd[0], STDIN_FILENO);
 		close_pipe(data.fd[0], data.fd[1]);
