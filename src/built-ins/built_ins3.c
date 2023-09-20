@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 17:18:44 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/18 18:43:30 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 19:36:02 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int	check_format_export(char *str)
 	i = 0;
 	while ((ft_isalpha(str[i]) == 1 || str[i] == '_') && str[i] != '\0')
 		i++;
+	if (ft_strncmp(&str[i], "+=", 2) == 0)
+		return (3);
 	if (str[i] == '\0')
 		return (2);
 	if (str[i] != '=')

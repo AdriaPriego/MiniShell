@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/18 18:15:57 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 15:58:15 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ char	*generate_entry(t_env *env)
 		entry = ft_strdup("Oooops where is home :( :");
 	else
 	{
-		if (find_home(env->env) != NULL && ft_strcmp(find_home(env->env), aux) == 0)
+		if (find_home(env->env) != NULL && ft_strcmp(find_home(env->env),
+				aux) == 0)
 			entry = ft_joincolors("~");
 		else if (ft_strcmp(aux, "/") == 0)
 			entry = ft_joincolors(aux);
@@ -107,5 +108,5 @@ void	generate_terminal(t_env *env)
 	}
 	ft_matrix_free(env->env);
 	ft_matrix_free(env->export);
-	exit (exit_s);
+	exit(exit_s);
 }

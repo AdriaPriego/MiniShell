@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/18 14:33:31 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 18:59:50 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	new_pipe(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s)
 	int		exit_code;
 	char	*path;
 
+	init_signals(CHILDS);
 	manage_redirections(commands, data, FT_EXIT);
 	if (is_builtin(commands))
 		execute_builtins(commands->args, envp, exit_s, FT_EXIT);
@@ -90,10 +91,7 @@ int	execute_commands(t_cmd *commands, t_env *envp, int *exit_s)
 		if (data.pid[i] == -1)
 			return (perror_return(&data, EXIT_FAILURE, "Fork"));
 		else if (data.pid[i] == 0)
-		{
-			init_signals(CHILDS);
 			new_pipe(commands, &data, envp, exit_s);
-		}
 		dup2(data.fd[0], STDIN_FILENO);
 		close_pipe(data.fd[0], data.fd[1]);
 		commands = commands->next;

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/20 15:31:55 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/20 18:12:51 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*obtain_oldpwd(char **env)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (env[i])
@@ -28,7 +28,7 @@ char	*obtain_oldpwd(char **env)
 
 char	*obtain_pwd(char **env)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (env[i])
@@ -40,14 +40,13 @@ char	*obtain_pwd(char **env)
 	return (NULL);
 }
 
-int ft_chdir(char *direct, char ***env)
+int	ft_chdir(char *direct, char ***env)
 {
 	char	*oldpwd;
 	char	*pwd;
 	char	*tmp;
 
 	oldpwd = obtain_pwd(*env);
-	//ft_printf("AAAAAAAAAAAAAA");
 	if (chdir(direct) == -1)
 	{
 		ft_printf_fd(STDERR_FILENO, "minishell: cd: %s: ", direct);
