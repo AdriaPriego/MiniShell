@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/20 18:26:34 by apriego-         ###   ########.fr        #
+#    Updated: 2023/09/21 11:59:16 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ NAME		=	minishell
 COMP		=	./libft/libft.a
 
 FILES_ENTRY	=	entry.c signals.c
-FILES_BUILT	=	built_ins.c built_ins2.c built_ins3.c
+FILES_BUILT	=	built_ins.c built_ins2.c built_ins3.c utils_pwd.c utils_export.c
 FILES_GEN	=	main.c utils.c utils2.c utils3.c utils4.c
 FILES_EXPAN	=	expansor.c expansor_utils.c expansor_utils2.c expand_files.c expand_files_utils.c expansor_utils_redirect.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c

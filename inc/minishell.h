@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/20 18:59:27 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/21 12:06:25 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,16 @@ int					check_format_export(char *str);
 char				**ft_add_env(char *str, char **env);
 char				**ft_add_export(char *str, char **export);
 t_env				*ft_add_env_export(char *str, t_env *env);
+char				**ft_join_env(char *str, char **env);
+char				**ft_join_export(char *str, char **export);
+char				*ft_strjoin_env(char *env, char *str);
+char				*ft_strjoin_export(char *export, char *str);
+char				*ft_strdup_join(char *str);
+char				*ft_strdup_export(char *envp);
+int					ft_chdir(char *direct, char ***env);
+char				*obtain_pwd(char **env);
+char				*obtain_oldpwd(char **env);
+t_env				*ft_join_env_export(char *str, t_env *env);
 
 /*-----------------------------	HEREDOC --------------------------------*/
 int					heredoc(t_cmd *commands);
