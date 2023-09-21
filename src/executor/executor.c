@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/21 02:25:23 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/21 12:00:13 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ int	exec_one_builtin(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s)
 	if (manage_redirections(commands, data, FT_RETURN) == 1)
 	{
 		*exit_s = 1;
+		dup2(data->dup_stdin, STDIN_FILENO);
+		dup2(data->dup_stdout, STDOUT_FILENO);
 		return (0);
 	}
 	free(data->pid);

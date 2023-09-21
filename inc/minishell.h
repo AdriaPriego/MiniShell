@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/20 21:40:38 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/21 11:39:31 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,7 +250,7 @@ int		try_local_path(char *cmd, char **path);
 int		try_absolute_path(char *cmd, char **path);
 int		check_access(char *file, int mode);
 void	check_files(t_pipe *data, t_io *temp);
-int		dup_custom_redirections(t_pipe *data, t_io *temp, int out);
+int		dup_custom_redirections(t_pipe *data, t_io *temp);
 int		manage_redirections(t_cmd *commands, t_pipe *data, int out);
 void	unlink_heredocs(t_io *redirection);
 int		init_data(t_pipe *data, t_cmd *commands);

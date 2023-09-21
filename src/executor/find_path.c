@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 21:45:52 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/21 02:27:02 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/21 11:57:50 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	directory_errors(char *cmd)
 {
-	int	i;
-	struct stat file_info;
+	int			i;
+	struct stat	file_info;
 
-    lstat(cmd, &file_info);
+	lstat(cmd, &file_info);
 	i = 0;
 	while (cmd[i])
 	{
@@ -29,7 +29,7 @@ int	directory_errors(char *cmd)
 		}
 		i++;
 	}
-    if (S_ISDIR(file_info.st_mode))
+	if (S_ISDIR(file_info.st_mode))
 		return (CMD_NOT_FOUND);
 	return (0);
 }
@@ -56,7 +56,7 @@ int	try_paths(char **full_path, char *cmd, char **path)
 			else
 				return (CMD_NO_ACCESS);
 		}
-		free (*path);
+		free(*path);
 	}
 	return (CMD_NOT_FOUND);
 }
@@ -73,8 +73,8 @@ int	try_local_path(char *cmd, char **path)
 	if (!temp2)
 		return (free(temp), 1);
 	*path = ft_strjoin(temp2, cmd);
-	free (temp);
-	free (temp2);
+	free(temp);
+	free(temp2);
 	if (!*path)
 		return (1);
 	if (access(*path, F_OK) == 0)
