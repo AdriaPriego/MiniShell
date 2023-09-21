@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   entry.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:13:18 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/20 15:58:15 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/21 20:43:26 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*generate_entry(t_env *env)
 		if (!entry)
 			return (free(aux), NULL);
 	}
-	str = readline("Minishell: ");
+	str = readline(entry);
 	return (free(aux), free(entry), str);
 }
 

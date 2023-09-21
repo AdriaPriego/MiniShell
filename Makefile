@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
+#    By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/20 18:26:34 by apriego-         ###   ########.fr        #
+#    Updated: 2023/09/21 20:44:32 by fbosch           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ NAME		=	minishell
 COMP		=	./libft/libft.a
 
 FILES_ENTRY	=	entry.c signals.c
-FILES_BUILT	=	built_ins.c built_ins2.c built_ins3.c
+FILES_BUILT	=	built_ins.c built_ins2.c built_ins3.c utils_pwd.c utils_export.c
 FILES_GEN	=	main.c utils.c utils2.c utils3.c utils4.c
 FILES_EXPAN	=	expansor.c expansor_utils.c expansor_utils2.c expand_files.c expand_files_utils.c expansor_utils_redirect.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
@@ -89,7 +89,7 @@ all : temp librarys $(NAME)
 
 librarys :
 	@$(MAKE) -C $(LIBFT_ROOT) --no-print-directory
-#@$(MAKE) rdline --no-print-directory
+	@$(MAKE) rdline --no-print-directory
 
 $(NAME) : $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_EXEC) $(OBJ_HERE)
 	@$(CC) $(CFLAGS) $(OBJ) $(OBJ_BUILT) $(OBJ_ENTRY) $(OBJ_LEXER) $(OBJ_PARSER) $(OBJ_EXPAN) $(OBJ_HERE) $(OBJ_EXEC) $(LIB_ADD_DIR) $(LIB_SEARCH) $(LIB_A) -o $@
@@ -100,7 +100,6 @@ rdline :
 	@cd ./readline/ &> /dev/null && ./configure &> /dev/null
 	@make -C ./readline/ &> /dev/null
 	@echo "${GREEN}Readline Compiled${NC}"
-
 
 $(DIR_OBJ)%.o: %.c Makefile $(LIB_A) $(HEADER)
 	@mkdir -p $(dir $@)

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 17:18:44 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/20 19:36:02 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/21 13:20:37 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_generate_new_env(char **command, char **env, int j, int i)
 int	ft_test_options_echo(char **command, int *i)
 {
 	int	j;
-	int check;
+	int	check;
 
 	check = 0;
 	while (command[*i] && command[*i][0] == '-')
@@ -74,11 +74,33 @@ int	check_format_export(char *str)
 	i = 0;
 	while ((ft_isalpha(str[i]) == 1 || str[i] == '_') && str[i] != '\0')
 		i++;
-	if (ft_strncmp(&str[i], "+=", 2) == 0)
+	if (ft_strncmp(&str[i], "+=", 2) == 0 && i != 0)
 		return (3);
 	if (str[i] == '\0')
 		return (2);
-	if (str[i] != '=')
+	if (str[i] != '=' || i == 0)
 		return (1);
 	return (0);
+}
+
+t_env	*ft_join_env_export(char *str, t_env *env)
+{
+	int	i;
+	int	flag;
+
+	i = 0;
+	flag = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '+' || flag == 1)
+		{
+			flag = 1;
+			str[i] = str[i + 1];
+		}
+		i++;
+	}
+	str[i] = '\0';
+	env->env = ft_join_env(str, env->env);
+	env->export = ft_join_export(str, env->export);
+	return (env);
 }
