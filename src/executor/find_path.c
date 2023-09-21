@@ -3,26 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 21:45:52 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/20 21:43:00 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/21 02:27:02 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_isdir(char *cmd)
+int	directory_errors(char *cmd)
 {
 	int	i;
+	struct stat file_info;
 
+    lstat(cmd, &file_info);
 	i = 0;
 	while (cmd[i])
 	{
-		if (cmd[i] == '/')
-			return (1);
+		if (cmd[i] == '/' && !S_ISREG(file_info.st_mode))
+		{
+			if (access(cmd, F_OK) == 0)
+				return (IS_A_DIR);
+			return (NO_SUCH_FILE);
+		}
 		i++;
 	}
+    if (S_ISDIR(file_info.st_mode))
+		return (CMD_NOT_FOUND);
 	return (0);
 }
 
@@ -102,6 +110,9 @@ int	search_path(char *cmd, char **envp, char **path)
 
 	if (!*cmd)
 		return (CMD_NOT_FOUND);
+	exit_status = directory_errors(cmd);
+	if (exit_status != 0)
+		return (exit_status);
 	i = 0;
 	while (ft_strnstr(envp[i], "PATH", 4) == NULL && envp[i])
 		i++;
@@ -113,12 +124,6 @@ int	search_path(char *cmd, char **envp, char **path)
 		exit_status = try_local_path(cmd, path);
 	if (exit_status == CMD_NOT_FOUND)
 		exit_status = try_absolute_path(cmd, path);
-	if (exit_status == CMD_NOT_FOUND && ft_isdir(cmd))
-	{
-		exit_status = NO_SUCH_FILE;
-		if (access(cmd, F_OK) == 0)
-			exit_status = IS_A_DIR;
-	}
 	ft_free_malloc_array(full_path, ft_array_len(full_path));
 	return (exit_status);
 }

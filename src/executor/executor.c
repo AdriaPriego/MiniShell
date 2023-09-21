@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42barcelona.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/20 21:41:59 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/21 02:25:23 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	new_command(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s)
 {
 	int		exit_code;
 	char	*path;
-
+	
 	manage_redirections(commands, data, FT_EXIT);
 	if (is_builtin(commands))
 		execute_builtins(commands->args, envp, exit_s, FT_EXIT);
