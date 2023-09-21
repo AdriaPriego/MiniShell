@@ -45,7 +45,8 @@ char	*generate_entry(t_env *env)
 		entry = ft_strdup("Oooops where is home :( :");
 	else
 	{
-		if (find_home(env->env) != NULL && ft_strcmp(find_home(env->env), aux) == 0)
+		if (find_home(env->env) != NULL && ft_strcmp(find_home(env->env),
+				aux) == 0)
 			entry = ft_joincolors("~");
 		else if (ft_strcmp(aux, "/") == 0)
 			entry = ft_joincolors(aux);
@@ -107,5 +108,5 @@ void	generate_terminal(t_env *env)
 	}
 	ft_matrix_free(env->env);
 	ft_matrix_free(env->export);
-	exit (exit_s);
+	exit(exit_s);
 }

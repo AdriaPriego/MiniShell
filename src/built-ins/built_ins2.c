@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 17:47:17 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/20 11:01:16 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/21 11:59:50 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,7 @@ int	ft_export(char **args, t_env *env)
 	int	i;
 	int	exit_s;
 
-	i = 1;
-	exit_s = 0;
+	(1 && (i = 1) && (exit_s = 0));
 	if (!args[1])
 		ft_print_export(env->export);
 	else
@@ -92,6 +91,8 @@ int	ft_export(char **args, t_env *env)
 		{
 			if (check_format_export(args[i]) == 0)
 				env = ft_add_env_export(args[i], env);
+			else if (check_format_export(args[i]) == 3)
+				env = ft_join_env_export(args[i], env);
 			else if (check_format_export(args[i]) == 2)
 				env->export = ft_add_export(args[i], env->export);
 			else
@@ -107,28 +108,29 @@ int	ft_export(char **args, t_env *env)
 
 void	ft_exit(char **args, int *exit_s)
 {
-	if (args[1])
+	if (args[1] && ft_strcmp(args[1], "--") == 0)
 	{
-		if (ft_test_int(args[1]) != 0)
-		{
-			// ft_printf("exit\n");
-			ft_printf_fd(STDERR_FILENO, 
-				"minishell: exit: %s: numeric argument required\n", args[1]);
-			exit(255);
-		}
-		else
-		{
-			if (ft_array_len(args) > 2)
-			{
-				ft_printf_fd(STDERR_FILENO,
-					"minishell: exit: too many arguments\n");
-				*exit_s = 1;
-				return ;
-			}
-			// ft_printf("exit\n");
-			exit(ft_atoi(args[1]));
-		}
+		ft_printf("exit\n");
+		exit(*exit_s);
 	}
-	// ft_printf("exit\n");
+	else if (args[1] && ft_test_int(args[1]) != 0)
+	{
+		ft_printf("exit\n");
+		ft_printf_fd(STDERR_FILENO, MSSG_EXIT_NUM_ERR, args[1]);
+		exit(255);
+	}
+	else if (args[1])
+	{
+		if (ft_array_len(args) > 2)
+		{
+			ft_printf_fd(STDERR_FILENO,
+				"minishell: exit: too many arguments\n");
+			*exit_s = 1;
+			return ;
+		}
+		ft_printf("exit\n");
+		exit(ft_atoi(args[1]));
+	}
+	ft_printf("exit\n");
 	exit(*exit_s);
 }

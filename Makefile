@@ -32,9 +32,9 @@ NAME		=	minishell
 COMP		=	./libft/libft.a
 
 FILES_ENTRY	=	entry.c signals.c
-FILES_BUILT	=	built_ins.c built_ins2.c built_ins3.c
-FILES_GEN	=	main.c utils.c utils2.c utils3.c
-FILES_EXPAN	=	expansor.c expansor_utils.c expansor_utils2.c expand_files.c expand_files_utils.c 
+FILES_BUILT	=	built_ins.c built_ins2.c built_ins3.c utils_pwd.c utils_export.c
+FILES_GEN	=	main.c utils.c utils2.c utils3.c utils4.c
+FILES_EXPAN	=	expansor.c expansor_utils.c expansor_utils2.c expand_files.c expand_files_utils.c expansor_utils_redirect.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 FILES_PARSE	=	parser.c parser_syntax.c cmd_lists.c redirect_lists.c
 FILES_EXEC	=	executor.c executor_utils.c find_path.c redirections.c\

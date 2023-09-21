@@ -44,7 +44,8 @@ void	new_command(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s)
 {
 	int		exit_code;
 	char	*path;
-	
+
+	init_signals(CHILDS);
 	manage_redirections(commands, data, FT_EXIT);
 	if (is_builtin(commands))
 		execute_builtins(commands->args, envp, exit_s, FT_EXIT);
@@ -96,10 +97,7 @@ int	execute_commands(t_cmd *commands, t_env *envp, int *exit_s)
 		if (data.pid[i] == -1)
 			return (perror_return(&data, EXIT_FAILURE, "Fork"));
 		else if (data.pid[i] == 0)
-		{
-			init_signals(CHILDS);
-			new_command(commands, &data, envp, exit_s);
-		}
+			new_pipe(commands, &data, envp, exit_s);
 		dup2(data.fd[0], STDIN_FILENO);
 		close_pipe(data.fd[0], data.fd[1]);
 		commands = commands->next;
