@@ -6,7 +6,7 @@
 /*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 01:12:21 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/15 13:20:33 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/21 11:58:36 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,12 @@ void	close_pipe(int in, int out)
 		close(out);
 }
 
-int	dup_custom_redirections(t_pipe *data, t_io *temp, int out)
+int	dup_custom_redirections(t_pipe *data, t_io *temp)
 {
 	if (temp->type == IN || temp->type == HERE_DOC)
 	{
 		data->fd_in = open(temp->file, O_RDONLY);
-		if (data->fd_in < 0 && out == FT_EXIT)
-			return (1);
-		else if (data->fd_in < 0 && out == FT_RETURN)
+		if (data->fd_in < 0)
 			return (1);
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
@@ -49,9 +47,7 @@ int	dup_custom_redirections(t_pipe *data, t_io *temp, int out)
 		else
 			data->fd_out = open(temp->file, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
-		if (data->fd_out < 0 && out == FT_EXIT)
-			return (1);
-		if (data->fd_out < 0 && out == FT_RETURN)
+		if (data->fd_out < 0)
 			return (1);
 		dup2(data->fd_out, STDOUT_FILENO);
 		close(data->fd_out);
@@ -69,7 +65,7 @@ int	manage_redirections(t_cmd *commands, t_pipe *data, int out)
 	temp = commands->redirect;
 	while (temp)
 	{
-		if (dup_custom_redirections(data, temp, out) == 1)
+		if (dup_custom_redirections(data, temp) == 1)
 		{
 			unlink_heredocs(commands->redirect);
 			if (out == FT_RETURN)

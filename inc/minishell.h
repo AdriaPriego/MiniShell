@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
+/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/21 12:06:25 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/21 11:39:31 by fbosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@
 # define MSSG_MEMORY_ERROR "Memory error, please free space and attempt again\n"
 # define MSSG_EXECUTOR_ERROR "Error during command execution\n"
 # define MSSG_CMD_NOT_FOUND "command not found"
+# define MSGG_NO_SUCH_FILE "No such file or directory"
+# define MSGG_IS_A_DIR "is a directory"
 # define MSSG_EXPORT_ERR "minishell: export: `%s': not a valid identifier\n"
 # define MSSG_SHLVL_ERR "minishell: warning: shell level (%d) too high, \
 resetting to 1\n"
@@ -70,6 +72,8 @@ resetting to 1\n"
 // Command errors
 # define CMD_NO_ACCESS 126
 # define CMD_NOT_FOUND 127
+# define IS_A_DIR 400
+# define NO_SUCH_FILE 401
 
 // File modes
 # define FILE_IN 0
@@ -257,31 +261,28 @@ t_io				*redirect_lstlast(t_io *lst);
 
 // Receives clean arguments in a t_cmd* linked list and manages execution
 /*/*---------------------------	EXECUTOR ---------------------------*/
-int					execute_commands(t_cmd *commands, t_env *envp, int *exit_s);
-void				new_pipe(t_cmd *commands, t_pipe *data, t_env *envp,
-						int *exit_s);
-int					exec_one_builtin(t_cmd *cmd, t_pipe *data, t_env *envp,
-						int *exit_s);
-void				wait_childs(t_pipe *data, int *exit_s);
-void				execute_builtins(char **args, t_env *envp, int *exit,
-						int exit_flag);
-int					is_builtin(t_cmd *commands);
-int					search_path(char *cmd, char **envp, char **path);
-int					try_paths(char **full_path, char *cmd, char **path);
-int					try_local_path(char *cmd, char **path);
-int					try_absolute_path(char *cmd, char **path);
-int					check_access(char *file, int mode);
-void				check_files(t_pipe *data, t_io *temp);
-int					dup_custom_redirections(t_pipe *data, t_io *temp, int out);
-int					manage_redirections(t_cmd *commands, t_pipe *data, int out);
-void				unlink_heredocs(t_io *redirection);
-int					init_data(t_pipe *data, t_cmd *commands);
-void				dup_original_stds(int *in, int *out);
-void				close_pipe(int in, int out);
-void				perror_exit(t_pipe *data, int exit_code, char *error);
-void				error_exit(t_pipe *data, int exit_code, char *name,
-						char *error);
-int					perror_return(t_pipe *data, int exit_code, char *error);
+
+int		execute_commands(t_cmd *commands, t_env *envp, int *exit_s);
+void	new_command(t_cmd *commands, t_pipe *data, t_env *envp, int *exit_s);
+int		exec_one_builtin(t_cmd *cmd, t_pipe *data, t_env *envp, int *exit_s);
+void	wait_childs(t_pipe *data, int *exit_s);
+void	execute_builtins(char **args, t_env *envp, int *exit, int exit_flag);
+int		is_builtin(t_cmd *commands);
+int		search_path(char *cmd, char **envp, char **path);
+int		try_paths(char **full_path, char *cmd, char **path);
+int		try_local_path(char *cmd, char **path);
+int		try_absolute_path(char *cmd, char **path);
+int		check_access(char *file, int mode);
+void	check_files(t_pipe *data, t_io *temp);
+int		dup_custom_redirections(t_pipe *data, t_io *temp);
+int		manage_redirections(t_cmd *commands, t_pipe *data, int out);
+void	unlink_heredocs(t_io *redirection);
+int		init_data(t_pipe *data, t_cmd *commands);
+void	dup_original_stds(int *in, int *out);
+void	close_pipe(int in, int out);
+void	perror_exit(t_pipe *data, int exit_code, char *error);
+void	error_exit(t_pipe *data, int exit_code, char *name, char *error);
+int		perror_return(t_pipe *data, int exit_code, char *error);
 
 // Handle signals
 /*---------------------------  	SIGNALS   	------------------------------*/
