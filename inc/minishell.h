@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/21 11:39:31 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/21 12:23:43 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ typedef enum s_redirect_type
 	HERE_DOC,
 	OUT_TRUNC,
 	OUT_APPEND,
-}					t_type;
+}		t_type;
 
 typedef enum s_token
 {
@@ -102,13 +102,13 @@ typedef enum s_token
 	GREAT_GREAT,
 	LESS,
 	LESS_LESS
-}					t_token;
+}		t_token;
 
 typedef struct s_quote
 {
-	int				two;
-	int				one;
-}					t_quote;
+	int	two;
+	int	one;
+}		t_quote;
 
 typedef struct s_lexer
 {
@@ -116,14 +116,14 @@ typedef struct s_lexer
 	t_token			token;
 	struct s_lexer	*prev;
 	struct s_lexer	*next;
-}					t_lex;
+}		t_lex;
 
 typedef struct s_in_out
 {
 	t_type			type;
 	char			*file;
 	struct s_in_out	*next;
-}					t_io;
+}		t_io;
 
 typedef struct s_cmd
 {
@@ -131,133 +131,128 @@ typedef struct s_cmd
 	t_io			*redirect;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
-}					t_cmd;
+}		t_cmd;
 
 typedef struct s_pipe
 {
-	int				n_cmds;
-	int				fd_in;
-	int				fd_out;
-	int				fd[2];
-	int				dup_stdin;
-	int				dup_stdout;
-	pid_t			*pid;
-	char			*path;
-}					t_pipe;
+	int		n_cmds;
+	int		fd_in;
+	int		fd_out;
+	int		fd[2];
+	int		dup_stdin;
+	int		dup_stdout;
+	pid_t	*pid;
+	char	*path;
+}		t_pipe;
 
 typedef struct s_env
 {
-	char			**env;
-	char			**export;
-}					t_env;
+	char	**env;
+	char	**export;
+}		t_env;
 
 /*==============================  FUNCTIONS  =============================*/
 
 // Holds minishell loop: MiniShell$>....
 /*------------------------------	ENTRY	-------------------------------*/
-void				generate_terminal(t_env *env);
-int					string_to_command(char *str, t_cmd **cmd, t_env *env,
-						int *exit_s);
-char				*generate_entry(t_env *env);
-char				*ft_joincolors(char *array);
+void	generate_terminal(t_env *env);
+int		string_to_command(char *str, t_cmd **cmd, t_env *env, int *exit_s);
+char	*generate_entry(t_env *env);
+char	*ft_joincolors(char *array);
 
 // Builtint shell commands
 /*----------------------------		BUILTINS	-----------------------------*/
-int					ft_export(char **command, t_env *env);
-int					ft_unset(char **command, t_env *env);
-int					ft_echo(char **command);
-int					ft_pwd(void);
-int					ft_env(char **env);
-int					ft_cd(char **command, char ***env);
-void				ft_exit(char **args, int *exit_s);
-void				ft_generate_new_env(char **command, char **env, int j,
-						int i);
-int					ft_test_options_echo(char **command, int *i);
-int					check_format_export(char *str);
-char				**ft_add_env(char *str, char **env);
-char				**ft_add_export(char *str, char **export);
-t_env				*ft_add_env_export(char *str, t_env *env);
-char				**ft_join_env(char *str, char **env);
-char				**ft_join_export(char *str, char **export);
-char				*ft_strjoin_env(char *env, char *str);
-char				*ft_strjoin_export(char *export, char *str);
-char				*ft_strdup_join(char *str);
-char				*ft_strdup_export(char *envp);
-int					ft_chdir(char *direct, char ***env);
-char				*obtain_pwd(char **env);
-char				*obtain_oldpwd(char **env);
-t_env				*ft_join_env_export(char *str, t_env *env);
+int		ft_export(char **command, t_env *env);
+int		ft_unset(char **command, t_env *env);
+int		ft_echo(char **command);
+int		ft_pwd(void);
+int		ft_env(char **env);
+int		ft_cd(char **command, char ***env);
+void	ft_exit(char **args, int *exit_s);
+void	ft_generate_new_env(char **command, char **env, int j, int i);
+int		ft_test_options_echo(char **command, int *i);
+int		check_format_export(char *str);
+char	**ft_add_env(char *str, char **env);
+char	**ft_add_export(char *str, char **export);
+t_env	*ft_add_env_export(char *str, t_env *env);
+char	**ft_join_env(char *str, char **env);
+char	**ft_join_export(char *str, char **export);
+char	*ft_strjoin_env(char *env, char *str);
+char	*ft_strjoin_export(char *export, char *str);
+char	*ft_strdup_join(char *str);
+char	*ft_strdup_export(char *envp);
+int		ft_chdir(char *direct, char ***env);
+char	*obtain_pwd(char **env);
+char	*obtain_oldpwd(char **env);
+t_env	*ft_join_env_export(char *str, t_env *env);
 
 /*-----------------------------	HEREDOC --------------------------------*/
-int					heredoc(t_cmd *commands);
+int		heredoc(t_cmd *commands);
 
 // Converts input string to tokens for minishell to interpret
 /*-----------------------------		TOKENIZER	----------------------------*/
-int					tokenizer(char *str, t_lex **lexer);
-int					create_word(char *str, int i, t_lex *new);
-int					create_token(char *str, int i, t_lex *lexer);
-int					ft_isspace(int c);
-int					ft_isquote(int c);
-int					ft_isreserved(int c);
-void				print_tokens(t_lex *lexer, char *str);
-t_lex				*lexer_lstnew(void);
-void				lexer_lstadd_back(t_lex **lst, t_lex *new);
-void				lexer_lstclear(t_lex **lst);
-int					lexer_lstsize(t_lex *lst);
-t_lex				*lexer_lstlast(t_lex *lst);
+int		tokenizer(char *str, t_lex **lexer);
+int		create_word(char *str, int i, t_lex *new);
+int		create_token(char *str, int i, t_lex *lexer);
+int		ft_isspace(int c);
+int		ft_isquote(int c);
+int		ft_isreserved(int c);
+void	print_tokens(t_lex *lexer, char *str);
+t_lex	*lexer_lstnew(void);
+void	lexer_lstadd_back(t_lex **lst, t_lex *new);
+void	lexer_lstclear(t_lex **lst);
+int		lexer_lstsize(t_lex *lst);
+t_lex	*lexer_lstlast(t_lex *lst);
 
 // Reads from lexer structure and expands variables
 /*------------------------------  EXPANSOR  ------------------------------*/
 
-int					expansor(t_cmd *def, char **env, int status);
-char				*expand(char *str, char **env);
-int					ft_omit_var(char *var);
-int					calc_len_expan(char *str, char **env, int status);
-char				*obtain_var(char *str);
-void				init_quote(t_quote *quote);
-void				check_expand(char *word, int exit, char *str, char **env);
-void				find_quote(t_quote *quote, int i, char *str);
-int					expansor_files(t_cmd *commands, char **env, int status);
-int					expansor_files_aux(t_cmd *commands, char **env, int i);
-int					expand_file(char *path, char **env, int exit);
-int					calc_len_file(char *path);
-int					fill_aux(char *path, char **file);
-int					expand_vars_file(char **file, char **aux, char **env,
-						int exit);
-int					rewrite_file(char *path, char **aux);
-int					calc_len_value_expan(char *str, char **env, int status,
-						int *len);
-void				expand_var(char *word, char *value, char *str, int len);
-void				check_expand_file(char *word, int exit, char *str,
-						char **env);
-int					calc_len_expan_file(char *str, char **env, int status);
-char				*create_value(char *word, int i, char **env, int exit);
-int					check_tilde(char *w, int i);
-int					check_dollar(char *word, int i);
-int					ft_change_redirection(t_io *redirect, char *str);
-int					expand_redirections(t_io *redir, char **env, int ex_s);
+int		expansor(t_cmd *def, char **env, int status);
+char	*expand(char *str, char **env);
+int		ft_omit_var(char *var);
+int		calc_len_expan(char *str, char **env, int status);
+char	*obtain_var(char *str);
+void	init_quote(t_quote *quote);
+void	check_expand(char *word, int exit, char *str, char **env);
+void	find_quote(t_quote *quote, int i, char *str);
+int		expansor_files(t_cmd *commands, char **env, int status);
+int		expansor_files_aux(t_cmd *commands, char **env, int i);
+int		expand_file(char *path, char **env, int exit);
+int		calc_len_file(char *path);
+int		fill_aux(char *path, char **file);
+int		expand_vars_file(char **file, char **aux, char **env, int exit);
+int		rewrite_file(char *path, char **aux);
+int		calc_len_value_expan(char *str, char **env, int status, int *len);
+void	expand_var(char *word, char *value, char *str, int len);
+void	check_expand_file(char *word, int exit, char *str, char **env);
+int		calc_len_expan_file(char *str, char **env, int status);
+char	*create_value(char *word, int i, char **env, int exit);
+int		check_tilde(char *w, int i);
+int		check_dollar(char *word, int i);
+int		ft_change_redirection(t_io *redirect, char *str);
+int		expand_redirections(t_io *redir, char **env, int ex_s);
 
 // Converts token list (lexer) into a simple arguments list
 /*---------------------------- 	PARSER	-------------------------------*/
-int					parser(t_cmd **commands, t_lex **lexer, int *exit_s);
-int					create_simple_command(t_lex **head, t_cmd *cmd);
-int					fill_command(t_lex **head, t_io **redirect, t_cmd *cmd);
-int					add_redirection(t_io **redirect, t_lex **head);
-int					count_arguments(t_lex *lexer);
-void				parser_error(int error);
-int					check_duplicate_tokens(t_lex *lexer);
-int					check_pipe_error(t_lex *lexer);
-int					check_syntax_error(t_lex *lexer, int *exit_s);
-t_cmd				*parser_lstnew(void);
-void				parser_lstadd_back(t_cmd **lst, t_cmd *new);
-void				parser_lstclear(t_cmd **lst);
-int					parser_lstsize(t_cmd *lst);
-t_cmd				*parser_lstlast(t_cmd *lst);
-t_io				*redirect_lstnew(void);
-void				redirect_lstadd_back(t_io **lst, t_io *new);
-void				redirect_lstclear(t_io **lst);
-int					redirect_lstsize(t_io *lst);
-t_io				*redirect_lstlast(t_io *lst);
+int		parser(t_cmd **commands, t_lex **lexer, int *exit_s);
+int		create_simple_command(t_lex **head, t_cmd *cmd);
+int		fill_command(t_lex **head, t_io **redirect, t_cmd *cmd);
+int		add_redirection(t_io **redirect, t_lex **head);
+int		count_arguments(t_lex *lexer);
+void	parser_error(int error);
+int		check_duplicate_tokens(t_lex *lexer);
+int		check_pipe_error(t_lex *lexer);
+int		check_syntax_error(t_lex *lexer, int *exit_s);
+t_cmd	*parser_lstnew(void);
+void	parser_lstadd_back(t_cmd **lst, t_cmd *new);
+void	parser_lstclear(t_cmd **lst);
+int		parser_lstsize(t_cmd *lst);
+t_cmd	*parser_lstlast(t_cmd *lst);
+t_io	*redirect_lstnew(void);
+void	redirect_lstadd_back(t_io **lst, t_io *new);
+void	redirect_lstclear(t_io **lst);
+int		redirect_lstsize(t_io *lst);
+t_io	*redirect_lstlast(t_io *lst);
 
 // Receives clean arguments in a t_cmd* linked list and manages execution
 /*/*---------------------------	EXECUTOR ---------------------------*/
@@ -287,24 +282,24 @@ int		perror_return(t_pipe *data, int exit_code, char *error);
 // Handle signals
 /*---------------------------  	SIGNALS   	------------------------------*/
 
-int					init_signals(int mode);
+int		init_signals(int mode);
 
 // General utility functions
 /*--------------------------      UTILS     -------------------------------*/
-char				*find_home(char **env);
-int					valid_command(char *command);
-int					ft_strcmp(const char *s1, const char *s2);
-int					ft_strlen_chr(char *str, char c);
-void				ft_print_matrix(char **matrix, int i);
-t_env				*ft_dup_matrix_env(char **envp);
-void				ft_matrix_free(char **matrix);
-void				ft_print_export(char **matrix);
-int					contain_env(char **env, char *str);
-int					ft_strcmp_env(char *env, char *str);
-char				**ft_free_matrix(char **matrix, int j);
-char				*ft_strdup_export(char *envp);
-int					ft_strcmp_export(char *export, char *str);
-int					ft_strcmp_nocase(char *s1, char *s2);
-char				*ft_correct_shlvl(char *env);
+char	*find_home(char **env);
+int		valid_command(char *command);
+int		ft_strcmp(const char *s1, const char *s2);
+int		ft_strlen_chr(char *str, char c);
+void	ft_print_matrix(char **matrix, int i);
+t_env	*ft_dup_matrix_env(char **envp);
+void	ft_matrix_free(char **matrix);
+void	ft_print_export(char **matrix);
+int		contain_env(char **env, char *str);
+int		ft_strcmp_env(char *env, char *str);
+char	**ft_free_matrix(char **matrix, int j);
+char	*ft_strdup_export(char *envp);
+int		ft_strcmp_export(char *export, char *str);
+int		ft_strcmp_nocase(char *s1, char *s2);
+char	*ft_correct_shlvl(char *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 11:56:55 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/21 11:58:02 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/21 12:21:36 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,21 @@ int	ft_chdir(char *direct, char ***env)
 	if (chdir(direct) == -1)
 	{
 		ft_printf_fd(STDERR_FILENO, "minishell: cd: %s: ", direct);
-		perror(NULL);
-		return (1);
+		return (perror(NULL), 1);
 	}
 	pwd = getcwd(NULL, 0);
-	tmp = ft_strjoin("OLDPWD=", oldpwd);
-	*env = ft_add_env(tmp, *env);
-	free(tmp);
-	tmp = ft_strjoin("PWD=", pwd);
-	*env = ft_add_env(tmp, *env);
-	free(tmp);
-	free(pwd);
+	if (oldpwd)
+	{
+		tmp = ft_strjoin("OLDPWD=", oldpwd);
+		*env = ft_add_env(tmp, *env);
+		free(tmp);
+	}
+	if (pwd)
+	{
+		tmp = ft_strjoin("PWD=", pwd);
+		*env = ft_add_env(tmp, *env);
+		free(tmp);
+		free(pwd);
+	}
 	return (0);
 }

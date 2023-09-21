@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbosch <fbosch@student.42.fr>              +#+  +:+       +#+        */
+/*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 21:45:12 by fbosch            #+#    #+#             */
-/*   Updated: 2023/09/21 12:00:13 by fbosch           ###   ########.fr       */
+/*   Updated: 2023/09/21 12:18:11 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	execute_commands(t_cmd *commands, t_env *envp, int *exit_s)
 		if (data.pid[i] == -1)
 			return (perror_return(&data, EXIT_FAILURE, "Fork"));
 		else if (data.pid[i] == 0)
-			new_pipe(commands, &data, envp, exit_s);
+			new_command(commands, &data, envp, exit_s);
 		dup2(data.fd[0], STDIN_FILENO);
 		close_pipe(data.fd[0], data.fd[1]);
 		commands = commands->next;
