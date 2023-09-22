@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:02:30 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/21 12:19:01 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/22 11:10:57 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 int	ft_cd(char **commands, char ***env)
 {
-	int		i;
-	char	*str;
-
 	if (!commands[1])
 		return (ft_chdir(find_home(*env), env));
 	else if (!*commands[1])
@@ -30,14 +27,7 @@ int	ft_cd(char **commands, char ***env)
 	else if (ft_strcmp(commands[1], "~") == 0)
 		return (ft_chdir(find_home(*env), env));
 	else if (ft_strcmp(commands[1], "-") == 0)
-	{
-		str = ft_strdup(obtain_oldpwd(*env));
-		i = ft_chdir(obtain_oldpwd(*env), env);
-		if (i == 0)
-			ft_printf("%s\n", str);
-		free(str);
-		return (i);
-	}
+		return (do_oldpwd(env));
 	return (ft_chdir(commands[1], env));
 }
 

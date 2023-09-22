@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 13:55:12 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/21 12:23:43 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/22 11:20:08 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,7 @@ int		ft_chdir(char *direct, char ***env);
 char	*obtain_pwd(char **env);
 char	*obtain_oldpwd(char **env);
 t_env	*ft_join_env_export(char *str, t_env *env);
+int		do_oldpwd(char ***env);
 
 /*-----------------------------	HEREDOC --------------------------------*/
 int		heredoc(t_cmd *commands);
@@ -267,8 +268,7 @@ int		search_path(char *cmd, char **envp, char **path);
 int		try_paths(char **full_path, char *cmd, char **path);
 int		try_local_path(char *cmd, char **path);
 int		try_absolute_path(char *cmd, char **path);
-int		check_access(char *file, int mode);
-void	check_files(t_pipe *data, t_io *temp);
+int		search_extra_path(char *cmd, char *envp, char **path, int exit_status);
 int		dup_custom_redirections(t_pipe *data, t_io *temp);
 int		manage_redirections(t_cmd *commands, t_pipe *data, int out);
 void	unlink_heredocs(t_io *redirection);

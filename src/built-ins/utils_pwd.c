@@ -6,7 +6,7 @@
 /*   By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 11:56:55 by apriego-          #+#    #+#             */
-/*   Updated: 2023/09/21 12:21:36 by apriego-         ###   ########.fr       */
+/*   Updated: 2023/09/22 11:11:07 by apriego-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,23 @@ int	ft_chdir(char *direct, char ***env)
 		free(pwd);
 	}
 	return (0);
+}
+
+int	do_oldpwd(char ***env)
+{
+	int		exit_s;
+	char	*str;
+
+	str = obtain_oldpwd(*env);
+	if (!str)
+	{
+		ft_printf_fd(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
+		return (1);
+	}
+	exit_s = ft_chdir(obtain_oldpwd(*env), env);
+	if (exit_s == 0)
+	{
+		ft_printf("%s\n", obtain_pwd(*env));
+	}
+	return (exit_s);
 }

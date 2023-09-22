@@ -6,7 +6,7 @@
 #    By: apriego- <apriego-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 11:57:58 by apriego-          #+#    #+#              #
-#    Updated: 2023/09/21 12:31:20 by apriego-         ###   ########.fr        #
+#    Updated: 2023/09/22 11:25:01 by apriego-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ FILES_GEN	=	main.c utils.c utils2.c utils3.c utils4.c
 FILES_EXPAN	=	expansor.c expansor_utils.c expansor_utils2.c expand_files.c expand_files_utils.c expansor_utils_redirect.c
 FILES_LEXER	=	tokenizer.c tokenizer_utils.c tokenizer_lists.c
 FILES_PARSE	=	parser.c parser_syntax.c cmd_lists.c redirect_lists.c
-FILES_EXEC	=	executor.c executor_utils.c find_path.c redirections.c\
+FILES_EXEC	=	executor.c executor_utils.c find_path.c find_path_utils.c redirections.c\
 				executor_utils2.c
 FILES_HERE	=	heredoc.c
 HEADER		=	./inc/minishell.h
