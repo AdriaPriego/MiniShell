@@ -16,7 +16,9 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-<img width="700" alt="minishell_screenshot" src="https://github.com/ferri17/minishell/assets/19575860/82977658-8af7-4e6e-98bf-af69bb83e507">
+<p align="center">
+	<img width="700" alt="minishell_screenshot" src="https://github.com/ferri17/minishell/assets/19575860/82977658-8af7-4e6e-98bf-af69bb83e507">
+</p>
 
 **Minishell is a Unix shell** really similar to bash but with some reduced functionalities. The project is written from scratch in C.
 Some of the functionalities are:
