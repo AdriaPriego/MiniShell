@@ -79,4 +79,4 @@ Run the program:
 
 <!-- Authors -->
 ## Authors
-This project is written by @ferri17 and me as part of 42 School core curriculum. I was mainly focused on the focused on the built-ins, expansor, and signals, while Ferran focused on the built-ins, expansor, and signals.
+This project is written by @ferri17 and me as part of 42 School core curriculum. I was mainly focused on the focused on the built-ins, expansor, and signals, while Ferran focused on the lexer(tokenizer), parser, and executor.
